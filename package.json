@@ -2,9 +2,9 @@
   "name": "linkit-project-server",
   "version": "1.0.0",
   "description": "This is the linkit-project server repo",
-  "main": "index.js",
+  "main": "app.ts",
   "scripts": {
-    "start": "nodemon",
+    "dev": "nodemon ./src/app.ts",
     "test": "jest"
   },
   "repository": {
