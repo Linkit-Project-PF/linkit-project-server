@@ -16,6 +16,6 @@ export class UserValue implements UserEntity {
     this.username = user.username;
     this.password = user.password;
     this.email = user.email;
-    this.role = user.role;
+    this.role = user.role || "user";
   }
 }
