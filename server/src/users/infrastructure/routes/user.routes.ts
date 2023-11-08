@@ -1,15 +1,15 @@
-import { Router } from "express";
-import { airtableRepository } from "../repository/airtable.repository";
-import { UserUseCase } from "../../aplication/userUseCase";
-import { UserController } from "../controllers/user.controller";
+import { Router } from 'express'
+import { AirtableRepository } from '../repository/airtable.repository'
+import { UserUseCase } from '../../aplication/userUseCase'
+import { UserControllers } from '../controllers/user.controllers'
 
-const user_route = Router();
+const userRoute = Router()
 
-const airtableUserRepo = new airtableRepository();
-const userUseCase = new UserUseCase(airtableUserRepo);
-const userController = new UserController(userUseCase);
+const airtableUserRepo = new AirtableRepository()
+const userUseCase = new UserUseCase(airtableUserRepo)
+const userController = new UserControllers(userUseCase)
 
-user_route.post("/register", userController.postController);
-user_route.get("/login");
+userRoute.post('/register', userController.postController)
+userRoute.get('/login', userController.loginController)
 
-export default user_route;
+export default userRoute
