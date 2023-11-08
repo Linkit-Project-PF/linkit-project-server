@@ -1,11 +1,10 @@
-import "dotenv/config";
-import Airtable from "airtable";
-
+import 'dotenv/config'
+import Airtable from 'airtable'
 const base = new Airtable({ apiKey: process.env.API_KEY }).base(
-  process.env.USER_BASE || ""
-);
+  process.env.USER_BASE ?? ''
+)
 
-export default base;
+export default base
 
 //! EXAMPLE TO GET USERNAME from all users on table.
 
@@ -54,4 +53,4 @@ export default base;
 //     records.forEach((rec) => console.log(rec.fields))
 //   );
 
-//--------------------------
+// --------------------------
