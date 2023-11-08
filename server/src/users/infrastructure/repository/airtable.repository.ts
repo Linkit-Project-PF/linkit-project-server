@@ -8,26 +8,30 @@ import { auth } from '../../../authentication/firebase'
 const userTable = base('Users')
 
 export class AirtableRepository implements UserRepository {
+  //! find in construction
   async findUserById (uuid: string): Promise<UserEntity | string> {
     const user = await userTable.find(uuid)
     if (user) return 'Found'
     else return 'Not found'
   }
 
-  async loginUser (email: string, password: string): Promise<any | null> {
+  async loginUser (email: string, password: string): Promise<UserEntity | string> {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password)
       const userEmail = userCredential.user.email
-      // const user = userTable.select({
-      //   filterByFormula: `{Email} = "${userEmail}"`
-      // }).firstPage((err: any): void => {
-      //   if (err) {
-      //     console.error(err)
-      //   }
-      // })
-      return userEmail
-    } catch (error: any) {
-      throw new Error(error.code)
+      if (userEmail) {
+        console.log(userEmail)
+        // TODO: testing user return for login
+        const userLogged = {
+          uuid: '1234-1234-1234-1234',
+          username: 'userTest',
+          password: '1234-1234-1234-1234',
+          email: 'userEmail'
+        }
+        return userLogged
+      } else return 'Not able to login'
+    } catch (error) {
+      throw new Error((error as Error).message)
     }
   }
 
@@ -40,8 +44,8 @@ export class AirtableRepository implements UserRepository {
           user.password
         )
         console.log(userCredentials)
-      } catch (error: any) {
-        throw new Error(error.code)
+      } catch (error) {
+        throw new Error((error as Error).message)
       }
       const newUser = await userTable.create([
         {
@@ -56,8 +60,8 @@ export class AirtableRepository implements UserRepository {
       if (newUser[0].id) {
         return newUser[0].id
       } else return 'Not able to create'
-    } catch (error: any) {
-      return 'Unable to create account: ' + error.message
+    } catch (error) {
+      throw new Error((error as Error).message)
     }
   }
 
