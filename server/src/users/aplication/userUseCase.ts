@@ -20,7 +20,7 @@ export class UserUseCase {
     return user
   }
 
-  public loginUser = async (email: string, password: string): Promise<string | null> => {
+  public loginUser = async (email: string, password: string): Promise<UserEntity | string> => {
     const user = await this.userRepository.loginUser(email, password)
     return user
   }
