@@ -1,5 +1,3 @@
-//* clase encargada de mapear lo datos
-
 import { randomUUID } from 'crypto'
 import { type UserEntity } from './user.entity'
 

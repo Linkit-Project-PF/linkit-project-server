@@ -1,5 +1,3 @@
-//* interface => de propiedades que son importantes para el negocio
-
 export interface UserEntity {
   uuid: string
   username: string

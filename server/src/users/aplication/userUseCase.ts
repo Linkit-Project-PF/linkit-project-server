@@ -1,5 +1,3 @@
-//* caso de uso de usuario seria toda la logica
-
 import { type UserEntity } from '../domain/user.entity'
 import { type UserRepository } from '../domain/user.reposiroty'
 import { UserValue } from '../domain/user.value'
@@ -23,5 +21,10 @@ export class UserUseCase {
   public loginUser = async (email: string, password: string): Promise<UserEntity | string> => {
     const user = await this.userRepository.loginUser(email, password)
     return user
+  }
+
+  public editUser = async (user: UserEntity): Promise<UserEntity | string> => {
+    const editUser = await this.userRepository.editUser(user)
+    return editUser
   }
 }

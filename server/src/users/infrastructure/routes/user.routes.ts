@@ -10,6 +10,7 @@ const userUseCase = new UserUseCase(airtableUserRepo)
 const userController = new UserControllers(userUseCase)
 
 userRoute.post('/register', userController.postController)
-userRoute.get('/login', userController.loginController)
+userRoute.get('/login', userController.getController)
+userRoute.put('/edit', userController.putController)
 
 export default userRoute

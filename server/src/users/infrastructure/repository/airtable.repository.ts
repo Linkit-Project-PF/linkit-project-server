@@ -5,17 +5,9 @@ import { type UserRepository } from '../../domain/user.reposiroty'
 import base from '../db/airtable'
 import { auth } from '../../../authentication/firebase'
 import { UserValue } from '../../domain/user.value'
-
 const userTable = base('Users')
 
 export class AirtableRepository implements UserRepository {
-  //! find in construction
-  async findUserById (uuid: string): Promise<UserEntity | string> {
-    const user = await userTable.find(uuid)
-    if (user) return 'Found'
-    else return 'Not found'
-  }
-
   async loginUser (email: string, password: string): Promise<UserEntity | string> {
     try {
       await signInWithEmailAndPassword(auth, email, password)
@@ -30,7 +22,9 @@ export class AirtableRepository implements UserRepository {
         role: String(dbInfo[0].fields.role)
       })
       return userLogged
-    } catch (error) {
+    } catch (error: any) {
+      if (error.code === 'auth/invalid-email') throw new Error('Invalid email')
+      if (error.code === 'auth/invalid-password') throw new Error('Invalid password')
       throw new Error((error as Error).message)
     }
   }
@@ -56,12 +50,25 @@ export class AirtableRepository implements UserRepository {
         }
       ])
       return dataOnDB
-    } catch (error) {
-      throw new Error((error as Error).message)
+    } catch (error: any) {
+      if (error.code === 'auth/email-already-in-use') throw new Error('Email already in use')
+      if (error.code === 'auth/invalid-email') throw new Error('Invalid email')
+      if (error.code === 'auth/invalid-password') throw new Error('Invalid password')
+      throw new Error(`Register error: ${(error as Error).message}`)
     }
   }
 
+  async editUser (user: UserEntity): Promise<UserEntity | string> {
+    return 'Not implemented'
+  }
+
+  //! delete in construction
   async deleteUser (uuid: string): Promise<boolean> {
     return false
+  }
+
+  //! find in construction
+  async findUserById (uuid: string): Promise<UserEntity | string> {
+    return 'Not implemented'
   }
 }
