@@ -4,6 +4,7 @@ import { type UserEntity } from '../../domain/user.entity'
 import { type UserRepository } from '../../domain/user.reposiroty'
 import base from '../db/airtable'
 import { auth } from '../../../authentication/firebase'
+import { UserValue } from '../../domain/user.value'
 
 const userTable = base('Users')
 
@@ -17,19 +18,18 @@ export class AirtableRepository implements UserRepository {
 
   async loginUser (email: string, password: string): Promise<UserEntity | string> {
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password)
-      const userEmail = userCredential.user.email
-      if (userEmail) {
-        console.log(userEmail)
-        // TODO: testing user return for login
-        const userLogged = {
-          uuid: '1234-1234-1234-1234',
-          username: 'userTest',
-          password: '1234-1234-1234-1234',
-          email: 'userEmail'
-        }
-        return userLogged
-      } else return 'Not able to login'
+      await signInWithEmailAndPassword(auth, email, password)
+      const dbInfo = await userTable.select({
+        view: 'Grid view',
+        filterByFormula: `IF({email} = '${email}', TRUE(), FALSE())`
+      }).all()
+      const userLogged = new UserValue({
+        uuid: String(dbInfo[0].fields.uuid),
+        username: String(dbInfo[0].fields.username),
+        email: String(dbInfo[0].fields.email),
+        role: String(dbInfo[0].fields.role)
+      })
+      return userLogged
     } catch (error) {
       throw new Error((error as Error).message)
     }
@@ -37,29 +37,25 @@ export class AirtableRepository implements UserRepository {
 
   async registerUser (user: UserEntity): Promise<UserEntity | string> {
     try {
-      try {
-        const userCredentials = await createUserWithEmailAndPassword(
+      if (user.password) {
+        await createUserWithEmailAndPassword(
           auth,
           user.email,
           user.password
         )
-        console.log(userCredentials)
-      } catch (error) {
-        throw new Error((error as Error).message)
+      } else throw new Error('No password provided')
+      const dataOnDB = {
+        uuid: user.uuid,
+        username: user.username,
+        email: user.email,
+        role: user.role
       }
-      const newUser = await userTable.create([
+      await userTable.create([
         {
-          fields: {
-            Username: user.username,
-            Password: user.password, //! TESTING, password wont be saved on DB
-            Email: user.email,
-            Role: user.role
-          }
+          fields: dataOnDB
         }
       ])
-      if (newUser[0].id) {
-        return newUser[0].id
-      } else return 'Not able to create'
+      return dataOnDB
     } catch (error) {
       throw new Error((error as Error).message)
     }

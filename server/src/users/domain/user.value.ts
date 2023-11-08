@@ -7,14 +7,14 @@ export class UserValue implements UserEntity {
   // implements => implementa la interfaz
   uuid: string
   username: string
-  password: string
+  password?: string
   email: string
   role: string
 
   constructor (user: UserEntity) {
-    this.uuid = randomUUID()
+    this.uuid = user.uuid || randomUUID()
     this.username = user.username
-    this.password = user.password
+    this.password = user.password ?? undefined
     this.email = user.email
     this.role = user.role ?? 'user'
   }
