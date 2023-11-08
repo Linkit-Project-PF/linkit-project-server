@@ -10,8 +10,6 @@ app.use(express.json());
 
 const port = process.env.PORT != null || 3000;
 
-//! EXAMPLE TO GET USERNAME from all users on table.
-
 app.use(user_route);
 
 app.listen(port, () => {

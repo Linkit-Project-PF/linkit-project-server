@@ -20,11 +20,10 @@ export class airtableRepository implements UserRepository {
           user.password
         );
         console.log(userCredentials);
-      } catch (error) {
-        console.log(error);
-        throw new Error();
+      } catch (error: any) {
+        throw new Error(error.code);
       }
-      const userFound = await userTable.create([
+      const newUser = await userTable.create([
         {
           fields: {
             Username: user.username,
@@ -34,11 +33,11 @@ export class airtableRepository implements UserRepository {
           },
         },
       ]);
-      if (userFound[0].id) {
-        return userFound[0].id;
+      if (newUser[0].id) {
+        return newUser[0].id;
       } else return "Not able to create";
-    } catch (error) {
-      return "El error es" + error;
+    } catch (error: any) {
+      return "Unable to create account: " + error.message;
     }
   }
 
