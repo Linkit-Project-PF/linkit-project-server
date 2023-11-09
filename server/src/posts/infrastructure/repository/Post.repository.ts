@@ -1,7 +1,7 @@
-import { type BlogEntity } from '../../../posts/domain/post.entity'
-import { type BlogRepository } from '../../../posts/domain/post.repository'
+import { type BlogEntity } from '../../domain/post.entity'
+import { type BlogRepository } from '../../domain/post.repository'
 // import { BlogValue } from '../../domain/blog/blog.value'
-import Blog from '../models/Blog'
+import Blog from '../models/Post'
 
 export class MongoRepository implements BlogRepository {
   async createBlog (blog: BlogEntity): Promise<BlogEntity | string> {
