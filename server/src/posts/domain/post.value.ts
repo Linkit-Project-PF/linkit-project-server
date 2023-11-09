@@ -1,4 +1,4 @@
-import { type BlogEntity } from './blog.entity'
+import { type BlogEntity } from './post.entity'
 
 export class BlogValue implements BlogEntity {
   id: string

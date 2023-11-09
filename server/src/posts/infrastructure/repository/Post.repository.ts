@@ -1,5 +1,5 @@
-import { type BlogEntity } from '../../domain/blog/blog.entity'
-import { type BlogRepository } from '../../domain/blog/blog.repository'
+import { type BlogEntity } from '../../../posts/domain/post.entity'
+import { type BlogRepository } from '../../../posts/domain/post.repository'
 // import { BlogValue } from '../../domain/blog/blog.value'
 import Blog from '../models/Blog'
 
