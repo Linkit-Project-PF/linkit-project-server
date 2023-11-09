@@ -1,5 +1,5 @@
 import { type RequestHandler } from 'express'
-import { type BlogUseCase } from '../../../../posts/aplication/blogUseCase'
+import { type BlogUseCase } from '../../aplication/postUseCase'
 
 export class BlogControllers {
   constructor (private readonly blogUseCase: BlogUseCase) {}
