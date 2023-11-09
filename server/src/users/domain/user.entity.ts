@@ -1,4 +1,5 @@
 export interface UserEntity {
+  idAirtable?: string
   uuid: string
   username: string
   password?: string //* Important to decide If we keep It, otherwise we need to create another interface */

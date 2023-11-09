@@ -16,6 +16,7 @@ export class AirtableRepository implements UserRepository {
         filterByFormula: `IF({email} = '${email}', TRUE(), FALSE())`
       }).all()
       const userLogged = new UserValue({
+        idAirtable: String(dbInfo[0].fields.idAirtable),
         uuid: String(dbInfo[0].fields.uuid),
         username: String(dbInfo[0].fields.username),
         email: String(dbInfo[0].fields.email),
