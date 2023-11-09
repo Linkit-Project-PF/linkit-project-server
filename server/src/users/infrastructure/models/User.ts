@@ -7,19 +7,7 @@ const userSchema = new Schema({
     minlength: 3,
     maxlength: 30
   },
-  surname: {
-    type: String,
-    required: true,
-    minlength: 3,
-    maxlength: 30
-  },
   email: {
-    type: String,
-    required: true,
-    minlength: 3,
-    maxlength: 30
-  },
-  password: {
     type: String,
     required: true,
     minlength: 3,
@@ -27,13 +15,13 @@ const userSchema = new Schema({
   },
   linkedin: {
     type: String,
-    required: true,
+    required: false,
     minlength: 3,
     maxlength: 30
   },
   cv: {
     type: String,
-    required: true,
+    required: false,
     minlength: 3,
     maxlength: 30
   },
