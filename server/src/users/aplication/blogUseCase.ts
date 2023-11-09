@@ -13,7 +13,7 @@ export class BlogUseCase {
     return blogCreated
   }
 
-  public findBlogById = async (uuid: string): Promise<BlogEntity | string> => {
+  public findBlogById = async (uuid: string): Promise<BlogEntity | null> => {
     const blog = await this.blogRepository.findBlogById(uuid)
     return blog
   }
@@ -23,7 +23,7 @@ export class BlogUseCase {
     return blog
   }
 
-  public editBlog = async (blog: BlogEntity): Promise<BlogEntity | string> => {
+  public editBlog = async (blog: BlogEntity): Promise<BlogEntity | null> => {
     const editBlog = await this.blogRepository.editBlog(blog)
     return editBlog
   }
