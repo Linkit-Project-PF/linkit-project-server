@@ -1,12 +1,12 @@
 import { Router } from 'express'
-import { AirtableRepository } from '../repository/airtable.repository'
 import { UserUseCase } from '../../aplication/userUseCase'
 import { UserControllers } from '../controllers/user.controllers'
+import { MongoRepository } from '../repository/mongo.repository'
 
 const userRoute = Router()
 
-const airtableUserRepo = new AirtableRepository()
-const userUseCase = new UserUseCase(airtableUserRepo)
+const mongoUserRepository = new MongoRepository()
+const userUseCase = new UserUseCase(mongoUserRepository)
 const userController = new UserControllers(userUseCase)
 
 userRoute.post('/register', userController.postController)
