@@ -26,6 +26,7 @@ export class AirtableRepository implements UserRepository {
     } catch (error: any) {
       if (error.code === 'auth/invalid-email') throw new Error('Invalid email')
       if (error.code === 'auth/invalid-password') throw new Error('Invalid password')
+      if (error.code === 'auth/invalid-login-credentials') throw new Error('User does not exist')
       throw new Error((error as Error).message)
     }
   }
@@ -39,17 +40,23 @@ export class AirtableRepository implements UserRepository {
           user.password
         )
       } else throw new Error('No password provided')
-      const dataOnDB = {
+      const dataOnDB = new UserValue({
         uuid: user.uuid,
         username: user.username,
         email: user.email,
         role: user.role
-      }
+      })
+
       await userTable.create([
         {
-          fields: dataOnDB
+          fields: {
+            uuid: dataOnDB.uuid,
+            username: dataOnDB.username,
+            email: dataOnDB.email,
+            role: dataOnDB.role
+          }
         }
-      ])
+      ]).then(result => { dataOnDB.idAirtable = result[0].getId() })
       return dataOnDB
     } catch (error: any) {
       if (error.code === 'auth/email-already-in-use') throw new Error('Email already in use')
