@@ -1,7 +1,7 @@
 import { type UserEntity } from '../../domain/user.entity'
 import { type UserRepository } from '../../domain/user.reposiroty'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
-import { auth } from '../../../authentication/firebase'
+import { auth } from '../../authentication/firebase'
 import User from '../models/User'
 import { UserValue } from '../../domain/user.value'
 

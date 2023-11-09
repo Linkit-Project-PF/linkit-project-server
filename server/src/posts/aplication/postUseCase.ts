@@ -1,6 +1,6 @@
-import { type BlogEntity } from '../domain/blog/blog.entity'
-import { type BlogRepository } from '../domain/blog/blog.repository'
-import { BlogValue } from '../domain/blog/blog.value'
+import { type BlogEntity } from '../domain/post.entity'
+import { type BlogRepository } from '../domain/post.repository'
+import { BlogValue } from '../domain/post.value'
 
 export class BlogUseCase {
   constructor (private readonly blogRepository: BlogRepository) {}

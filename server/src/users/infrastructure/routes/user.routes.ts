@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { UserUseCase } from '../../aplication/userUseCase'
 import { UserControllers } from '../controllers/user.controllers'
-import { MongoRepository } from '../repository/mongo.repository'
+import { MongoRepository } from '../repository/User.repository'
 
 const userRoute = Router()
 
