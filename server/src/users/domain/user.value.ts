@@ -7,6 +7,8 @@ export class UserValue implements UserEntity {
   name: string
   password?: string | null
   email: string
+  country: string
+  phone: string
   role: string
   linkedin?: string | null
   cv?: string | null
@@ -17,6 +19,8 @@ export class UserValue implements UserEntity {
     this.name = user.name
     this.password = user.password ?? undefined
     this.email = user.email
+    this.country = user.country
+    this.phone = user.phone
     this.role = user.role ?? 'user'
     this.linkedin = user.linkedin ?? undefined
     this.cv = user.cv ?? undefined
