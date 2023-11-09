@@ -33,8 +33,3 @@ export class UserControllers {
     }
   }
 }
-
-// public getController: RequestHandler = async (req, res): Promise<void> => {
-//   const user = await this.userUseCase.findUserById(req.params.id)
-//   res.send(user)
-// }

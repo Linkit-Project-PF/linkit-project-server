@@ -2,7 +2,7 @@ import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
 import userRoute from './users/infrastructure/routes/user.routes'
-// import base from "./users/infrastructure/db/airtable"; //* Decomment if testing airtable.
+import mongoDBConnect from './users/infrastructure/db/mongo'
 
 const app = express()
 app.use(cors())
@@ -12,6 +12,8 @@ const port = process.env.PORT ?? 3000
 
 app.use(userRoute)
 
-app.listen(port, () => {
-  console.log(`Listen in port: ${port}`)
-})
+mongoDBConnect().then(() => {
+  app.listen(port, () => {
+    console.log(`Listen in port: ${port}`)
+  })
+}).catch((error) => { console.log(error) })
