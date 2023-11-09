@@ -13,7 +13,10 @@ export class MongoRepository implements UserRepository {
       const userData = new UserValue(dbUser)
       return userData
     } catch (error: any) {
-      return `Error ${error}`
+      if (error.code === 'auth/invalid-email') throw new Error('Invalid email')
+      if (error.code === 'auth/invalid-password') throw new Error('Invalid password')
+      if (error.code === 'auth/invalid-login-credentials') throw new Error('User does not exist')
+      throw new Error((error as Error).message)
     }
   }
 
@@ -30,7 +33,10 @@ export class MongoRepository implements UserRepository {
       const userData = new UserValue(userCreated)
       return userData
     } catch (error: any) {
-      return `Error ${error}`
+      if (error.code === 'auth/email-already-in-use') throw new Error('Email already in use')
+      if (error.code === 'auth/invalid-email') throw new Error('Invalid email')
+      if (error.code === 'auth/invalid-password') throw new Error('Invalid password')
+      throw new Error(`Register error: ${(error as Error).message}`)
     }
   }
 
