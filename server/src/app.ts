@@ -6,7 +6,13 @@ import userRoute from './users/infrastructure/routes/user.routes'
 import postRoute from './posts/infrastructure/routes/post.routes'
 
 const app = express()
-app.use(cors())
+app.use(cors(
+  {
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  }
+))
 app.use(express.json())
 
 const port = process.env.PORT ?? 3000
