@@ -1,5 +1,7 @@
 import { type UserEntity } from '../../domain/user.entity'
 import { type UserRepository } from '../../domain/user.reposiroty'
+import { ValidateUserRegister } from '../../../errors/validation'
+import { ValidationError } from '../../../errors/errors'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../../authentication/firebase'
 import User from '../models/User'
@@ -14,13 +16,15 @@ export class MongoUserRepository implements UserRepository {
       if (error.code === 'auth/invalid-email') throw new Error('Invalid email')
       if (error.code === 'auth/invalid-password') throw new Error('Invalid password')
       if (error.code === 'auth/invalid-login-credentials') throw new Error('Bad credentials')
-      throw new Error((error as Error).message)
+      throw new ValidationError(`Login error: ${(error as Error).message}`)
     }
   }
 
   async registerUser (user: UserEntity, type: string): Promise<UserEntity | string> {
     try {
+      // TODO: improve logic
       if (type === 'email' && user.password) {
+        ValidateUserRegister(user)
         await createUserWithEmailAndPassword(
           auth,
           user.email,
@@ -33,7 +37,7 @@ export class MongoUserRepository implements UserRepository {
       if (error.code === 'auth/email-already-in-use') throw new Error('Email already in use')
       if (error.code === 'auth/invalid-email') throw new Error('Invalid email')
       if (error.code === 'auth/invalid-password') throw new Error('Invalid password')
-      throw new Error(`Register error: ${(error as Error).message}`)
+      throw new ValidationError(`Register error: ${(error as Error).message}`)
     }
   }
 
