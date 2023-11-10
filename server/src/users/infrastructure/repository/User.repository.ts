@@ -13,7 +13,7 @@ export class MongoUserRepository implements UserRepository {
     } catch (error: any) {
       if (error.code === 'auth/invalid-email') throw new Error('Invalid email')
       if (error.code === 'auth/invalid-password') throw new Error('Invalid password')
-      if (error.code === 'auth/invalid-login-credentials') throw new Error('User does not exist')
+      if (error.code === 'auth/invalid-login-credentials') throw new Error('Bad credentials')
       throw new Error((error as Error).message)
     }
   }
