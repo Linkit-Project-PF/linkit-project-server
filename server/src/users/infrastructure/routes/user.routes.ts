@@ -1,11 +1,11 @@
 import { Router } from 'express'
 import { UserUseCase } from '../../aplication/userUseCase'
 import { UserControllers } from '../controllers/user.controllers'
-import { MongoRepository } from '../repository/User.repository'
+import { MongoUserRepository } from '../repository/User.repository'
 
 const userRoute = Router()
 
-const mongoUserRepository = new MongoRepository()
+const mongoUserRepository = new MongoUserRepository()
 const userUseCase = new UserUseCase(mongoUserRepository)
 const userController = new UserControllers(userUseCase)
 
