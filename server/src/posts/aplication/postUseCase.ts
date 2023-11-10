@@ -13,8 +13,8 @@ export class PostUseCase {
     return PostCreated
   }
 
-  public findPostById = async (uuid: string): Promise<PostEntity | null> => {
-    const post = await this.PostRepository.findPostById(uuid)
+  public findPostById = async (uuid: string): Promise<PostEntity[] | null> => {
+    const post = await this.PostRepository.findAllPosts(uuid)
     return post
   }
 

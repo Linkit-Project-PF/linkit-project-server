@@ -3,14 +3,12 @@ import { type UserRepository } from '../../domain/user.reposiroty'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../../authentication/firebase'
 import User from '../models/User'
-import { UserValue } from '../../domain/user.value'
 
-export class MongoRepository implements UserRepository {
+export class MongoUserRepository implements UserRepository {
   async loginUser (email: string, password: string): Promise<UserEntity | string> {
     try {
       await signInWithEmailAndPassword(auth, email, password)
-      const [dbUser] = await User.find({ email })
-      const userData = new UserValue(dbUser)
+      const [userData] = await User.find({ email })
       return userData
     } catch (error: any) {
       if (error.code === 'auth/invalid-email') throw new Error('Invalid email')
@@ -30,8 +28,7 @@ export class MongoRepository implements UserRepository {
         )
       }
       const userCreated = await User.create(user)
-      const userData = new UserValue(userCreated)
-      return userData
+      return userCreated
     } catch (error: any) {
       if (error.code === 'auth/email-already-in-use') throw new Error('Email already in use')
       if (error.code === 'auth/invalid-email') throw new Error('Invalid email')

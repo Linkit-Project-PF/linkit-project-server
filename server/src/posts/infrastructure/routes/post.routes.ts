@@ -1,17 +1,17 @@
-// import { Router } from 'express'
-// import { MongoRepository } from '../repositories/mongo.repository'
-// import { PostUseCase } from '../../application/postUseCase'
-// import { PostControllers } from '../controllers/post.controllers'
+import { Router } from 'express'
+import { MongoPostRepository } from '../repository/Post.repository'
+import { PostUseCase } from '../../aplication/postUseCase'
+import { PostController } from '../controller/post.controller'
 
-// const postRoute = Router()
+const postRoute = Router()
 
-// const mongoPostRepository = new MongoRepository()
-// const postUseCase = new PostUseCase(mongoPostRepository)
-// const postController = new PostControllers(postUseCase)
+const mongoPostRepository = new MongoPostRepository()
+const postUseCase = new PostUseCase(mongoPostRepository)
+const postController = new PostController(postUseCase)
 
-// postRoute.post('/create', postController.postController)
-// postRoute.get('/read', postController.getController)
-// postRoute.put('/update', postController.putController)
-// postRoute.delete('/delete', postController.deleteController)
+postRoute.post('/create', postController.postController)
+postRoute.get('/allPosts', postController.getController)
+postRoute.put('/update', postController.putController)
+postRoute.delete('/delete', postController.deleteController)
 
-// export default postRoute
+export default postRoute
