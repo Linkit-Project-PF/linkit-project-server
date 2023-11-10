@@ -21,7 +21,7 @@ const userSchema = new Schema({
   country: {
     type: String,
     required: true,
-    minlength: 3
+    minlength: 2
   },
   linkedin: {
     type: String,
