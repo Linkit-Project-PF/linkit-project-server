@@ -24,6 +24,12 @@ const blogSchema = new Schema({
     required: true,
     minlength: 3,
     maxlength: 30
+  },
+  input: {
+    type: String,
+    required: true,
+    minlength: 3,
+    maxlength: 30
   }
 })
 
