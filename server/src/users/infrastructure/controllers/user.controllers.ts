@@ -1,5 +1,4 @@
 import { type RequestHandler } from 'express'
-
 import { type UserUseCase } from '../../aplication/userUseCase'
 
 export class UserControllers {
@@ -7,8 +6,8 @@ export class UserControllers {
 
   public getController: RequestHandler = async (req, res) => { //* function name can change
     try {
-      const { email, password }: { email: string, password: string } = req.body
-      const user = await this.userUseCase.loginUser(email, password)
+      const { email, password } = req.query
+      const user = await this.userUseCase.loginUser(String(email), String(password))
       return res.status(200).json(user)
     } catch (error) {
       return res.status(400).json((error as Error).message)
