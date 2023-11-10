@@ -1,6 +1,7 @@
 import { type UserEntity } from '../../domain/user.entity'
 import { type UserRepository } from '../../domain/user.reposiroty'
-import { ValidateUserRegister } from '../../../errors/validation'
+import { ValidateUserRegister, ValidateUserLogin } from '../../../errors/validation'
+
 import { ValidationError } from '../../../errors/errors'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../../authentication/firebase'
@@ -9,6 +10,7 @@ import User from '../models/User'
 export class MongoUserRepository implements UserRepository {
   async loginUser (email: string, password: string): Promise<UserEntity | string> {
     try {
+      ValidateUserLogin(email, password)
       await signInWithEmailAndPassword(auth, email, password)
       const [userData] = await User.find({ email })
       return userData
