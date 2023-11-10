@@ -13,6 +13,7 @@ export class UserValue implements UserEntity {
   linkedin?: string | null
   cv?: string | null
   technologies?: string[]
+  active: boolean
 
   constructor (user: UserEntity) {
     this._id = user._id ?? undefined
@@ -25,5 +26,6 @@ export class UserValue implements UserEntity {
     this.linkedin = user.linkedin ?? undefined
     this.cv = user.cv ?? undefined
     this.technologies = user.technologies ?? []
+    this.active = user.active ?? true
   }
 }
