@@ -1,4 +1,4 @@
-export interface BlogEntity {
+export interface PostEntity {
   id: string
   title: string
   image?: string

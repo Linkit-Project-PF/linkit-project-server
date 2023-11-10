@@ -1,40 +1,40 @@
-import { type BlogEntity } from '../../domain/post.entity'
-import { type BlogRepository } from '../../domain/post.repository'
+import { type PostEntity } from '../../domain/post.entity'
+import { type PostRepository } from '../../domain/post.repository'
 // import { BlogValue } from '../../domain/blog/blog.value'
-import Blog from '../models/Post'
+import Post from '../models/Post'
 
-export class MongoRepository implements BlogRepository {
-  async createBlog (blog: BlogEntity): Promise<BlogEntity | string> {
+export class MongoRepository implements PostRepository {
+  async createPost (post: PostEntity): Promise<PostEntity | string> {
     try {
-      const blogCreated = await Blog.create(blog)
-      return blogCreated
+      const postCreated = await Post.create(post)
+      return postCreated
     } catch (error: any) {
       return `Error ${error}`
     }
   }
 
-  async deleteBlog (uuid: string): Promise<boolean | null> {
+  async deletePost (uuid: string): Promise<boolean | null> {
     try {
-      const blog = await Blog.findByIdAndDelete(uuid)
-      return blog !== null
+      const post = await Post.findByIdAndDelete(uuid)
+      return post !== null
     } catch (error) {
       return null
     }
   }
 
-  async findBlogById (uuid: string): Promise<BlogEntity | null> {
+  async findPostById (uuid: string): Promise<PostEntity | null> {
     try {
-      const blog = await Blog.findById(uuid)
-      return blog
+      const post = await Post.findById(uuid)
+      return post
     } catch (error) {
       return null
     }
   }
 
-  async editBlog (blog: BlogEntity): Promise<BlogEntity | null> {
+  async editPost (post: PostEntity): Promise<PostEntity | null> {
     try {
-      const editedBlog = await Blog.findOneAndReplace(blog)
-      return editedBlog
+      const editedPost = await Post.findOneAndReplace(post)
+      return editedPost
     } catch (error) {
       return null
     }

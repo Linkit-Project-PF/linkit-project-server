@@ -1,8 +1,8 @@
-import { type BlogEntity } from './post.entity'
+import { type PostEntity } from './post.entity'
 
-export interface BlogRepository {
-  createBlog: (blog: BlogEntity) => Promise<BlogEntity | string>
-  findBlogById: (uuid: string) => Promise<BlogEntity | null>
-  deleteBlog: (uuid: string) => Promise<boolean | null>
-  editBlog: (blog: BlogEntity) => Promise<BlogEntity | null>
+export interface PostRepository {
+  createPost: (post: PostEntity) => Promise<PostEntity | string>
+  findPostById: (uuid: string) => Promise<PostEntity | null>
+  deletePost: (uuid: string) => Promise<boolean | null>
+  editPost: (post: PostEntity) => Promise<PostEntity | null>
 }
