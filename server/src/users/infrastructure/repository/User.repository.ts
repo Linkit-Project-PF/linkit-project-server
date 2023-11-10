@@ -18,9 +18,9 @@ export class MongoUserRepository implements UserRepository {
     }
   }
 
-  async registerUser (user: UserEntity): Promise<UserEntity | string> {
+  async registerUser (user: UserEntity, type: string): Promise<UserEntity | string> {
     try {
-      if (user.password) {
+      if (type === 'email' && user.password) {
         await createUserWithEmailAndPassword(
           auth,
           user.email,
@@ -37,11 +37,11 @@ export class MongoUserRepository implements UserRepository {
     }
   }
 
-  async deleteUser (uuid: string): Promise<boolean | null> {
+  async deleteUser (id: string): Promise<boolean | null> {
     return null
   }
 
-  async findUserById (uuid: string): Promise<UserEntity | string> {
+  async findUserById (id: string): Promise<UserEntity | string> {
     return 'fined User'
   }
 

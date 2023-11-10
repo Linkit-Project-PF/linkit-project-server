@@ -7,9 +7,9 @@ export class UserUseCase {
 
   public registerUser = async (
     user: UserEntity
-  ): Promise<UserEntity | string> => {
+    , type: string): Promise<UserEntity | string> => {
     const newUser = new UserValue(user)
-    const userCreated = await this.userRepository.registerUser(newUser)
+    const userCreated = await this.userRepository.registerUser(newUser, type)
     return userCreated
   }
 
