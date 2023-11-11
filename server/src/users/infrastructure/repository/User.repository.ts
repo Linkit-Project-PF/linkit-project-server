@@ -1,6 +1,6 @@
 import { type UserEntity } from '../../domain/user.entity'
 import { type UserRepository } from '../../domain/user.reposiroty'
-import { ValidateUserRegister, ValidateUserLogin } from '../../../errors/validation'
+import { ValidateUserRegister, ValidateUserLogin, ValidateUserDelete } from '../../../errors/validation'
 
 import { ValidationError } from '../../../errors/errors'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
@@ -47,6 +47,7 @@ export class MongoUserRepository implements UserRepository {
 
   async deleteUser (_id: Types.ObjectId | null): Promise<any> {
     try {
+      ValidateUserDelete(_id)
       await mongoDBConnect()
       const resultado = await User.updateOne(
         { _id },
@@ -54,7 +55,7 @@ export class MongoUserRepository implements UserRepository {
       )
       return resultado
     } catch (error) {
-      return 'error al eliminar usuario'
+      throw new ValidationError(`Delete error: ${(error as Error).message}`)
     }
   }
 
