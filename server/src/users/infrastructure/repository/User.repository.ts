@@ -3,6 +3,8 @@ import { type UserRepository } from '../../domain/user.reposiroty'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../../authentication/firebase'
 import User from '../models/User'
+import mongoDBConnect from '../../../db/mongo'
+import { type Types } from 'mongoose'
 
 export class MongoUserRepository implements UserRepository {
   async loginUser (email: string, password: string): Promise<UserEntity | string> {
@@ -37,8 +39,17 @@ export class MongoUserRepository implements UserRepository {
     }
   }
 
-  async deleteUser (id: string): Promise<boolean | null> {
-    return null
+  async deleteUser (_id: Types.ObjectId | null): Promise<any> {
+    try {
+      await mongoDBConnect()
+      const resultado = await User.updateOne(
+        { _id },
+        { $set: { active: false } }
+      )
+      return resultado
+    } catch (error) {
+      return 'error al eliminar usuario'
+    }
   }
 
   async findUserById (id: string): Promise<UserEntity | string> {
