@@ -7,11 +7,14 @@ export class PostValue implements PostEntity {
   image?: string | null
   description: string
   input: string
+  link?: string | null
+
   constructor (post: PostEntity) {
     this._id = post._id ?? undefined
     this.title = post.title
     this.image = post.image ?? undefined
     this.description = post.description
     this.input = post.input
+    this.link = post.link ?? undefined
   }
 }
