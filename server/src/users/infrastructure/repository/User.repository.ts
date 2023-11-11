@@ -38,6 +38,7 @@ export class MongoUserRepository implements UserRepository {
       const userCreated = await User.create(user)
       return userCreated
     } catch (error: any) {
+      // TODO: improve error handling
       if (error.code === 'auth/email-already-in-use') throw new Error('Email already in use')
       if (error.code === 'auth/invalid-email') throw new Error('Invalid email')
       if (error.code === 'auth/invalid-password') throw new Error('Invalid password')
