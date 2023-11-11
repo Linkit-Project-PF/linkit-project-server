@@ -12,5 +12,6 @@ const userController = new UserControllers(userUseCase)
 userRoute.post('/register', userController.postController)
 userRoute.get('/login', userController.getController)
 userRoute.put('/edit', userController.putController)
+userRoute.delete('/delete', userController.deleteController)
 
 export default userRoute
