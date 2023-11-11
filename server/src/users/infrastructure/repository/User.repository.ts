@@ -26,6 +26,13 @@ export class MongoUserRepository implements UserRepository {
 
   async registerUser (user: UserEntity, type: string): Promise<UserEntity | string> {
     try {
+      // TODO: this can be modularized, as validateIfAlreadyonDB
+      let userExist = false
+      const allUsers = await User.find({}, 'email')
+      allUsers.forEach(obj => {
+        if (obj.email === user.email) userExist = true
+      })
+      if (userExist) throw Error('That email is already on use')
       // TODO: improve logic
       if (type === 'email' && user.password) {
         ValidateUserRegister(user)

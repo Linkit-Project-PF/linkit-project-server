@@ -19,11 +19,17 @@ const blogSchema = new Schema({
     minlength: 10,
     maxlength: 300
   },
+  link: {
+    type: String,
+    required: false,
+    minlength: 5
+  },
   input: {
     type: String,
     required: true,
     minlength: 3,
-    maxlength: 30
+    maxlength: 30,
+    enum: ['blog', 'jd', 'social', 'ebook']
   }
 })
 

@@ -6,4 +6,5 @@ export interface PostEntity {
   image?: string | null
   description: string
   input: string
+  link?: string | null
 }
