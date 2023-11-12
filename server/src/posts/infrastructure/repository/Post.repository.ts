@@ -29,12 +29,17 @@ export class MongoPostRepository implements PostRepository {
     }
   }
 
-  async findAllPosts (): Promise<PostEntity[] | null> { //* This needs to filter depending on post type
+  async findPost (type: string, id?: string): Promise<PostEntity[] | string> { //* This needs to filter depending on post type
     try {
-      const post = await Post.find()
+      let post
+      if (type !== 'undefined') {
+        const validTypes = ['jd', 'social', 'blog', 'ebook']
+        if (!validTypes.includes(type)) throw Error('That is not a valid post type')
+        post = await Post.find({ input: type })
+      } else post = await Post.find()
       return post
-    } catch (error) {
-      return null
+    } catch (error: any) {
+      return `Error ${error}`
     }
   }
 

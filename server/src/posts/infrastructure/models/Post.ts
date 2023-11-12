@@ -17,7 +17,7 @@ const blogSchema = new Schema({
     type: String,
     required: true,
     minlength: 10,
-    maxlength: 300
+    maxlength: 3000
   },
   link: {
     type: String,
@@ -27,8 +27,8 @@ const blogSchema = new Schema({
   input: {
     type: String,
     required: true,
-    minlength: 3,
-    maxlength: 30,
+    minlength: 2,
+    maxlength: 5,
     enum: ['blog', 'jd', 'social', 'ebook']
   }
 })
