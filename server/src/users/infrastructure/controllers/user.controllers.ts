@@ -16,7 +16,7 @@ export class UserControllers {
 
   public postController: RequestHandler = async (req, res) => {
     try {
-      const user = await this.userUseCase.registerUser(req.body)
+      const user = await this.userUseCase.registerUser(req.body, String(req.query.type))
       return res.status(201).json(user)
     } catch (error) {
       return res.status(400).json((error as Error).message)
@@ -26,6 +26,15 @@ export class UserControllers {
   public putController: RequestHandler = async (req, res) => {
     try {
       const user = await this.userUseCase.editUser(req.body)
+      return res.status(200).json(user)
+    } catch (error) {
+      return res.status(400).json((error as Error).message)
+    }
+  }
+
+  public deleteController: RequestHandler = async (req, res) => {
+    try {
+      const user = await this.userUseCase.deleteUser(req.body)
       return res.status(200).json(user)
     } catch (error) {
       return res.status(400).json((error as Error).message)

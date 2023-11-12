@@ -1,5 +1,6 @@
 import { type UserEntity } from '../domain/user.entity'
 import { type UserRepository } from '../domain/user.reposiroty'
+import { type Types } from 'mongoose'
 import { UserValue } from '../domain/user.value'
 
 export class UserUseCase {
@@ -7,9 +8,9 @@ export class UserUseCase {
 
   public registerUser = async (
     user: UserEntity
-  ): Promise<UserEntity | string> => {
+    , type: string): Promise<UserEntity | string> => {
     const newUser = new UserValue(user)
-    const userCreated = await this.userRepository.registerUser(newUser)
+    const userCreated = await this.userRepository.registerUser(newUser, type)
     return userCreated
   }
 
@@ -26,5 +27,10 @@ export class UserUseCase {
   public editUser = async (user: UserEntity): Promise<UserEntity | string> => {
     const editUser = await this.userRepository.editUser(user)
     return editUser
+  }
+
+  public deleteUser = async (_id: Types.ObjectId | null): Promise<any> => {
+    const deleteUser = await this.userRepository.deleteUser(_id)
+    return deleteUser
   }
 }

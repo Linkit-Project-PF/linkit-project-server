@@ -13,8 +13,8 @@ export class PostUseCase {
     return PostCreated
   }
 
-  public findPostById = async (uuid: string): Promise<PostEntity[] | null> => {
-    const post = await this.PostRepository.findAllPosts(uuid)
+  public findPost = async (type: string, id?: string): Promise<PostEntity[] | string> => {
+    const post = await this.PostRepository.findPost(type, id)
     return post
   }
 
@@ -23,8 +23,8 @@ export class PostUseCase {
     return post
   }
 
-  public editPost = async (post: PostEntity): Promise<PostEntity | null> => {
-    const editPost = await this.PostRepository.editPost(post)
+  public editPost = async (post: PostEntity, type: string): Promise<PostEntity | null> => {
+    const editPost = await this.PostRepository.editPost(post, type)
     return editPost
   }
 }

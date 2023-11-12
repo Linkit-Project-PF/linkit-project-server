@@ -6,8 +6,15 @@ import Post from '../models/Post'
 export class MongoPostRepository implements PostRepository {
   async createPost (post: PostEntity): Promise<PostEntity | string> {
     try {
-      const postCreated = await Post.create(post)
-      return postCreated
+      let postExists = false
+      const allTitles = await Post.find({}, 'title input')
+      allTitles.forEach(obj => {
+        if (obj.title === post.title && obj.input === post.input) postExists = true
+      })
+      if (!postExists) {
+        const postCreated = await Post.create(post)
+        return postCreated
+      } else throw Error('Another post already exists with same Title from that type')
     } catch (error: any) {
       return `Error ${error}`
     }
@@ -22,16 +29,21 @@ export class MongoPostRepository implements PostRepository {
     }
   }
 
-  async findAllPosts (id: string): Promise<PostEntity[] | null> { //* This needs to filter depending on post type
+  async findPost (type: string, id?: string): Promise<PostEntity[] | string> { //* This needs to filter depending on post type
     try {
-      const post = await Post.find()
+      let post
+      if (type !== 'undefined') {
+        const validTypes = ['jd', 'social', 'blog', 'ebook']
+        if (!validTypes.includes(type)) throw Error('That is not a valid post type')
+        post = await Post.find({ input: type })
+      } else post = await Post.find()
       return post
-    } catch (error) {
-      return null
+    } catch (error: any) {
+      return `Error ${error}`
     }
   }
 
-  async editPost (post: PostEntity): Promise<PostEntity | null> { //* This needs to receive the post id? and the changes.
+  async editPost (post: PostEntity, type: string): Promise<PostEntity | null> { //* This needs to receive the post id? and the changes.
     try {
       const editedPost = await Post.findOneAndReplace(post)
       return editedPost

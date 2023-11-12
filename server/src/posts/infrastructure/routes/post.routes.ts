@@ -10,7 +10,7 @@ const postUseCase = new PostUseCase(mongoPostRepository)
 const postController = new PostController(postUseCase)
 
 postRoute.post('/create', postController.postController)
-postRoute.get('/allPosts', postController.getController)
+postRoute.get('/get', postController.getController)
 postRoute.put('/update', postController.putController)
 postRoute.delete('/delete', postController.deleteController)
 

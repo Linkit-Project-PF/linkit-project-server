@@ -11,4 +11,5 @@ export interface UserEntity {
   linkedin?: string | null
   cv?: string | null
   technologies?: string[]
+  active?: boolean | null
 }
