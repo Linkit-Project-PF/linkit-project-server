@@ -11,7 +11,7 @@ const postController = new PostController(postUseCase)
 
 postRoute.post('/create', postController.postController)
 postRoute.get('/get', postController.getController)
-postRoute.put('/update', postController.putController)
+postRoute.put('/update/:id', postController.putController)
 postRoute.delete('/delete', postController.deleteController)
 
 export default postRoute

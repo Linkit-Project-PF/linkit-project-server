@@ -1,6 +1,10 @@
 import { Schema, model } from 'mongoose'
 
 const blogSchema = new Schema({
+  id: {
+    type: String,
+    required: true
+  },
   title: {
     type: String,
     required: true,

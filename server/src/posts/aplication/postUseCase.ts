@@ -23,8 +23,8 @@ export class PostUseCase {
     return post
   }
 
-  public editPost = async (post: PostEntity, type: string): Promise<PostEntity | null> => {
-    const editPost = await this.PostRepository.editPost(post, type)
+  public editPost = async (id: string, post: PostEntity): Promise<PostEntity | null> => {
+    const editPost = await this.PostRepository.editPost(id, post)
     return editPost
   }
 }
