@@ -1,7 +1,6 @@
 import { type UserEntity } from '../../domain/user.entity'
 import { type UserRepository } from '../../domain/user.reposiroty'
 import { ValidateUserRegister, ValidateUserLogin, ValidateUserDelete } from '../../../errors/validation'
-
 import { ValidationError } from '../../../errors/errors'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../../authentication/firebase'

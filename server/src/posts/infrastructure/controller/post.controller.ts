@@ -6,7 +6,7 @@ export class PostController {
 
   public getController: RequestHandler = async (req, res) => {
     try {
-      const blog = await this.postUseCase.findPostById()
+      const blog = await this.postUseCase.findPost(String(req.query.type), String(req.query.id))
       return res.status(200).json(blog)
     } catch (error) {
       return res.status(400).json((error as Error).message)
