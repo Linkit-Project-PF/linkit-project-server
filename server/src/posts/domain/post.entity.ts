@@ -1,7 +1,5 @@
-import { type Types } from 'mongoose'
-
 export interface PostEntity {
-  _id?: Types.ObjectId | null
+  id: string
   title: string
   image?: string | null
   description: string
