@@ -1,7 +1,5 @@
-import { type Types } from 'mongoose'
-
 export interface UserEntity {
-  _id?: Types.ObjectId | null
+  _id: string
   name: string
   country: string
   phone: string

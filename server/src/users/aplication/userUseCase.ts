@@ -1,6 +1,5 @@
 import { type UserEntity } from '../domain/user.entity'
 import { type UserRepository } from '../domain/user.reposiroty'
-import { type Types } from 'mongoose'
 import { UserValue } from '../domain/user.value'
 
 export class UserUseCase {
@@ -29,7 +28,7 @@ export class UserUseCase {
     return editUser
   }
 
-  public deleteUser = async (_id: Types.ObjectId | null): Promise<any> => {
+  public deleteUser = async (_id: string): Promise<any> => {
     const deleteUser = await this.userRepository.deleteUser(_id)
     return deleteUser
   }

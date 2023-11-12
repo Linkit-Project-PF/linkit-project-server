@@ -1,6 +1,5 @@
 import { type UserEntity } from '../users/domain/user.entity'
 import { returnUserError, returnConectError } from './returnErrors'
-import { type Types } from 'mongoose'
 
 //* USER ERRORS
 export const ValidateUserRegister = (user: UserEntity): void => {
@@ -25,7 +24,7 @@ export const ValidateUserUpdate = (user: UserEntity): void => {
   if (!user.phone) returnUserError('User phone is required')
 }
 
-export const ValidateUserDelete = (_id: Types.ObjectId | null): void => {
+export const ValidateUserDelete = (_id: string): void => {
   if (!_id) returnUserError('User id is required')
 }
 
