@@ -6,7 +6,6 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'fire
 import { auth } from '../../authentication/firebase'
 import User from '../models/User'
 import mongoDBConnect from '../../../db/mongo'
-import { type Types } from 'mongoose'
 
 export class MongoUserRepository implements UserRepository {
   async loginUser (email: string, password: string): Promise<UserEntity | string> {
@@ -52,7 +51,7 @@ export class MongoUserRepository implements UserRepository {
     }
   }
 
-  async deleteUser (_id: Types.ObjectId | null): Promise<any> {
+  async deleteUser (_id: string): Promise<any> {
     try {
       ValidateUserDelete(_id)
       await mongoDBConnect()

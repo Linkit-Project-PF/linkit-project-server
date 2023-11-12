@@ -1,5 +1,5 @@
 export interface PostEntity {
-  id: string
+  _id: string
   title: string
   image?: string | null
   description: string

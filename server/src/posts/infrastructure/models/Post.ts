@@ -1,8 +1,10 @@
+import { randomUUID } from 'crypto'
 import { Schema, model } from 'mongoose'
 
 const blogSchema = new Schema({
-  id: {
+  _id: {
     type: String,
+    default: randomUUID(),
     required: true
   },
   title: {
