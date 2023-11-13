@@ -2,7 +2,6 @@ import { randomUUID } from 'crypto'
 import { type UserEntity } from './user.entity'
 
 export class UserValue implements UserEntity {
-  // implements => implementa la interfaz
   _id: string
   name: string
   password?: string | null

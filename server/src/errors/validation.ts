@@ -3,29 +3,29 @@ import { returnUserError, returnConectError } from './returnErrors'
 
 //* USER ERRORS
 export const ValidateUserRegister = (user: UserEntity): void => {
-  if (!user.name) returnUserError('User name is required')
-  if (!user.email) returnUserError('User email is required')
-  if (!user.password) returnUserError('User password is required')
-  if (!user.role) returnUserError('User role is required')
-  if (!user.country) returnUserError('User country is required')
-  if (!user.phone) returnUserError('User phone is required')
+  if (!user.name) returnUserError('El nombre es requerido')
+  if (!user.email) returnUserError('El email es requerido')
+  if (!user.password) returnUserError('La contraseña es requerida')
+  if (!user.role) returnUserError('El rol es requerido')
+  if (!user.country) returnUserError('El país es requerido')
+  if (!user.phone) returnUserError('El teléfono es requerido')
 }
 
 export const ValidateUserLogin = (email: string, password: string): void => {
-  if (!email) returnUserError('User email is required')
-  if (!password) returnUserError('User password is required')
+  if (!email) returnUserError('El email es requerido')
+  if (!password) returnUserError('La contraseña es requerida')
 }
 
 export const ValidateUserUpdate = (user: UserEntity): void => {
-  if (!user.name) returnUserError('User name is required')
-  if (!user.email) returnUserError('User email is required')
-  if (!user.role) returnUserError('User role is required')
-  if (!user.country) returnUserError('User country is required')
-  if (!user.phone) returnUserError('User phone is required')
+  if (!user.name) returnUserError('El nombre es requerido')
+  if (!user.email) returnUserError('El email es requerido')
+  if (!user.role) returnUserError('El rol es requerido')
+  if (!user.country) returnUserError('El país es requerido')
+  if (!user.phone) returnUserError('El teléfono es requerido')
 }
 
 export const ValidateUserDelete = (_id: string): void => {
-  if (!_id) returnUserError('User id is required')
+  if (!_id) returnUserError('El id es requerido')
 }
 
 //* POST ERRORS
