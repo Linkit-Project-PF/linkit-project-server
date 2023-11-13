@@ -3,6 +3,7 @@ import { type UserEntity } from './user.entity'
 
 export class UserValue implements UserEntity {
   _id: string
+  image?: string
   name: string
   password?: string | null
   email: string
@@ -16,6 +17,7 @@ export class UserValue implements UserEntity {
 
   constructor (user: UserEntity) {
     this._id = randomUUID()
+    this.image = user.image ?? 'https://api.dicebear.com/7.x/avataaars-neutral/svg?seed=Callie'
     this.name = user.name
     this.password = user.password ?? undefined
     this.email = user.email

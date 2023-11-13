@@ -23,18 +23,18 @@ export class UserUseCase {
     return user
   }
 
-  public editUser = async (user: UserEntity): Promise<UserEntity | string> => {
-    const editUser = await this.userRepository.editUser(user)
+  public editUser = async (id: string, user: UserEntity): Promise<UserEntity | string> => {
+    const editUser = await this.userRepository.editUser(id, user)
     return editUser
   }
 
-  public editRoleUser = async (_id: string): Promise<any> => {
-    const editRolUser = await this.userRepository.editRoleUser(_id)
+  public editRoleUser = async (id: string): Promise<UserEntity | string> => {
+    const editRolUser = await this.userRepository.editRoleUser(id)
     return editRolUser
   }
 
-  public deleteUser = async (_id: string): Promise<any> => {
-    const deleteUser = await this.userRepository.deleteUser(_id)
+  public deleteUser = async (id: string): Promise<UserEntity | string> => {
+    const deleteUser = await this.userRepository.deleteUser(id)
     return deleteUser
   }
 }
