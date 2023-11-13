@@ -6,4 +6,5 @@ export interface UserRepository {
   deleteUser: (_id: string) => Promise<any>
   loginUser: (email: string, password: string) => Promise<UserEntity | string>
   editUser: (user: UserEntity) => Promise<UserEntity | string>
+  editRoleUser: (_id: string) => Promise <any>
 }
