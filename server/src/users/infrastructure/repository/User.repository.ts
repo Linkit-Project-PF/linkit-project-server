@@ -15,10 +15,10 @@ export class MongoUserRepository implements UserRepository {
       const [userData] = await User.find({ email })
       return userData
     } catch (error: any) {
-      if (error.code === 'auth/invalid-email') throw new Error('Invalid email')
-      if (error.code === 'auth/invalid-password') throw new Error('Invalid password')
-      if (error.code === 'auth/invalid-login-credentials') throw new Error('Bad credentials')
-      throw new ValidationError(`Login error: ${(error as Error).message}`)
+      if (error.code === 'auth/invalid-email') throw new Error('Email invalido')
+      if (error.code === 'auth/invalid-password') throw new Error('Contraseña invalida')
+      if (error.code === 'auth/invalid-login-credentials') throw new Error('Credenciles invalidas')
+      throw new ValidationError(`Error de inicio de sección: ${(error as Error).message}`)
     }
   }
 
@@ -30,7 +30,7 @@ export class MongoUserRepository implements UserRepository {
       allUsers.forEach(obj => {
         if (obj.email === user.email) userExist = true
       })
-      if (userExist) throw Error('That email is already on use')
+      if (userExist) throw Error('Este email ya esta en uso')
       // TODO: improve logic
       if (type === 'email' && user.password) {
         ValidateUserRegister(user)
@@ -44,10 +44,10 @@ export class MongoUserRepository implements UserRepository {
       return userCreated
     } catch (error: any) {
       // TODO: improve error handling
-      if (error.code === 'auth/email-already-in-use') throw new Error('Email already in use')
-      if (error.code === 'auth/invalid-email') throw new Error('Invalid email')
-      if (error.code === 'auth/invalid-password') throw new Error('Invalid password')
-      throw new ValidationError(`Register error: ${(error as Error).message}`)
+      if (error.code === 'auth/email-already-in-use') throw new Error('El email ya esta en uso')
+      if (error.code === 'auth/invalid-email') throw new Error('Email invalido')
+      if (error.code === 'auth/invalid-password') throw new Error('Contraseña invalida')
+      throw new ValidationError(`Error de registro: ${(error as Error).message}`)
     }
   }
 
@@ -61,7 +61,7 @@ export class MongoUserRepository implements UserRepository {
       )
       return resultado
     } catch (error) {
-      throw new ValidationError(`Delete error: ${(error as Error).message}`)
+      throw new ValidationError(`Error al eliminar: ${(error as Error).message}`)
     }
   }
 
