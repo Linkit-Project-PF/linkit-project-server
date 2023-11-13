@@ -18,7 +18,7 @@ export class MongoUserRepository implements UserRepository {
       if (error.code === 'auth/invalid-email') throw new Error('Email invalido')
       if (error.code === 'auth/invalid-password') throw new Error('Contraseña invalida')
       if (error.code === 'auth/invalid-login-credentials') throw new Error('Credenciles invalidas')
-      throw new ValidationError(`Error de inicio de sección: ${(error as Error).message}`)
+      throw new ValidationError(`Error de inicio de sesión: ${(error as Error).message}`)
     }
   }
 
@@ -83,7 +83,7 @@ export class MongoUserRepository implements UserRepository {
       )
       return result
     } catch (error) {
-      throw new Error('No fue posible realizar la acción de cambiar el rol')
+      throw new ValidationError(`Error al intentar cambiar el rol del usuario: ${(error as Error).message}`)
     }
   }
 }

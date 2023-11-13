@@ -1,5 +1,7 @@
 import { type PostEntity } from '../../domain/post.entity'
 import { type PostRepository } from '../../domain/post.repository'
+import { ValidatePostCreate, ValidatePostUpdate } from '../../../errors/validation'
+import { ValidationError } from '../../../errors/errors'
 // import { BlogValue } from '../../domain/blog/blog.value'
 import Post from '../models/Post'
 import mongoDBConnect from '../../../db/mongo'
@@ -7,6 +9,7 @@ import mongoDBConnect from '../../../db/mongo'
 export class MongoPostRepository implements PostRepository {
   async createPost (post: PostEntity): Promise<PostEntity | string> {
     try {
+      ValidatePostCreate(post)
       let postExists = false
       const allTitles = await Post.find({}, 'title input')
       allTitles.forEach(obj => {
@@ -17,7 +20,7 @@ export class MongoPostRepository implements PostRepository {
         return postCreated
       } else throw Error('Another post already exists with same Title from that type')
     } catch (error: any) {
-      return `Error ${error}`
+      throw new ValidationError(`Error al crear el post: ${(error as Error).message}`)
     }
   }
 
@@ -53,9 +56,10 @@ export class MongoPostRepository implements PostRepository {
   async editPost (id: string, post: PostEntity): Promise<PostEntity | null> { //* This needs to receive the post id? and the changes.
     try {
       const editedPost = await Post.findByIdAndUpdate(id, post)
+      ValidatePostUpdate(post)
       return editedPost
     } catch (error) {
-      return null
+      throw new ValidationError(`Error al editar el post: ${(error as Error).message}`)
     }
   }
 }

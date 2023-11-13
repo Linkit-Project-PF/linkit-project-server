@@ -1,5 +1,6 @@
 import { type UserEntity } from '../users/domain/user.entity'
-import { returnUserError, returnConectError } from './returnErrors'
+import { type PostEntity } from '../posts/domain/post.entity'
+import { returnUserError, returnConectError, returnPostError } from './returnErrors'
 
 //* USER ERRORS
 export const ValidateUserRegister = (user: UserEntity): void => {
@@ -29,6 +30,20 @@ export const ValidateUserDelete = (_id: string): void => {
 }
 
 //* POST ERRORS
+
+export const ValidatePostCreate = (post: PostEntity): void => {
+  if (!post.title) returnPostError('El título es requerido')
+  if (!post.description) returnPostError('La descripción es requerida')
+  if (!post.input) returnPostError('El tipo de posteo es requerido')
+}
+
+export const ValidatePostUpdate = (post: PostEntity): void => {
+  if (!post.title) returnPostError('El título es requerido')
+  if (!post.description) returnPostError('La descripción es requerida')
+  if (!post.input) returnPostError('El tipo de posteo es requerido')
+}
+
+// export const ValidatePostDelete
 
 //* GENERAL ERRORS
 
