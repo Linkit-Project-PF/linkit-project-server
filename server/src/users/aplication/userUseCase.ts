@@ -28,6 +28,11 @@ export class UserUseCase {
     return editUser
   }
 
+  public editRoleUser = async (_id: string): Promise<any> => {
+    const editRolUser = await this.userRepository.editRoleUser(_id)
+    return editRolUser
+  }
+
   public deleteUser = async (_id: string): Promise<any> => {
     const deleteUser = await this.userRepository.deleteUser(_id)
     return deleteUser

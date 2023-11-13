@@ -72,4 +72,18 @@ export class MongoUserRepository implements UserRepository {
   async editUser (user: UserEntity): Promise<UserEntity | string> {
     return 'edited User'
   }
+
+  async editRoleUser (_id: string): Promise <any> {
+    try {
+      ValidateUserDelete(_id)
+      await mongoDBConnect()
+      const result = await User.updateOne(
+        { _id },
+        { $set: { role: 'admin' } }
+      )
+      return result
+    } catch (error) {
+      throw new Error('No fue posible realizar la acción de cambiar el rol')
+    }
+  }
 }
