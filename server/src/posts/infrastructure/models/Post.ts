@@ -36,6 +36,11 @@ const blogSchema = new Schema({
     minlength: 2,
     maxlength: 5,
     enum: ['blog', 'jd', 'social', 'ebook']
+  },
+  archived: {
+    type: Boolean,
+    required: true,
+    default: false
   }
 })
 

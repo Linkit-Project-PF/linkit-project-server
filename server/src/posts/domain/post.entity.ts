@@ -5,4 +5,5 @@ export interface PostEntity {
   description: string
   input: string
   link?: string | null
+  archived?: boolean | null
 }

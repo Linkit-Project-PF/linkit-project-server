@@ -34,7 +34,6 @@ export class UserControllers {
 
   public deleteController: RequestHandler = async (req, res) => {
     try {
-      console.log(req.params.id)
       const user = await this.userUseCase.deleteUser(req.params.id)
       return res.status(200).json(user)
     } catch (error) {

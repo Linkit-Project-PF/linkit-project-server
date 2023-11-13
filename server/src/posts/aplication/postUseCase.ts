@@ -18,9 +18,9 @@ export class PostUseCase {
     return post
   }
 
-  public deletePost = async (uuid: string): Promise<boolean | null> => {
-    const post = await this.PostRepository.deletePost(uuid)
-    return post
+  public deletePost = async (_id: string): Promise<any> => {
+    const deletepost = await this.PostRepository.deletePost(_id)
+    return deletepost
   }
 
   public editPost = async (id: string, post: PostEntity): Promise<PostEntity | null> => {
