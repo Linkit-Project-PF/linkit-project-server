@@ -7,6 +7,11 @@ const userSchema = new Schema({
     required: true,
     default: randomUUID()
   },
+  image: {
+    type: String,
+    required: false,
+    minlength: 3
+  },
   name: {
     type: String,
     required: true,

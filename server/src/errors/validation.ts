@@ -28,6 +28,10 @@ export const ValidateUserDelete = (_id: string): void => {
   if (!_id) returnUserError('El id es requerido')
 }
 
+export const ValidateUserFindById = (id: string): void => {
+  if (!id) returnUserError('El id es requerido')
+}
+
 //* POST ERRORS
 
 //* GENERAL ERRORS

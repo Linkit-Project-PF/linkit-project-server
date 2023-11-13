@@ -1,6 +1,6 @@
 import { type UserEntity } from '../../domain/user.entity'
 import { type UserRepository } from '../../domain/user.reposiroty'
-import { ValidateUserRegister, ValidateUserLogin, ValidateUserDelete } from '../../../errors/validation'
+import { ValidateUserRegister, ValidateUserLogin, ValidateUserDelete, ValidateUserFindById, ValidateUserUpdate } from '../../../errors/validation'
 import { ValidationError } from '../../../errors/errors'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../../authentication/firebase'
@@ -13,7 +13,7 @@ export class MongoUserRepository implements UserRepository {
       ValidateUserLogin(email, password)
       await signInWithEmailAndPassword(auth, email, password)
       const [userData] = await User.find({ email })
-      return userData
+      return userData as UserEntity
     } catch (error: any) {
       if (error.code === 'auth/invalid-email') throw new Error('Email invalido')
       if (error.code === 'auth/invalid-password') throw new Error('Contraseña invalida')
@@ -41,7 +41,7 @@ export class MongoUserRepository implements UserRepository {
         )
       }
       const userCreated = await User.create(user)
-      return userCreated
+      return userCreated as UserEntity
     } catch (error: any) {
       // TODO: improve error handling
       if (error.code === 'auth/email-already-in-use') throw new Error('El email ya esta en uso')
@@ -51,7 +51,7 @@ export class MongoUserRepository implements UserRepository {
     }
   }
 
-  async deleteUser (_id: string): Promise<any> {
+  async deleteUser (_id: string): Promise<UserEntity | string> {
     try {
       ValidateUserDelete(_id)
       await mongoDBConnect()
@@ -59,21 +59,33 @@ export class MongoUserRepository implements UserRepository {
         { _id },
         { $set: { active: false } }
       )
-      return resultado
+      return resultado as unknown as UserEntity
     } catch (error) {
       throw new ValidationError(`Error al eliminar: ${(error as Error).message}`)
     }
   }
 
   async findUserById (id: string): Promise<UserEntity | string> {
-    return 'fined User'
+    try {
+      ValidateUserFindById(id)
+      const result = await User.findById(id)
+      return result as unknown as UserEntity
+    } catch (error) {
+      throw new ValidationError(`Error al buscar: ${(error as Error).message}`)
+    }
   }
 
-  async editUser (user: UserEntity): Promise<UserEntity | string> {
-    return 'edited User'
+  async editUser (id: string, user: UserEntity): Promise<UserEntity | string> {
+    try {
+      ValidateUserUpdate(user)
+      const editedUser = await User.findByIdAndUpdate(id, user)
+      return editedUser as unknown as UserEntity
+    } catch (error) {
+      throw new ValidationError(`Error al editar: ${(error as Error).message}`)
+    }
   }
 
-  async editRoleUser (_id: string): Promise <any> {
+  async editRoleUser (_id: string): Promise <UserEntity | string> {
     try {
       ValidateUserDelete(_id)
       await mongoDBConnect()
@@ -81,7 +93,7 @@ export class MongoUserRepository implements UserRepository {
         { _id },
         { $set: { role: 'admin' } }
       )
-      return result
+      return result as unknown as UserEntity
     } catch (error) {
       throw new Error('No fue posible realizar la acción de cambiar el rol')
     }
