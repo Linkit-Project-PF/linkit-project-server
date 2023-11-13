@@ -2,6 +2,7 @@ import { type PostEntity } from '../../domain/post.entity'
 import { type PostRepository } from '../../domain/post.repository'
 // import { BlogValue } from '../../domain/blog/blog.value'
 import Post from '../models/Post'
+import mongoDBConnect from '../../../db/mongo'
 
 export class MongoPostRepository implements PostRepository {
   async createPost (post: PostEntity): Promise<PostEntity | string> {
@@ -20,11 +21,17 @@ export class MongoPostRepository implements PostRepository {
     }
   }
 
-  async deletePost (id: string): Promise<boolean | null> {
+  async deletePost (_id: string): Promise<any> {
     try {
-      const post = await Post.findByIdAndDelete(id)
-      return post !== null
+      await mongoDBConnect()
+
+      const resultado = await Post.updateOne(
+        { _id },
+        { $set: { archived: true } }
+      )
+      return resultado
     } catch (error) {
+      console.error(error)
       return null
     }
   }

@@ -34,7 +34,8 @@ export class PostController {
 
   public deleteController: RequestHandler = async (req, res) => {
     try {
-      const blog = await this.postUseCase.deletePost(req.body)
+      const { _id } = req.params
+      const blog = await this.postUseCase.deletePost(_id)
       return res.status(200).json(blog)
     } catch (error) {
       return res.status(400).json((error as Error).message)
