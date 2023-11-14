@@ -7,3 +7,7 @@ export const returnUserError = (message: string): string => {
 export const returnConectError = (message: string): string => {
   throw new ConnectionError(message)
 }
+
+export const returnPostError = (message: string): string => {
+  throw new ValidationError(message)
+}

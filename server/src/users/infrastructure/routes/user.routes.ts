@@ -10,8 +10,10 @@ const userUseCase = new UserUseCase(mongoUserRepository)
 const userController = new UserControllers(userUseCase)
 
 userRoute.post('/register', userController.postController)
-userRoute.get('/login', userController.getController)
-userRoute.put('/edit', userController.putController)
-userRoute.delete('/delete', userController.deleteController)
+userRoute.get('/login', userController.loginController)
+userRoute.get('/find', userController.findUserController)
+userRoute.put('/update/:id', userController.putController)
+userRoute.put('/editRole', userController.putRoleController)
+userRoute.delete('/delete/:id', userController.deleteController)
 
 export default userRoute

@@ -4,9 +4,27 @@ import { type PostUseCase } from '../../aplication/postUseCase'
 export class PostController {
   constructor (private readonly postUseCase: PostUseCase) {}
 
-  public getController: RequestHandler = async (req, res) => {
+  public getTypeController: RequestHandler = async (req, res) => {
     try {
-      const blog = await this.postUseCase.findPost(String(req.query.type), String(req.query.id))
+      const blog = await this.postUseCase.findPostByType(String(req.query.type), String(req.query.id))
+      return res.status(200).json(blog)
+    } catch (error) {
+      return res.status(400).json((error as Error).message)
+    }
+  }
+
+  public getIdController: RequestHandler = async (req, res) => {
+    try {
+      const blog = await this.postUseCase.findPostById(req.params.id)
+      return res.status(200).json(blog)
+    } catch (error) {
+      return res.status(400).json((error as Error).message)
+    }
+  }
+
+  public getTitleController: RequestHandler = async (req, res) => {
+    try {
+      const blog = await this.postUseCase.findPostByTitle(String(req.query.title))
       return res.status(200).json(blog)
     } catch (error) {
       return res.status(400).json((error as Error).message)
@@ -25,7 +43,7 @@ export class PostController {
 
   public putController: RequestHandler = async (req, res) => {
     try {
-      const blog = await this.postUseCase.editPost(req.body, String(req.query.type))
+      const blog = await this.postUseCase.editPost(req.params.id, req.body)
       return res.status(200).json(blog)
     } catch (error) {
       return res.status(400).json((error as Error).message)
@@ -34,7 +52,8 @@ export class PostController {
 
   public deleteController: RequestHandler = async (req, res) => {
     try {
-      const blog = await this.postUseCase.deletePost(req.body)
+      const { _id } = req.params
+      const blog = await this.postUseCase.deletePost(_id)
       return res.status(200).json(blog)
     } catch (error) {
       return res.status(400).json((error as Error).message)

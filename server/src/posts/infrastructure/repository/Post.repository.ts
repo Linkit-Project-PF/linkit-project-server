@@ -1,11 +1,14 @@
 import { type PostEntity } from '../../domain/post.entity'
 import { type PostRepository } from '../../domain/post.repository'
-// import { BlogValue } from '../../domain/blog/blog.value'
+import { ValidatePostCreate, ValidatePostUpdate, ValidatePostDelete, ValidatePostFindById, ValidatePostFindByType, ValidatePostFindByTitle } from '../../../errors/validation'
+import { ValidationError } from '../../../errors/errors'
 import Post from '../models/Post'
+import mongoDBConnect from '../../../db/mongo'
 
 export class MongoPostRepository implements PostRepository {
   async createPost (post: PostEntity): Promise<PostEntity | string> {
     try {
+      ValidatePostCreate(post)
       let postExists = false
       const allTitles = await Post.find({}, 'title input')
       allTitles.forEach(obj => {
@@ -16,21 +19,48 @@ export class MongoPostRepository implements PostRepository {
         return postCreated
       } else throw Error('Another post already exists with same Title from that type')
     } catch (error: any) {
-      return `Error ${error}`
+      throw new ValidationError(`Error al crear el post: ${(error as Error).message}`)
     }
   }
 
-  async deletePost (id: string): Promise<boolean | null> {
+  async deletePost (_id: string): Promise<any> {
     try {
-      const post = await Post.findByIdAndDelete(id)
-      return post !== null
+      ValidatePostDelete(_id)
+      await mongoDBConnect()
+      const resultado = await Post.updateOne(
+        { _id },
+        { $set: { archived: true } }
+      )
+      return resultado
     } catch (error) {
+      console.error(error)
       return null
     }
   }
 
-  async findPost (type: string, id?: string): Promise<PostEntity[] | string> { //* This needs to filter depending on post type
+  async findPostById (id: string): Promise<PostEntity | null> {
     try {
+      ValidatePostFindById(id)
+      const post = await Post.findById(id)
+      return post
+    } catch (error) {
+      throw new ValidationError(`Error al buscar el post: ${(error as Error).message}`)
+    }
+  }
+
+  async findPostByTitle (title: string): Promise<PostEntity | null> {
+    try {
+      ValidatePostFindByTitle(title)
+      const postFinded = await Post.findOne({ title })
+      return postFinded
+    } catch (error) {
+      throw new ValidationError(`Error al buscar el post: ${(error as Error).message}`)
+    }
+  }
+
+  async findPostByType (type: string): Promise<PostEntity[] | string> {
+    try {
+      ValidatePostFindByType(type)
       let post
       if (type !== 'undefined') {
         const validTypes = ['jd', 'social', 'blog', 'ebook']
@@ -43,12 +73,13 @@ export class MongoPostRepository implements PostRepository {
     }
   }
 
-  async editPost (post: PostEntity, type: string): Promise<PostEntity | null> { //* This needs to receive the post id? and the changes.
+  async editPost (id: string, post: PostEntity): Promise<PostEntity | null> {
     try {
-      const editedPost = await Post.findOneAndReplace(post)
+      const editedPost = await Post.findByIdAndUpdate(id, post)
+      ValidatePostUpdate(post)
       return editedPost
     } catch (error) {
-      return null
+      throw new ValidationError(`Error al editar el post: ${(error as Error).message}`)
     }
   }
 }

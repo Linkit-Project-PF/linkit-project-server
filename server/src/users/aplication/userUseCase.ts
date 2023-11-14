@@ -1,6 +1,5 @@
 import { type UserEntity } from '../domain/user.entity'
 import { type UserRepository } from '../domain/user.reposiroty'
-import { type Types } from 'mongoose'
 import { UserValue } from '../domain/user.value'
 
 export class UserUseCase {
@@ -19,18 +18,28 @@ export class UserUseCase {
     return user
   }
 
+  public findUserByEmail = async (email: string): Promise<UserEntity | string> => {
+    const user = await this.userRepository.findUserByEmail(email)
+    return user
+  }
+
   public loginUser = async (email: string, password: string): Promise<UserEntity | string> => {
     const user = await this.userRepository.loginUser(email, password)
     return user
   }
 
-  public editUser = async (user: UserEntity): Promise<UserEntity | string> => {
-    const editUser = await this.userRepository.editUser(user)
+  public editUser = async (id: string, user: UserEntity): Promise<UserEntity | string> => {
+    const editUser = await this.userRepository.editUser(id, user)
     return editUser
   }
 
-  public deleteUser = async (_id: Types.ObjectId | null): Promise<any> => {
-    const deleteUser = await this.userRepository.deleteUser(_id)
+  public editRoleUser = async (id: string): Promise<UserEntity | string> => {
+    const editRolUser = await this.userRepository.editRoleUser(id)
+    return editRolUser
+  }
+
+  public deleteUser = async (id: string): Promise<UserEntity | string> => {
+    const deleteUser = await this.userRepository.deleteUser(id)
     return deleteUser
   }
 }

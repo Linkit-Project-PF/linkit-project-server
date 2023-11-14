@@ -1,10 +1,11 @@
 import { type UserEntity } from './user.entity'
-import { type Types } from 'mongoose'
 
 export interface UserRepository {
-  findUserById: (id: string) => Promise<UserEntity | string>
+  findUserById: (id: string) => Promise<any>
+  findUserByEmail: (email: string) => Promise<UserEntity | string>
   registerUser: (user: UserEntity, type: string) => Promise<UserEntity | string>
-  deleteUser: (_id: Types.ObjectId | null) => Promise<any>
+  deleteUser: (id: string) => Promise<UserEntity | string>
   loginUser: (email: string, password: string) => Promise<UserEntity | string>
-  editUser: (user: UserEntity) => Promise<UserEntity | string>
+  editUser: (id: string, user: UserEntity) => Promise<UserEntity | string>
+  editRoleUser: (id: string) => Promise <UserEntity | string>
 }

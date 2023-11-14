@@ -1,9 +1,9 @@
+import { randomUUID } from 'crypto'
 import { type UserEntity } from './user.entity'
-import { type Types } from 'mongoose'
 
 export class UserValue implements UserEntity {
-  // implements => implementa la interfaz
-  _id?: Types.ObjectId | null
+  _id: string
+  image?: string
   name: string
   password?: string | null
   email: string
@@ -16,7 +16,8 @@ export class UserValue implements UserEntity {
   active: boolean
 
   constructor (user: UserEntity) {
-    this._id = user._id ?? undefined
+    this._id = randomUUID()
+    this.image = user.image ?? 'https://api.dicebear.com/7.x/avataaars-neutral/svg?seed=Callie'
     this.name = user.name
     this.password = user.password ?? undefined
     this.email = user.email

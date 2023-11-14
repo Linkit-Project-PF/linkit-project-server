@@ -1,12 +1,11 @@
 import { type UserEntity } from '../../domain/user.entity'
 import { type UserRepository } from '../../domain/user.reposiroty'
-import { ValidateUserRegister, ValidateUserLogin, ValidateUserDelete } from '../../../errors/validation'
+import { ValidateUserRegister, ValidateUserLogin, ValidateUserDelete, ValidateUserFindById, ValidateUserUpdate } from '../../../errors/validation'
 import { ValidationError } from '../../../errors/errors'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../../authentication/firebase'
 import User from '../models/User'
 import mongoDBConnect from '../../../db/mongo'
-import { type Types } from 'mongoose'
 
 export class MongoUserRepository implements UserRepository {
   async loginUser (email: string, password: string): Promise<UserEntity | string> {
@@ -14,12 +13,12 @@ export class MongoUserRepository implements UserRepository {
       ValidateUserLogin(email, password)
       await signInWithEmailAndPassword(auth, email, password)
       const [userData] = await User.find({ email })
-      return userData
+      return userData as UserEntity
     } catch (error: any) {
-      if (error.code === 'auth/invalid-email') throw new Error('Invalid email')
-      if (error.code === 'auth/invalid-password') throw new Error('Invalid password')
-      if (error.code === 'auth/invalid-login-credentials') throw new Error('Bad credentials')
-      throw new ValidationError(`Login error: ${(error as Error).message}`)
+      if (error.code === 'auth/invalid-email') throw new Error('Email invalido')
+      if (error.code === 'auth/invalid-password') throw new Error('Contraseña invalida')
+      if (error.code === 'auth/invalid-login-credentials') throw new Error('Credenciles invalidas')
+      throw new ValidationError(`Error de inicio de sesión: ${(error as Error).message}`)
     }
   }
 
@@ -31,7 +30,7 @@ export class MongoUserRepository implements UserRepository {
       allUsers.forEach(obj => {
         if (obj.email === user.email) userExist = true
       })
-      if (userExist) throw Error('That email is already on use')
+      if (userExist) throw Error('Este email ya esta en uso')
       // TODO: improve logic
       if (type === 'email' && user.password) {
         ValidateUserRegister(user)
@@ -42,17 +41,17 @@ export class MongoUserRepository implements UserRepository {
         )
       }
       const userCreated = await User.create(user)
-      return userCreated
+      return userCreated as UserEntity
     } catch (error: any) {
       // TODO: improve error handling
-      if (error.code === 'auth/email-already-in-use') throw new Error('Email already in use')
-      if (error.code === 'auth/invalid-email') throw new Error('Invalid email')
-      if (error.code === 'auth/invalid-password') throw new Error('Invalid password')
-      throw new ValidationError(`Register error: ${(error as Error).message}`)
+      if (error.code === 'auth/email-already-in-use') throw new Error('El email ya esta en uso')
+      if (error.code === 'auth/invalid-email') throw new Error('Email invalido')
+      if (error.code === 'auth/invalid-password') throw new Error('Contraseña invalida')
+      throw new ValidationError(`Error de registro: ${(error as Error).message}`)
     }
   }
 
-  async deleteUser (_id: Types.ObjectId | null): Promise<any> {
+  async deleteUser (_id: string): Promise<UserEntity | string> {
     try {
       ValidateUserDelete(_id)
       await mongoDBConnect()
@@ -60,17 +59,54 @@ export class MongoUserRepository implements UserRepository {
         { _id },
         { $set: { active: false } }
       )
-      return resultado
+      return resultado as unknown as UserEntity
     } catch (error) {
-      throw new ValidationError(`Delete error: ${(error as Error).message}`)
+      throw new ValidationError(`Error al eliminar: ${(error as Error).message}`)
     }
   }
 
   async findUserById (id: string): Promise<UserEntity | string> {
-    return 'fined User'
+    try {
+      ValidateUserFindById(id)
+      const result = await User.findById(id)
+      return result as unknown as UserEntity
+    } catch (error) {
+      throw new ValidationError(`Error al buscar: ${(error as Error).message}`)
+    }
   }
 
-  async editUser (user: UserEntity): Promise<UserEntity | string> {
-    return 'edited User'
+  async findUserByEmail (email: string): Promise<UserEntity | string> {
+    try {
+      // TODO Create validation for email
+      const result = await User.find({ email })
+      if (!result.length) throw Error('No user found')
+      return result as unknown as UserEntity
+    } catch (error) {
+      throw new ValidationError(`Error al buscar: ${(error as Error).message}`)
+    }
+  }
+
+  async editUser (id: string, user: UserEntity): Promise<UserEntity | string> {
+    try {
+      ValidateUserUpdate(user)
+      const editedUser = await User.findByIdAndUpdate(id, user)
+      return editedUser as unknown as UserEntity
+    } catch (error) {
+      throw new ValidationError(`Error al editar: ${(error as Error).message}`)
+    }
+  }
+
+  async editRoleUser (_id: string): Promise <UserEntity | string> {
+    try {
+      ValidateUserDelete(_id)
+      await mongoDBConnect()
+      const result = await User.updateOne(
+        { _id },
+        { $set: { role: 'admin' } }
+      )
+      return result as unknown as UserEntity
+    } catch (error) {
+      throw new ValidationError(`Error al intentar cambiar el rol del usuario: ${(error as Error).message}`)
+    }
   }
 }
