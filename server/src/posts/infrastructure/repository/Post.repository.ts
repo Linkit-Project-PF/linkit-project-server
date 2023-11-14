@@ -1,6 +1,6 @@
 import { type PostEntity } from '../../domain/post.entity'
 import { type PostRepository } from '../../domain/post.repository'
-import { ValidatePostCreate, ValidatePostUpdate, ValidatePostDelete, ValidatePostFindById, ValidatePostFindByType } from '../../../errors/validation'
+import { ValidatePostCreate, ValidatePostUpdate, ValidatePostDelete, ValidatePostFindById, ValidatePostFindByType, ValidatePostFindByTitle } from '../../../errors/validation'
 import { ValidationError } from '../../../errors/errors'
 import Post from '../models/Post'
 import mongoDBConnect from '../../../db/mongo'
@@ -43,6 +43,16 @@ export class MongoPostRepository implements PostRepository {
       ValidatePostFindById(id)
       const post = await Post.findById(id)
       return post
+    } catch (error) {
+      throw new ValidationError(`Error al buscar el post: ${(error as Error).message}`)
+    }
+  }
+
+  async findPostByTitle (title: string): Promise<PostEntity | null> {
+    try {
+      ValidatePostFindByTitle(title)
+      const postFinded = await Post.findOne({ title })
+      return postFinded
     } catch (error) {
       throw new ValidationError(`Error al buscar el post: ${(error as Error).message}`)
     }

@@ -67,6 +67,10 @@ export const ValidatePostFindById = (id: string): void => {
   if (!id) returnPostError('El id es requerido')
 }
 
+export const ValidatePostFindByTitle = (title: string): void => {
+  if (!title) returnPostError('El título es requerido')
+}
+
 //* GENERAL ERRORS
 
 // export const ValidateNotFound = (data: any): void => {

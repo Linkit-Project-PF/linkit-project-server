@@ -23,6 +23,11 @@ export class PostUseCase {
     return post
   }
 
+  public findPostByTitle = async (title: string): Promise<PostEntity | null> => {
+    const post = await this.PostRepository.findPostByTitle(title)
+    return post
+  }
+
   public deletePost = async (_id: string): Promise<any> => {
     const deletepost = await this.PostRepository.deletePost(_id)
     return deletepost
