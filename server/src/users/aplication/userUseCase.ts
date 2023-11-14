@@ -18,6 +18,11 @@ export class UserUseCase {
     return user
   }
 
+  public findUserByEmail = async (email: string): Promise<UserEntity | string> => {
+    const user = await this.userRepository.findUserByEmail(email)
+    return user
+  }
+
   public loginUser = async (email: string, password: string): Promise<UserEntity | string> => {
     const user = await this.userRepository.loginUser(email, password)
     return user
