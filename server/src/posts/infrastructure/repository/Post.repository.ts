@@ -17,21 +17,21 @@ export class MongoPostRepository implements PostRepository {
       if (!postExists) {
         const postCreated = await Post.create(post)
         return postCreated
-      } else throw Error('Another post already exists with same Title from that type')
+      } else throw Error('Ya existe otro post de este tipo con este título')
     } catch (error: any) {
       throw new ValidationError(`Error al crear el post: ${(error as Error).message}`)
     }
   }
 
-  async deletePost (_id: string): Promise<any> {
+  async deletePost (id: string): Promise<any> {
     try {
-      ValidatePostDelete(_id)
+      ValidatePostDelete(id)
       await mongoDBConnect()
-      const resultado = await Post.updateOne(
-        { _id },
+      await Post.updateOne(
+        { id },
         { $set: { archived: true } }
       )
-      return resultado
+      return 'Post archivado'
     } catch (error) {
       console.error(error)
       return null
@@ -51,7 +51,7 @@ export class MongoPostRepository implements PostRepository {
   async findPostByTitle (title: string): Promise<PostEntity | null> {
     try {
       ValidatePostFindByTitle(title)
-      const postFinded = await Post.findOne({ title })
+      const postFinded = await Post.findOne({ title: { $regex: new RegExp(title, 'i') } })
       return postFinded
     } catch (error) {
       throw new ValidationError(`Error al buscar el post: ${(error as Error).message}`)

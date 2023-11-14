@@ -29,6 +29,10 @@ export const ValidateUserDelete = (_id: string): void => {
   if (!_id) returnUserError('El id es requerido')
 }
 
+export const ValidateId = (_id: string): void => {
+  if (_id === 'id super admin') returnUserError('Acción inválida, no se puede cambiar el rol del Administrador')
+}
+
 export const ValidateUserFindById = (id: string): void => {
   if (!id) returnUserError('El id es requerido')
 }
@@ -36,23 +40,35 @@ export const ValidateUserFindById = (id: string): void => {
 //* POST ERRORS
 
 export const ValidatePostCreate = (post: PostEntity): void => {
-  if (!post.title) returnPostError('El título es requerido')
-  if (!post.description) returnPostError('La descripción es requerida')
   if (!post.input) returnPostError('El tipo de posteo es requerido')
-  if (!post.modality) returnPostError('La modalidad es requerida')
-  if (!post.type) returnPostError('El tipo es requerido')
-  if (!post.stack) returnPostError('El stack es requerido')
-  if (!post.location) returnPostError('La ubicación es requerida')
+  if (post.input === 'jd') {
+    if (!post.title) returnPostError('El título es requerido')
+    if (!post.description) returnPostError('La descripción es requerida')
+    if (!post.modality) returnPostError('La modalidad es requerida')
+    if (!post.type) returnPostError('El tipo es requerido')
+    if (!post.stack) returnPostError('El stack es requerido')
+    if (!post.location) returnPostError('La ubicación es requerida')
+  } else {
+    if (!post.title) returnPostError('El título es requerido')
+    if (!post.description) returnPostError('La descripción es requerida')
+    if (!post.input) returnPostError('El tipo de posteo es requerido')
+  }
 }
 
 export const ValidatePostUpdate = (post: PostEntity): void => {
-  if (!post.title) returnPostError('El título es requerido')
-  if (!post.description) returnPostError('La descripción es requerida')
   if (!post.input) returnPostError('El tipo de posteo es requerido')
-  if (!post.modality) returnPostError('La modalidad es requerida')
-  if (!post.type) returnPostError('El tipo es requerido')
-  if (!post.stack) returnPostError('El stack es requerido')
-  if (!post.location) returnPostError('La ubicación es requerida')
+  if (post.input === 'jd') {
+    if (!post.title) returnPostError('El título es requerido')
+    if (!post.description) returnPostError('La descripción es requerida')
+    if (!post.modality) returnPostError('La modalidad es requerida')
+    if (!post.type) returnPostError('El tipo es requerido')
+    if (!post.stack) returnPostError('El stack es requerido')
+    if (!post.location) returnPostError('La ubicación es requerida')
+  } else {
+    if (!post.title) returnPostError('El título es requerido')
+    if (!post.description) returnPostError('La descripción es requerida')
+    if (!post.input) returnPostError('El tipo de posteo es requerido')
+  }
 }
 
 export const ValidatePostDelete = (_id: string): void => {

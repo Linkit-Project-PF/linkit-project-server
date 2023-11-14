@@ -2,7 +2,7 @@ import { randomUUID } from 'crypto'
 import { Schema, model } from 'mongoose'
 
 const blogSchema = new Schema({
-  _id: {
+  id: {
     type: String,
     default: randomUUID(),
     required: true
@@ -34,14 +34,14 @@ const blogSchema = new Schema({
     type: String,
     required: true,
     minlength: 2,
-    maxlength: 5,
+    maxlength: 6,
     enum: ['blog', 'jd', 'social', 'ebook']
   },
   modality: {
     type: String,
     required: false,
     minlength: 2,
-    maxlength: 5,
+    maxlength: 8,
     enum: ['fullTime', 'partTime', 'remote']
   },
   type: {
