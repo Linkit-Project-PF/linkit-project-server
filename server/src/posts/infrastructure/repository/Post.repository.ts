@@ -27,11 +27,11 @@ export class MongoPostRepository implements PostRepository {
     try {
       ValidatePostDelete(id)
       await mongoDBConnect()
-      const resultado = await Post.updateOne(
+      await Post.updateOne(
         { id },
         { $set: { archived: true } }
       )
-      return resultado
+      return 'Post archivado'
     } catch (error) {
       console.error(error)
       return null
