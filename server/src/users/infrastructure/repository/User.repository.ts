@@ -1,6 +1,6 @@
 import { type UserEntity } from '../../domain/user.entity'
 import { type UserRepository } from '../../domain/user.reposiroty'
-import { ValidateUserRegister, ValidateUserLogin, ValidateUserDelete, ValidateUserFindById, ValidateUserUpdate } from '../../../errors/validation'
+import { ValidateUserRegister, ValidateUserLogin, ValidateUserDelete, ValidateUserFindById, ValidateUserUpdate, ValidateId } from '../../../errors/validation'
 import { ValidationError } from '../../../errors/errors'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../../authentication/firebase'
@@ -99,6 +99,7 @@ export class MongoUserRepository implements UserRepository {
   async editRoleUser (id: string): Promise <UserEntity | string> {
     try {
       ValidateUserDelete(id)
+      ValidateId(id)
       await mongoDBConnect()
       const result = await User.updateOne(
         { id },

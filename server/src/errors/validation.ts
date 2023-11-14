@@ -29,6 +29,10 @@ export const ValidateUserDelete = (_id: string): void => {
   if (!_id) returnUserError('El id es requerido')
 }
 
+export const ValidateId = (_id: string): void => {
+  if (_id === 'id super admin') returnUserError('Acción inválida, no se puede cambiar el rol del Administrador')
+}
+
 export const ValidateUserFindById = (id: string): void => {
   if (!id) returnUserError('El id es requerido')
 }
