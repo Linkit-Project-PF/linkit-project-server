@@ -1,5 +1,5 @@
 export interface UserEntity {
-  _id: string
+  id: string
   image?: string
   name: string
   country: string

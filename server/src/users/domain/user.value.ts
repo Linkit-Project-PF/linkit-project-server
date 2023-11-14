@@ -2,7 +2,7 @@ import { randomUUID } from 'crypto'
 import { type UserEntity } from './user.entity'
 
 export class UserValue implements UserEntity {
-  _id: string
+  id: string
   image?: string
   name: string
   password?: string | null
@@ -16,7 +16,7 @@ export class UserValue implements UserEntity {
   active: boolean
 
   constructor (user: UserEntity) {
-    this._id = randomUUID()
+    this.id = randomUUID()
     this.image = user.image ?? 'https://api.dicebear.com/7.x/avataaars-neutral/svg?seed=Callie'
     this.name = user.name
     this.password = user.password ?? undefined

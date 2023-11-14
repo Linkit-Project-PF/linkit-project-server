@@ -16,11 +16,15 @@ export class UserControllers {
 
   public findUserController: RequestHandler = async (req, res) => {
     try {
-      //! Here we can redirect to findUserByEmail or findUserByID depending on what receiving by query
-      //! to have only one controller to find
+      const { id } = req.params
       const { email } = req.query
-      const user = await this.userUseCase.findUserByEmail(String(email))
-      return res.status(200).json(user)
+      if (id) {
+        const user = await this.userUseCase.findUserById(String(id))
+        return res.status(200).json(user)
+      } else {
+        const user = await this.userUseCase.findUserByEmail(String(email))
+        return res.status(200).json(user)
+      }
     } catch (error) {
       return res.status(400).json((error as Error).message)
     }

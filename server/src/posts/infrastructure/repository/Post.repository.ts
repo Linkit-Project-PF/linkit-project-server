@@ -23,12 +23,12 @@ export class MongoPostRepository implements PostRepository {
     }
   }
 
-  async deletePost (_id: string): Promise<any> {
+  async deletePost (id: string): Promise<any> {
     try {
-      ValidatePostDelete(_id)
+      ValidatePostDelete(id)
       await mongoDBConnect()
       const resultado = await Post.updateOne(
-        { _id },
+        { id },
         { $set: { archived: true } }
       )
       return resultado
@@ -51,7 +51,7 @@ export class MongoPostRepository implements PostRepository {
   async findPostByTitle (title: string): Promise<PostEntity | null> {
     try {
       ValidatePostFindByTitle(title)
-      const postFinded = await Post.findOne({ title })
+      const postFinded = await Post.findOne({ title: includes(title) })
       return postFinded
     } catch (error) {
       throw new ValidationError(`Error al buscar el post: ${(error as Error).message}`)
@@ -82,4 +82,7 @@ export class MongoPostRepository implements PostRepository {
       throw new ValidationError(`Error al editar el post: ${(error as Error).message}`)
     }
   }
+}
+function includes (title: string): any {
+  throw new Error('Function not implemented.')
 }

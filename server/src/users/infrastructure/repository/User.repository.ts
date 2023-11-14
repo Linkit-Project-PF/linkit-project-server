@@ -51,12 +51,12 @@ export class MongoUserRepository implements UserRepository {
     }
   }
 
-  async deleteUser (_id: string): Promise<UserEntity | string> {
+  async deleteUser (id: string): Promise<UserEntity | string> {
     try {
-      ValidateUserDelete(_id)
+      ValidateUserDelete(id)
       await mongoDBConnect()
       const resultado = await User.updateOne(
-        { _id },
+        { id },
         { $set: { active: false } }
       )
       return resultado as unknown as UserEntity
@@ -96,12 +96,12 @@ export class MongoUserRepository implements UserRepository {
     }
   }
 
-  async editRoleUser (_id: string): Promise <UserEntity | string> {
+  async editRoleUser (id: string): Promise <UserEntity | string> {
     try {
-      ValidateUserDelete(_id)
+      ValidateUserDelete(id)
       await mongoDBConnect()
       const result = await User.updateOne(
-        { _id },
+        { id },
         { $set: { role: 'admin' } }
       )
       return result as unknown as UserEntity
