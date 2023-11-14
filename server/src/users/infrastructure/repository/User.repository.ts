@@ -75,6 +75,17 @@ export class MongoUserRepository implements UserRepository {
     }
   }
 
+  async findUserByEmail (email: string): Promise<UserEntity | string> {
+    try {
+      // TODO Create validation for email
+      const result = await User.find({ email })
+      if (!result.length) throw Error('No user found')
+      return result as unknown as UserEntity
+    } catch (error) {
+      throw new ValidationError(`Error al buscar: ${(error as Error).message}`)
+    }
+  }
+
   async editUser (id: string, user: UserEntity): Promise<UserEntity | string> {
     try {
       ValidateUserUpdate(user)
