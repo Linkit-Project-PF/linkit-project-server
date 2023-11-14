@@ -37,6 +37,31 @@ const blogSchema = new Schema({
     maxlength: 5,
     enum: ['blog', 'jd', 'social', 'ebook']
   },
+  modality: {
+    type: String,
+    required: false,
+    minlength: 2,
+    maxlength: 5,
+    enum: ['fullTime', 'partTime', 'remote']
+  },
+  type: {
+    type: String,
+    required: false,
+    minlength: 2,
+    maxlength: 5
+  },
+  stack: {
+    type: Array,
+    required: false,
+    minlength: 1,
+    maxlength: 10
+  },
+  location: {
+    type: String,
+    required: false,
+    minlength: 1,
+    maxlength: 30
+  },
   archived: {
     type: Boolean,
     required: true,

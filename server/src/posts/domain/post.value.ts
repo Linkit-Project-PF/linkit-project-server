@@ -6,17 +6,25 @@ export class PostValue implements PostEntity {
   title: string
   image?: string | null
   description: string
-  input: string
   link?: string | null
-  archived: boolean
+  input: string
+  modality?: string | null
+  type?: string | null
+  stack?: string[] | null
+  location?: string | null
+  archived?: boolean | null
 
   constructor (post: PostEntity) {
     this._id = randomUUID()
     this.title = post.title
     this.image = post.image ?? undefined
     this.description = post.description
-    this.input = post.input
     this.link = post.link ?? undefined
+    this.input = post.input
+    this.modality = post.modality ?? undefined
+    this.type = post.type ?? undefined
+    this.stack = post.stack ?? undefined
+    this.location = post.location ?? undefined
     this.archived = post.archived ?? false
   }
 }
