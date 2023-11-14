@@ -51,7 +51,7 @@ export class MongoPostRepository implements PostRepository {
   async findPostByTitle (title: string): Promise<PostEntity | null> {
     try {
       ValidatePostFindByTitle(title)
-      const postFinded = await Post.findOne({ title: includes(title) })
+      const postFinded = await Post.findOne({ title: { $regex: new RegExp(title, 'i') } })
       return postFinded
     } catch (error) {
       throw new ValidationError(`Error al buscar el post: ${(error as Error).message}`)
@@ -82,7 +82,4 @@ export class MongoPostRepository implements PostRepository {
       throw new ValidationError(`Error al editar el post: ${(error as Error).message}`)
     }
   }
-}
-function includes (title: string): any {
-  throw new Error('Function not implemented.')
 }
