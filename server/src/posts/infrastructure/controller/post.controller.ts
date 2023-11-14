@@ -43,7 +43,7 @@ export class PostController {
 
   public putController: RequestHandler = async (req, res) => {
     try {
-      const blog = await this.postUseCase.editPost(req.params.id, req.body)
+      const blog = await this.postUseCase.editPost(req.params._id, req.body)
       return res.status(200).json(blog)
     } catch (error) {
       return res.status(400).json((error as Error).message)
