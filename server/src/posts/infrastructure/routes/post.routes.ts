@@ -11,7 +11,7 @@ const postController = new PostController(postUseCase)
 
 postRoute.get('/type', postController.getTypeController)
 postRoute.get('/:id', postController.getIdController)
-postRoute.get('/title', postController.getTitleController)
+postRoute.get('/search/title', postController.getTitleController)
 postRoute.post('/create', postController.postController)
 postRoute.put('/update/:_id', postController.putController)
 postRoute.delete('/delete/:_id', postController.deleteController)
