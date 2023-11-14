@@ -2,7 +2,7 @@ import { randomUUID } from 'crypto'
 import { type PostEntity } from './post.entity'
 
 export class PostValue implements PostEntity {
-  _id: string
+  id: string
   title: string
   image?: string | null
   description: string
@@ -15,7 +15,7 @@ export class PostValue implements PostEntity {
   archived?: boolean | null
 
   constructor (post: PostEntity) {
-    this._id = randomUUID()
+    this.id = randomUUID()
     this.title = post.title
     this.image = post.image ?? undefined
     this.description = post.description
