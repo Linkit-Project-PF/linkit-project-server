@@ -1,8 +1,7 @@
 import { type PostEntity } from '../../domain/post.entity'
 import { type PostRepository } from '../../domain/post.repository'
-import { ValidatePostCreate, ValidatePostUpdate } from '../../../errors/validation'
+import { ValidatePostCreate, ValidatePostUpdate, ValidatePostDelete, ValidatePostFindById, ValidatePostFindByType } from '../../../errors/validation'
 import { ValidationError } from '../../../errors/errors'
-// import { BlogValue } from '../../domain/blog/blog.value'
 import Post from '../models/Post'
 import mongoDBConnect from '../../../db/mongo'
 
@@ -26,8 +25,8 @@ export class MongoPostRepository implements PostRepository {
 
   async deletePost (_id: string): Promise<any> {
     try {
+      ValidatePostDelete(_id)
       await mongoDBConnect()
-
       const resultado = await Post.updateOne(
         { _id },
         { $set: { archived: true } }
@@ -39,8 +38,19 @@ export class MongoPostRepository implements PostRepository {
     }
   }
 
-  async findPost (type: string, id?: string): Promise<PostEntity[] | string> { //* This needs to filter depending on post type
+  async findPostById (id: string): Promise<PostEntity | null> {
     try {
+      ValidatePostFindById(id)
+      const post = await Post.findById(id)
+      return post
+    } catch (error) {
+      throw new ValidationError(`Error al buscar el post: ${(error as Error).message}`)
+    }
+  }
+
+  async findPostByType (type: string): Promise<PostEntity[] | string> {
+    try {
+      ValidatePostFindByType(type)
       let post
       if (type !== 'undefined') {
         const validTypes = ['jd', 'social', 'blog', 'ebook']
@@ -53,7 +63,7 @@ export class MongoPostRepository implements PostRepository {
     }
   }
 
-  async editPost (id: string, post: PostEntity): Promise<PostEntity | null> { //* This needs to receive the post id? and the changes.
+  async editPost (id: string, post: PostEntity): Promise<PostEntity | null> {
     try {
       const editedPost = await Post.findByIdAndUpdate(id, post)
       ValidatePostUpdate(post)

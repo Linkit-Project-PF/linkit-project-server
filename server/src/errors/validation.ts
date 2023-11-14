@@ -39,15 +39,33 @@ export const ValidatePostCreate = (post: PostEntity): void => {
   if (!post.title) returnPostError('El título es requerido')
   if (!post.description) returnPostError('La descripción es requerida')
   if (!post.input) returnPostError('El tipo de posteo es requerido')
+  if (!post.modality) returnPostError('La modalidad es requerida')
+  if (!post.type) returnPostError('El tipo es requerido')
+  if (!post.stack) returnPostError('El stack es requerido')
+  if (!post.location) returnPostError('La ubicación es requerida')
 }
 
 export const ValidatePostUpdate = (post: PostEntity): void => {
   if (!post.title) returnPostError('El título es requerido')
   if (!post.description) returnPostError('La descripción es requerida')
   if (!post.input) returnPostError('El tipo de posteo es requerido')
+  if (!post.modality) returnPostError('La modalidad es requerida')
+  if (!post.type) returnPostError('El tipo es requerido')
+  if (!post.stack) returnPostError('El stack es requerido')
+  if (!post.location) returnPostError('La ubicación es requerida')
 }
 
-// export const ValidatePostDelete
+export const ValidatePostDelete = (_id: string): void => {
+  if (!_id) returnPostError('El id es requerido')
+}
+
+export const ValidatePostFindByType = (type: string): void => {
+  if (!type) returnPostError('El tipo es requerido')
+}
+
+export const ValidatePostFindById = (id: string): void => {
+  if (!id) returnPostError('El id es requerido')
+}
 
 //* GENERAL ERRORS
 
