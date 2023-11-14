@@ -17,7 +17,7 @@ export class MongoPostRepository implements PostRepository {
       if (!postExists) {
         const postCreated = await Post.create(post)
         return postCreated
-      } else throw Error('Another post already exists with same Title from that type')
+      } else throw Error('Ya existe otro post de este tipo con este título')
     } catch (error: any) {
       throw new ValidationError(`Error al crear el post: ${(error as Error).message}`)
     }
