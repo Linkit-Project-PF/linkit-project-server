@@ -6,8 +6,8 @@ export class PostController {
 
   public getTypeController: RequestHandler = async (req, res) => {
     try {
-      const blog = await this.postUseCase.findPostByType(String(req.query.type))
-      return res.status(200).json(blog)
+      const post = await this.postUseCase.findPostByType(String(req.query.type))
+      return res.status(200).json(post)
     } catch (error) {
       return res.status(400).json((error as Error).message)
     }
@@ -15,8 +15,8 @@ export class PostController {
 
   public getIdController: RequestHandler = async (req, res) => {
     try {
-      const blog = await this.postUseCase.findPostById(req.params.id)
-      return res.status(200).json(blog)
+      const post = await this.postUseCase.findPostById(req.params.id)
+      return res.status(200).json(post)
     } catch (error) {
       return res.status(400).json((error as Error).message)
     }
@@ -24,8 +24,8 @@ export class PostController {
 
   public getTitleController: RequestHandler = async (req, res) => {
     try {
-      const blog = await this.postUseCase.findPostByTitle(String(req.query.title))
-      return res.status(200).json(blog)
+      const post = await this.postUseCase.findPostByTitle(String(req.query.title))
+      return res.status(200).json(post)
     } catch (error) {
       return res.status(400).json((error as Error).message)
     }
@@ -33,9 +33,9 @@ export class PostController {
 
   public postController: RequestHandler = async (req, res) => {
     try {
-      const blog = await this.postUseCase.createPost(req.body)
-      if (typeof blog === 'string') return res.status(409).json(blog)
-      return res.status(201).json(blog)
+      const post = await this.postUseCase.createPost(req.body)
+      if (typeof post === 'string') return res.status(409).json(post)
+      return res.status(201).json(post)
     } catch (error) {
       return res.status(400).json((error as Error).message)
     }
@@ -43,8 +43,8 @@ export class PostController {
 
   public putController: RequestHandler = async (req, res) => {
     try {
-      const blog = await this.postUseCase.editPost(req.params._id, req.body)
-      return res.status(200).json(blog)
+      const post = await this.postUseCase.editPost(req.params._id, req.body)
+      return res.status(200).json(post)
     } catch (error) {
       return res.status(400).json((error as Error).message)
     }
@@ -53,8 +53,8 @@ export class PostController {
   public deleteController: RequestHandler = async (req, res) => {
     try {
       const { _id } = req.params
-      const blog = await this.postUseCase.deletePost(_id)
-      return res.status(200).json(blog)
+      const post = await this.postUseCase.deletePost(_id)
+      return res.status(200).json(post)
     } catch (error) {
       return res.status(400).json((error as Error).message)
     }
