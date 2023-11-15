@@ -6,7 +6,7 @@ export class PostController {
 
   public getTypeController: RequestHandler = async (req, res) => {
     try {
-      const blog = await this.postUseCase.findPostByType(String(req.query.type), String(req.query.id))
+      const blog = await this.postUseCase.findPostByType(String(req.query.type))
       return res.status(200).json(blog)
     } catch (error) {
       return res.status(400).json((error as Error).message)

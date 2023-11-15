@@ -18,8 +18,8 @@ export class PostUseCase {
     return post
   }
 
-  public findPostByType = async (type: string, id?: string): Promise<PostEntity[] | string> => {
-    const post = await this.PostRepository.findPostByType(type, id)
+  public findPostByType = async (type: string): Promise<PostEntity[] | string> => {
+    const post = await this.PostRepository.findPostByType(type)
     return post
   }
 
