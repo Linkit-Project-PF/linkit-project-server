@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto'
 import { Schema, model } from 'mongoose'
 
-const blogSchema = new Schema({
+const postSchema = new Schema({
   id: {
     type: String,
     default: randomUUID(),
@@ -69,4 +69,4 @@ const blogSchema = new Schema({
   }
 })
 
-export default model('Blog', blogSchema)
+export default model('Post', postSchema)
