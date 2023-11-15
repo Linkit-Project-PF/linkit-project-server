@@ -73,9 +73,9 @@ export class MongoPostRepository implements PostRepository {
     }
   }
 
-  async editPost (id: string, post: PostEntity): Promise<PostEntity | null> {
+  async editPost (_id: string, post: PostEntity): Promise<PostEntity | null> {
     try {
-      const editedPost = await Post.findByIdAndUpdate(id, post)
+      const editedPost = await Post.findByIdAndUpdate(_id, post)
       ValidatePostUpdate(post)
       return editedPost
     } catch (error) {
