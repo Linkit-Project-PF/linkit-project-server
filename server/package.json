@@ -13,7 +13,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-
     "airtable": "^0.12.2",
     "axios": "^1.6.0",
     "cors": "^2.8.5",
