@@ -14,6 +14,6 @@ postRoute.get('/search/id/:id', postController.getIdController)
 postRoute.get('/search/title', postController.getTitleController)
 postRoute.post('/create', postController.postController)
 postRoute.put('/update/:_id', postController.putController)
-postRoute.delete('/delete/:_id', postController.deleteController)
+postRoute.delete('/delete/:id', postController.deleteController)
 
 export default postRoute

@@ -5,6 +5,6 @@ export interface PostRepository {
   findPostByType: (type: string) => Promise<PostEntity[] | string>
   findPostById: (id: string) => Promise<PostEntity | null>
   findPostByTitle: (title: string) => Promise<PostEntity | null>
-  deletePost: (id: string) => Promise<any>
+  deletePost: (_id: string) => Promise<any>
   editPost: (id: string, post: PostEntity) => Promise<PostEntity | null>
 }
