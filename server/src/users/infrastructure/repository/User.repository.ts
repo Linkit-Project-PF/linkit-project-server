@@ -1,6 +1,7 @@
+/* eslint-disable indent */
 import { type UserEntity } from '../../domain/user.entity'
 import { type UserRepository } from '../../domain/user.reposiroty'
-import { ValidateUserRegister, ValidateUserLogin, ValidateUserDelete, ValidateUserFindById, ValidateUserUpdate, ValidateId } from '../../../errors/validation'
+import { ValidateUserRegister, ValidateUserLogin, ValidateUserDelete, ValidateUserUpdate, ValidateId } from '../../../errors/validation'
 import { ValidationError } from '../../../errors/errors'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../../authentication/firebase'
@@ -65,21 +66,29 @@ export class MongoUserRepository implements UserRepository {
     }
   }
 
-  async findUserById (id: string): Promise<UserEntity | string> {
+  async findUser (value: string, filter: string): Promise<UserEntity | UserEntity[] | string> {
     try {
-      ValidateUserFindById(id)
-      const result = await User.findById(id)
-      return result as unknown as UserEntity
-    } catch (error) {
-      throw new ValidationError(`Error al buscar: ${(error as Error).message}`)
-    }
-  }
-
-  async findUserByEmail (email: string): Promise<UserEntity | string> {
-    try {
-      // TODO Create validation for email
-      const result = await User.find({ email })
-      if (!result.length) throw Error('No user found')
+      let result
+      switch (filter) {
+        case 'id':
+          result = await User.findById(value)
+          break
+        case 'email':
+          result = await User.find({ email: value })
+          break
+        case 'active':
+          result = await User.find({ active: value })
+          break
+        case 'tech':
+          result = (await User.find()).filter(user => user.technologies.includes(value))
+          break
+        case 'all':
+          result = await User.find()
+          break
+        default:
+          result = 'Not a valid parameter'
+          break
+      }
       return result as unknown as UserEntity
     } catch (error) {
       throw new ValidationError(`Error al buscar: ${(error as Error).message}`)

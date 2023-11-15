@@ -1,30 +1,14 @@
 import { type RequestHandler } from 'express'
 import { type UserUseCase } from '../../aplication/userUseCase'
+import getUserValidator from '../helpers/getUserValidator'
 
 export class UserControllers {
   constructor (private readonly userUseCase: UserUseCase) {}
 
-  public loginController: RequestHandler = async (req, res) => { //* function name can change
+  public getController: RequestHandler = async (req, res) => {
     try {
-      const { email, password } = req.query
-      const user = await this.userUseCase.loginUser(String(email), String(password))
+      const user = await getUserValidator(req.query, this.userUseCase)
       return res.status(200).json(user)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
-    }
-  }
-
-  public findUserController: RequestHandler = async (req, res) => {
-    try {
-      const { id } = req.params
-      const { email } = req.query
-      if (id) {
-        const user = await this.userUseCase.findUserById(String(id))
-        return res.status(200).json(user)
-      } else {
-        const user = await this.userUseCase.findUserByEmail(String(email))
-        return res.status(200).json(user)
-      }
     } catch (error) {
       return res.status(400).json((error as Error).message)
     }
@@ -51,15 +35,6 @@ export class UserControllers {
   public deleteController: RequestHandler = async (req, res) => {
     try {
       const user = await this.userUseCase.deleteUser(req.params.id)
-      return res.status(200).json(user)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
-    }
-  }
-
-  public putRoleController: RequestHandler = async (req, res) => {
-    try {
-      const user = await this.userUseCase.editRoleUser(req.body)
       return res.status(200).json(user)
     } catch (error) {
       return res.status(400).json((error as Error).message)

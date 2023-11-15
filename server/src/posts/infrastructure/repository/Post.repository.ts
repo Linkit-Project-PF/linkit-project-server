@@ -18,7 +18,7 @@ export class MongoPostRepository implements PostRepository {
         const postCreated = await Post.create(post)
         return postCreated
       } else throw Error('Ya existe otro post de este tipo con este título')
-    } catch (error: any) {
+    } catch (error) {
       throw new ValidationError(`Error al crear el post: ${(error as Error).message}`)
     }
   }
@@ -63,7 +63,7 @@ export class MongoPostRepository implements PostRepository {
       ValidatePostFindByType(type)
       let post
       if (type !== 'undefined') {
-        const validTypes = ['jd', 'social', 'blog', 'ebook']
+        const validTypes = ['social', 'blog', 'ebook']
         if (!validTypes.includes(type)) throw Error('That is not a valid post type')
         post = await Post.find({ input: type })
       } else post = await Post.find()

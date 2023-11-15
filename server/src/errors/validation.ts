@@ -13,6 +13,7 @@ export const ValidateUserRegister = (user: UserEntity): void => {
 }
 
 export const ValidateUserLogin = (email: string, password: string): void => {
+  if (email === 'undefined' || password === 'undefined') returnUserError('Credenciales requeridas')
   if (!email) returnUserError('El email es requerido')
   if (!password) returnUserError('La contraseña es requerida')
 }
