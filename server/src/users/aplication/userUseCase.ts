@@ -5,21 +5,14 @@ import { UserValue } from '../domain/user.value'
 export class UserUseCase {
   constructor (private readonly userRepository: UserRepository) {}
 
-  public registerUser = async (
-    user: UserEntity
-    , type: string): Promise<UserEntity | string> => {
+  public registerUser = async (user: UserEntity, type: string): Promise<UserEntity | string> => {
     const newUser = new UserValue(user)
     const userCreated = await this.userRepository.registerUser(newUser, type)
     return userCreated
   }
 
-  public findUserById = async (uuid: string): Promise<UserEntity | string> => {
-    const user = await this.userRepository.findUserById(uuid)
-    return user
-  }
-
-  public findUserByEmail = async (email: string): Promise<UserEntity | string> => {
-    const user = await this.userRepository.findUserByEmail(email)
+  public findUser = async (value: string, filter: string): Promise<UserEntity | UserEntity[] | string> => {
+    const user = await this.userRepository.findUser(value, filter)
     return user
   }
 
@@ -31,11 +24,6 @@ export class UserUseCase {
   public editUser = async (id: string, user: UserEntity): Promise<UserEntity | string> => {
     const editUser = await this.userRepository.editUser(id, user)
     return editUser
-  }
-
-  public editRoleUser = async (id: string): Promise<UserEntity | string> => {
-    const editRolUser = await this.userRepository.editRoleUser(id)
-    return editRolUser
   }
 
   public deleteUser = async (id: string): Promise<UserEntity | string> => {

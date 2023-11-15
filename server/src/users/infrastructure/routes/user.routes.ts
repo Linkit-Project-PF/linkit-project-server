@@ -9,11 +9,9 @@ const mongoUserRepository = new MongoUserRepository()
 const userUseCase = new UserUseCase(mongoUserRepository)
 const userController = new UserControllers(userUseCase)
 
-userRoute.post('/register', userController.postController)
-userRoute.get('/login', userController.loginController)
-userRoute.get('/find', userController.findUserController)
-userRoute.put('/update/:id', userController.putController)
-userRoute.put('/editRole', userController.putRoleController)
+userRoute.get('/find', userController.getController)
+userRoute.post('/create', userController.postController)
+userRoute.put('/update', userController.putController)
 userRoute.delete('/delete/:id', userController.deleteController)
 
 export default userRoute
