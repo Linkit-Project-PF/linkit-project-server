@@ -35,7 +35,7 @@ const postSchema = new Schema({
     required: true,
     minlength: 2,
     maxlength: 6,
-    enum: ['blog', 'jd', 'social', 'ebook']
+    enum: ['blog', 'social', 'ebook']
   },
   modality: {
     type: String,
