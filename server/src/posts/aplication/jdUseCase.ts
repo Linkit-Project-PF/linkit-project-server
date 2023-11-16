@@ -1,6 +1,6 @@
-import { type JdEntity } from '../domain/jd.entity'
-import { type JdRepository } from '../domain/jd.repository'
-import { JdValue } from '../domain/jd.value'
+import { type JdEntity } from '../domain/jd/jd.entity'
+import { type JdRepository } from '../domain/jd/jd.repository'
+import { JdValue } from '../domain/jd/jd.value'
 
 export class JdUseCase {
   constructor (private readonly JdRepository: JdRepository) {}

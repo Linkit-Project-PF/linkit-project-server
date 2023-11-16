@@ -1,6 +1,6 @@
 import { type UserEntity } from '../users/domain/user/user.entity'
 import { type AdminEntity } from '../users/domain/admin/admin.entity'
-import { type PostEntity } from '../posts/domain/post.entity'
+import { type PostEntity } from '../posts/domain/post/post.entity'
 import Admin from '../users/infrastructure/collections/Admin'
 import User from '../users/infrastructure/collections/User'
 import { returnUserError, returnConectError, returnPostError } from './returnErrors'
