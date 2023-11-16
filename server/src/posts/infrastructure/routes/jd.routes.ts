@@ -9,9 +9,9 @@ const mongoJdRepository = new MongoJdRepository()
 const jdUseCase = new JdUseCase(mongoJdRepository)
 const jdController = new JdController(jdUseCase)
 
-jdRoute.post('/createJd', jdController.postJdController)
-jdRoute.get('/searchJd', jdController.getJdController)
-jdRoute.put('/updateJd/:_id', jdController.putJdController)
-jdRoute.delete('/deleteJd/:id', jdController.deleteJdController)
+jdRoute.post('/create', jdController.postController)
+jdRoute.get('/find', jdController.getController)
+jdRoute.put('/update/:_id', jdController.putController)
+jdRoute.delete('/delete/:id', jdController.deleteController)
 
 export default jdRoute

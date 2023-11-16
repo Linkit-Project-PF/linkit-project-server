@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { type JdEntity } from '../../domain/jd/jd.entity'
 import { type JdRepository } from '../../domain/jd/jd.repository'
 import Jd from '../collections/Jd'
@@ -8,25 +9,24 @@ export class MongoJdRepository implements JdRepository {
     try {
       console.log(jd)
       const jdCreated = await Jd.create(jd)
-
       return jdCreated
     } catch (error) {
-
+      throw new Error(`Error: ${(error as Error).message}`)
     }
   }
 
-  async findJD (
-    id: string,
-    title: string,
-    createdDate: string,
-    requisites: string,
-    modality: string,
-    location: string,
-    schedule: string,
-    stack: string): Promise<JdEntity | any> {
+  async findJD (value: string, filter: string): Promise<JdEntity | JdEntity[] | any> {
     try {
-      const jd = await Jd.findById(id)
-      return jd
+      let result
+      const singleValidValues = ['title', 'location', 'modality', 'schedule', 'archived']
+      if (filter === 'all') result = await Jd.find()
+      else if (filter === 'id') result = await Jd.findById(value)
+      else if (filter === 'stack') {
+        const allJds = await Jd.find()
+        result = allJds.filter(jd => jd.stack.includes(value))
+      } else if (singleValidValues.includes(filter)) result = await Jd.find({ [filter]: value })
+      else result = 'Not a valid parameter'
+      return result
     } catch (error) {
       return 'No fue posible encontrar la vacante'
     }
