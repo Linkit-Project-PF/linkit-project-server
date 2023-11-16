@@ -1,9 +1,33 @@
-import { type UserEntity } from '../users/domain/user.entity'
+import { type UserEntity } from '../users/domain/user/user.entity'
+import { type AdminEntity } from '../users/domain/admin/admin.entity'
 import { type PostEntity } from '../posts/domain/post.entity'
+import Admin from '../users/infrastructure/collections/Admin'
+import User from '../users/infrastructure/collections/User'
 import { returnUserError, returnConectError, returnPostError } from './returnErrors'
+import Company from '../users/infrastructure/collections/Company'
 
 //* USER ERRORS
-export const ValidateUserRegister = (user: UserEntity): void => {
+export const ValidateCompanyIfAlreadyonDB = async (email: string): Promise<void> => {
+  const allCompanies = await Company.find({}, 'email')
+  allCompanies.forEach(obj => {
+    if (obj.email === email) returnUserError('Este email ya esta en uso')
+  })
+}
+
+export const ValidateAdminIfAlreadyonDB = async (email: string): Promise<void> => {
+  const allAdmins = await Admin.find({}, 'email')
+  allAdmins.forEach(obj => {
+    if (obj.email === email) returnUserError('Este email ya esta en uso')
+  })
+}
+
+export const ValidateUserIfAlreadyonDB = async (email: string): Promise<void> => {
+  const allUsers = await User.find({}, 'email')
+  allUsers.forEach(obj => {
+    if (obj.email === email) returnUserError('Este email ya esta en uso')
+  })
+}
+export const ValidateUserRegister = (user: UserEntity | AdminEntity): void => {
   if (!user.name) returnUserError('El nombre es requerido')
   if (!user.email) returnUserError('El email es requerido')
   if (!user.password) returnUserError('La contraseña es requerida')
@@ -13,6 +37,7 @@ export const ValidateUserRegister = (user: UserEntity): void => {
 }
 
 export const ValidateUserLogin = (email: string, password: string): void => {
+  if (email === 'undefined' || password === 'undefined') returnUserError('Credenciales requeridas')
   if (!email) returnUserError('El email es requerido')
   if (!password) returnUserError('La contraseña es requerida')
 }
