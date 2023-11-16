@@ -1,9 +1,9 @@
 export interface PostEntity {
   id: string
-  airTableId: string//! Preguntar a la empresa
+  airTableId?: string | null //! Preguntar a la empresa
   title: string
   description: string
-  createdDate: string | null//! Verificar tipo de dato
+  createdDate?: string | null //! Verificar tipo de dato
   image?: string | null
   link?: string | null
   input: string

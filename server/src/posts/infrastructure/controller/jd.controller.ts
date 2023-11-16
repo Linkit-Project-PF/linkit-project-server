@@ -20,11 +20,11 @@ export class JdController {
         String(req.query.id),
         String(req.query.title),
         String(req.query.createdDate),
-        Array.isArray(req.query.requisites) ? (req.query.requisites as string[]) : undefined,
+        String(req.query.requisites),
         String(req.query.modality),
         String(req.query.location),
         String(req.query.schedule),
-        Array.isArray(req.query.stack) ? (req.query.stack as string[]) : undefined
+        String(req.query.stack)
       )
       return res.status(200).json(post)
     } catch (error) {

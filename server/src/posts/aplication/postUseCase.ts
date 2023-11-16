@@ -7,14 +7,14 @@ export class PostUseCase {
 
   public createPost = async (
     post: PostEntity
-  ): Promise<PostEntity | string> => {
+  ): Promise<PostEntity | null> => {
     const newPost = new PostValue(post)
     const PostCreated = await this.PostRepository.createPost(newPost)
     return PostCreated
   }
 
   public findPost = async (
-    id: string, type: string, input: string, title: string, createdDate: string, link: string): Promise<PostEntity | string> => {
+    id: string, type: string, input: string, title: string, createdDate: string, link: string): Promise<PostEntity | null> => {
     const post = await this.PostRepository.findPost(id, type, input, title, createdDate, link)
     return post
   }

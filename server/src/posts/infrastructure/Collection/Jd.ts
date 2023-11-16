@@ -34,7 +34,7 @@ const jdSchema = new Schema({
     maxlength: 200
   },
   requisites: {
-    type: Array,
+    type: String,
     required: false,
     minlength: 0,
     maxlength: 20
@@ -53,7 +53,7 @@ const jdSchema = new Schema({
     maxlength: 60
   },
   stack: {
-    type: Array,
+    type: String,
     required: false,
     minlength: 0,
     maxlength: 20

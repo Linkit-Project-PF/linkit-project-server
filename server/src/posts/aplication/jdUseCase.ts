@@ -14,7 +14,7 @@ export class JdUseCase {
   }
 
   public findJD = async (
-    id: string, title: string, createdDate: string, requisites: string[] | undefined, modality: string, location: string, schedule: string, stack: string[] | undefined
+    id: string, title: string, createdDate: string, requisites: string, modality: string, location: string, schedule: string, stack: string
   ): Promise<JdEntity | any> => {
     const jd = await this.JdRepository.findJD(id, title, createdDate, requisites, modality, location, schedule, stack)
     return jd

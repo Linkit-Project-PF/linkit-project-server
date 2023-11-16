@@ -25,7 +25,7 @@ const postSchema = new Schema({
   },
   createdDate: {
     type: String,
-    required: true
+    required: false
   },
   image: {
     type: String,

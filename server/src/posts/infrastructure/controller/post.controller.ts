@@ -16,7 +16,13 @@ export class PostController {
 
   public getPostController: RequestHandler = async (req, res) => {
     try {
-      const post = await this.postUseCase.findPost(String(req.query.id), String(req.query.type), String(req.query.input), String(req.query.title), String(req.query.createdDate), String(req.query.link))
+      const post = await this.postUseCase.findPost(
+        String(req.query.id),
+        String(req.query.type),
+        String(req.query.input),
+        String(req.query.title),
+        String(req.query.createdDate),
+        String(req.query.link))
       return res.status(200).json(post)
     } catch (error) {
       return res.status(400).json((error as Error).message)
