@@ -3,7 +3,6 @@ import { type PostRepository } from '../../domain/post.repository'
 import { ValidatePostCreate, ValidatePostUpdate, ValidatePostDelete, ValidatePostFindById, ValidatePostFindByType, ValidatePostFindByTitle } from '../../../errors/validation'
 import { ValidationError } from '../../../errors/errors'
 import Post from '../models/Post'
-import mongoDBConnect from '../../../db/mongo'
 
 export class MongoPostRepository implements PostRepository {
   async createPost (post: PostEntity): Promise<PostEntity | string> {
@@ -26,7 +25,6 @@ export class MongoPostRepository implements PostRepository {
   async deletePost (id: string): Promise<any> {
     try {
       ValidatePostDelete(id)
-      await mongoDBConnect()
       await Post.updateOne(
         { id },
         { $set: { archived: true } }

@@ -51,7 +51,7 @@ const userSchema = new Schema({
     required: true,
     minlength: 3,
     maxlength: 30,
-    enum: ['user', 'company', 'admin']
+    enum: ['user']
   },
   technologies: {
     type: Array,

@@ -1,11 +1,19 @@
-import { type UserEntity } from '../users/domain/user.entity'
+import { type UserEntity } from '../users/domain/user/user.entity'
 import { type AdminEntity } from '../users/domain/admin/admin.entity'
 import { type PostEntity } from '../posts/domain/post.entity'
 import Admin from '../users/infrastructure/collections/Admin'
 import User from '../users/infrastructure/collections/User'
 import { returnUserError, returnConectError, returnPostError } from './returnErrors'
+import Company from '../users/infrastructure/collections/Company'
 
 //* USER ERRORS
+export const ValidateCompanyIfAlreadyonDB = async (email: string): Promise<void> => {
+  const allCompanies = await Company.find({}, 'email')
+  allCompanies.forEach(obj => {
+    if (obj.email === email) returnUserError('Este email ya esta en uso')
+  })
+}
+
 export const ValidateAdminIfAlreadyonDB = async (email: string): Promise<void> => {
   const allAdmins = await Admin.find({}, 'email')
   allAdmins.forEach(obj => {

@@ -16,7 +16,7 @@ export class UserControllers {
 
   public postController: RequestHandler = async (req, res) => {
     try {
-      const user = await this.userUseCase.registerUser(req.body, String(req.query.type))
+      const user = await this.userUseCase.createUser(req.body)
       return res.status(201).json(user)
     } catch (error) {
       return res.status(400).json((error as Error).message)

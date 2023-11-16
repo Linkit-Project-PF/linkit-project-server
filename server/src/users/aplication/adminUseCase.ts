@@ -5,24 +5,14 @@ import { type AdminRepository } from '../domain/admin/admin.repository'
 export class AdminUseCase {
   constructor (private readonly adminRepository: AdminRepository) {}
 
-  public loginAdmin = async (email: string, password: string): Promise<AdminEntity | string> => {
-    const admin = await this.adminRepository.loginAdmin(email, password)
+  public findAdmin = async (value: string, filter: string): Promise<AdminEntity | AdminEntity[] | string> => {
+    const admin = await this.adminRepository.findAdmin(value, filter)
     return admin
   }
 
-  public findAdminById = async (uuid: string): Promise<AdminEntity | string> => {
-    const admin = await this.adminRepository.findAdminById(uuid)
-    return admin
-  }
-
-  public findAdminByEmail = async (email: string): Promise<AdminEntity | string> => {
-    const admin = await this.adminRepository.findAdminByEmail(email)
-    return admin
-  }
-
-  public registerAdmin = async (admin: AdminEntity, type: string): Promise<AdminEntity | string> => {
+  public createAdmin = async (admin: AdminEntity): Promise<AdminEntity | string> => {
     const newAdmin = new AdminValue(admin)
-    const adminCreated = await this.adminRepository.registerAdmin(newAdmin, type)
+    const adminCreated = await this.adminRepository.createAdmin(newAdmin)
     return adminCreated
   }
 
