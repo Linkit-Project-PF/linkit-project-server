@@ -1,6 +1,6 @@
-import { type JdEntity } from '../../domain/jd.entity'
-import { type JdRepository } from '../../domain/jd.repository'
-import Jd from '../Collection/Jd'
+import { type JdEntity } from '../../domain/jd/jd.entity'
+import { type JdRepository } from '../../domain/jd/jd.repository'
+import Jd from '../collections/Jd'
 import mongoDBConnect from '../../../db/mongo'
 
 export class MongoJdRepository implements JdRepository {

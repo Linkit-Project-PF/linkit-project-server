@@ -1,8 +1,8 @@
-import { type PostEntity } from '../../domain/post.entity'
-import { type PostRepository } from '../../domain/post.repository'
+import { type PostEntity } from '../../domain/post/post.entity'
+import { type PostRepository } from '../../domain/post/post.repository'
 import { ValidatePostCreate, ValidatePostUpdate, ValidatePostDelete, ValidatePostFindById } from '../../../errors/validation' //, ValidatePostFindByType, ValidatePostFindByTitle
 import { ValidationError } from '../../../errors/errors'
-import Post from '../Collection/Post'
+import Post from '../collections/Post'
 import mongoDBConnect from '../../../db/mongo'
 
 export class MongoPostRepository implements PostRepository {

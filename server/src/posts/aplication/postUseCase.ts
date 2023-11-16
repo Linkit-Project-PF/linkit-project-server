@@ -1,6 +1,6 @@
-import { type PostEntity } from '../domain/post.entity'
-import { type PostRepository } from '../domain/post.repository'
-import { PostValue } from '../domain/post.value'
+import { type PostEntity } from '../domain/post/post.entity'
+import { type PostRepository } from '../domain/post/post.repository'
+import { PostValue } from '../domain/post/post.value'
 
 export class PostUseCase {
   constructor (private readonly PostRepository: PostRepository) {}
