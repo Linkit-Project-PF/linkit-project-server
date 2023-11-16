@@ -1,12 +1,13 @@
 import { type RequestHandler } from 'express'
 import { type AdminUseCase } from '../../aplication/adminUseCase'
+import getAdminValidator from '../helpers/getAdminValidator'
 
 export class AdminControllers {
   constructor (private readonly adminUseCase: AdminUseCase) {}
 
   public getController: RequestHandler = async (req, res) => {
     try {
-      const admin = await this.adminUseCase.loginAdmin(req.body.email, req.body.password)
+      const admin = await getAdminValidator(req.query, this.adminUseCase)
       return res.status(200).json(admin)
     } catch (error) {
       return res.status(400).json((error as Error).message)
@@ -15,7 +16,7 @@ export class AdminControllers {
 
   public postController: RequestHandler = async (req, res) => {
     try {
-      const admin = await this.adminUseCase.registerAdmin(req.body, String(req.query.type))
+      const admin = await this.adminUseCase.createAdmin(req.body)
       return res.status(201).json(admin)
     } catch (error) {
       return res.status(400).json((error as Error).message)

@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose'
 
-const userSchema = new Schema({
+const adminSchema = new Schema({
   image: {
     type: String,
     required: false,
@@ -39,7 +39,7 @@ const userSchema = new Schema({
     required: true,
     minlength: 3,
     maxlength: 30,
-    enum: ['user', 'company', 'admin']
+    enum: ['admin']
   },
   active: {
     type: Boolean,
@@ -48,4 +48,4 @@ const userSchema = new Schema({
   }
 })
 
-export default model('User', userSchema)
+export default model('Admin', adminSchema)
