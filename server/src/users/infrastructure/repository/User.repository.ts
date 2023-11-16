@@ -32,29 +32,12 @@ export class MongoUserRepository implements UserRepository {
   async findUser (value: string, filter: string): Promise<UserEntity | UserEntity[] | string> {
     try {
       let result
-      switch (filter) {
-        case 'id':
-          result = await User.findById(value)
-          break
-        case 'name':
-          result = await User.find({ name: value })
-          break
-        case 'email':
-          result = await User.find({ email: value })
-          break
-        case 'active':
-          result = await User.find({ active: value })
-          break
-        case 'tech':
-          result = (await User.find()).filter(user => user.technologies.includes(value))
-          break
-        case 'all':
-          result = await User.find()
-          break
-        default:
-          result = 'Not a valid parameter'
-          break
-      }
+      const validSingleParams = ['name', 'email', 'active', 'country']
+      if (filter === 'all') result = await User.find()
+      else if (filter === 'id') result = await User.findById(value)
+      else if (filter === 'tech') result = (await User.find()).filter(user => user.technologies.includes(value))
+      else if (validSingleParams.includes(filter)) result = await User.find({ [filter]: value })
+      else throw Error('Not a valid parameter')
       return result as unknown as UserEntity
     } catch (error) {
       throw new ValidationError(`Error al buscar: ${(error as Error).message}`)

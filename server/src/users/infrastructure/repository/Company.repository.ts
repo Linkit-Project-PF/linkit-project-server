@@ -19,28 +19,13 @@ export class MongoCompanyRepository implements CompanyRepository {
 
   async findCompany (value: string, filter: string): Promise<CompanyEntity | CompanyEntity[] | string> {
     try {
-      let company
-      switch (filter) {
-        case 'id':
-          company = await Company.findById(value)
-          break
-        case 'name':
-          company = await Company.find({ name: value })
-          break
-        case 'email':
-          company = await Company.find({ email: value })
-          break
-        case 'active':
-          company = await Company.find({ active: value })
-          break
-        case 'all':
-          company = await Company.find()
-          break
-        default:
-          company = 'Not a valid parameter'
-          break
-      }
-      return company as CompanyEntity
+      let result
+      const validParams = ['name', 'email', 'active']
+      if (filter === 'all') result = await Company.find()
+      else if (filter === 'id') result = await Company.findById(value)
+      else if (validParams.includes(filter)) result = await Company.find({ [filter]: value })
+      else throw Error('Not a valid parameter')
+      return result as CompanyEntity
     } catch (error) {
       throw new ValidationError(`Error al buscar: ${(error as Error).message}`)
     }

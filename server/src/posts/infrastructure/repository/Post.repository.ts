@@ -45,7 +45,7 @@ export class MongoPostRepository implements PostRepository {
       if (filter === 'all') result = await Post.find()
       else if (filter === 'id') result = await Post.findById(value)
       else if (validFilters.includes(filter)) result = await Post.find({ [filter]: value })
-      else result = 'Not a valid parameter'
+      else throw Error('Not a valid parameter')
       return result as PostEntity[]
     } catch (error) {
       throw new ValidationError(`Error al buscar el post: ${(error as Error).message}`)
