@@ -1,6 +1,7 @@
 import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
+import adminRoute from './users/infrastructure/routes/admin.routes'
 import mongoDBConnect from './db/mongo'
 import userRoute from './users/infrastructure/routes/user.routes'
 import postRoute from './posts/infrastructure/routes/post.routes'
@@ -28,6 +29,7 @@ app.use(express.json())
 
 const port = process.env.PORT ?? 3000
 
+app.use('/admin', adminRoute)
 app.use('/users', userRoute)
 app.use('/posts', postRoute)
 
