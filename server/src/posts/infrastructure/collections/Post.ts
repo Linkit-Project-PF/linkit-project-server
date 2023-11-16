@@ -24,8 +24,9 @@ const postSchema = new Schema({
     maxlength: 3000
   },
   createdDate: {
-    type: String,
-    required: false
+    type: Date,
+    required: false,
+    default: Date()
   },
   image: {
     type: String,
@@ -38,18 +39,12 @@ const postSchema = new Schema({
     required: false,
     minlength: 5
   },
-  input: {
+  type: {
     type: String,
     required: true,
     minlength: 4,
     maxlength: 6,
     enum: ['blog', 'social', 'ebook']
-  },
-  type: { //! Revisar a que se refiere este campo
-    type: String,
-    required: false,
-    minlength: 2,
-    maxlength: 5
   },
   archived: {
     type: Boolean,

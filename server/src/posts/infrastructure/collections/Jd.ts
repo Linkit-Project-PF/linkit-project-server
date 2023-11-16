@@ -24,8 +24,9 @@ const jdSchema = new Schema({
     maxlength: 3000
   },
   createdDate: {
-    type: String,
-    required: false
+    type: Date,
+    required: true,
+    default: Date()
   },
   image: {
     type: String,
@@ -35,35 +36,35 @@ const jdSchema = new Schema({
   },
   requisites: {
     type: String,
-    required: false,
+    required: true,
     minlength: 0,
     maxlength: 20
   },
   modality: {
     type: String,
-    required: false,
+    required: true,
     minlength: 2,
     maxlength: 9,
     enum: ['In-person', 'Remote', 'Hybrid']
   },
   location: {
     type: String,
-    required: false,
+    required: true,
     minlength: 1,
     maxlength: 60
   },
   stack: {
-    type: String,
-    required: false,
+    type: Array,
+    required: true,
     minlength: 0,
     maxlength: 20
   },
   schedule: {
     type: String,
-    required: false,
-    minlength: 2,
-    maxlength: 5,
-    enum: ['full time', 'Part time']
+    required: true,
+    minlength: 9,
+    maxlength: 9,
+    enum: ['full-time', 'part-time']
   },
   archived: {
     type: Boolean,

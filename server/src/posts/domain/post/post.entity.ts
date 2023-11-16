@@ -3,10 +3,9 @@ export interface PostEntity {
   airTableId?: string | null //! Preguntar a la empresa
   title: string
   description: string
-  createdDate?: string | null //! Verificar tipo de dato
+  createdDate: Date
   image?: string | null
   link?: string | null
-  input: string
-  type?: string | null//! Revisar a qué se refiere este campo
+  type: string
   archived?: boolean | null
 }
