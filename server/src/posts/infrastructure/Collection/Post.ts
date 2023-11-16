@@ -7,23 +7,31 @@ const postSchema = new Schema({
     default: randomUUID(),
     required: true
   },
+  airTableId: {
+    type: String,
+    required: false //! Si se requiere, se debe poner en true
+  },
   title: {
     type: String,
     required: true,
     minlength: 3,
-    maxlength: 30
-  },
-  image: {
-    type: String,
-    required: false,
-    minlength: 3,
-    maxlength: 30
+    maxlength: 40
   },
   description: {
     type: String,
     required: true,
     minlength: 10,
     maxlength: 3000
+  },
+  createdDate: {
+    type: String,
+    required: false
+  },
+  image: {
+    type: String,
+    required: false,
+    minlength: 3,
+    maxlength: 200
   },
   link: {
     type: String,
@@ -33,34 +41,15 @@ const postSchema = new Schema({
   input: {
     type: String,
     required: true,
-    minlength: 2,
+    minlength: 4,
     maxlength: 6,
     enum: ['blog', 'social', 'ebook']
   },
-  modality: {
-    type: String,
-    required: false,
-    minlength: 2,
-    maxlength: 8,
-    enum: ['fullTime', 'partTime', 'remote']
-  },
-  type: {
+  type: { //! Revisar a que se refiere este campo
     type: String,
     required: false,
     minlength: 2,
     maxlength: 5
-  },
-  stack: {
-    type: Array,
-    required: false,
-    minlength: 1,
-    maxlength: 10
-  },
-  location: {
-    type: String,
-    required: false,
-    minlength: 1,
-    maxlength: 30
   },
   archived: {
     type: Boolean,

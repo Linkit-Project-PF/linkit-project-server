@@ -1,11 +1,12 @@
 import { type PostEntity } from '../../domain/post.entity'
 import { type PostRepository } from '../../domain/post.repository'
-import { ValidatePostCreate, ValidatePostUpdate, ValidatePostDelete, ValidatePostFindById, ValidatePostFindByType, ValidatePostFindByTitle } from '../../../errors/validation'
+import { ValidatePostCreate, ValidatePostUpdate, ValidatePostDelete, ValidatePostFindById } from '../../../errors/validation' //, ValidatePostFindByType, ValidatePostFindByTitle
 import { ValidationError } from '../../../errors/errors'
-import Post from '../models/Post'
+import Post from '../Collection/Post'
+import mongoDBConnect from '../../../db/mongo'
 
 export class MongoPostRepository implements PostRepository {
-  async createPost (post: PostEntity): Promise<PostEntity | string> {
+  async createPost (post: PostEntity): Promise<PostEntity> {
     try {
       ValidatePostCreate(post)
       let postExists = false
@@ -17,14 +18,15 @@ export class MongoPostRepository implements PostRepository {
         const postCreated = await Post.create(post)
         return postCreated
       } else throw Error('Ya existe otro post de este tipo con este título')
-    } catch (error) {
+    } catch (error: any) {
       throw new ValidationError(`Error al crear el post: ${(error as Error).message}`)
     }
   }
 
-  async deletePost (id: string): Promise<any> {
+  async deletePost (id: string): Promise<string> {
     try {
       ValidatePostDelete(id)
+      await mongoDBConnect()
       await Post.updateOne(
         { id },
         { $set: { archived: true } }
@@ -32,11 +34,17 @@ export class MongoPostRepository implements PostRepository {
       return 'Post archivado'
     } catch (error) {
       console.error(error)
-      return null
+      return 'Error al intentar archivar el posteo'
     }
   }
 
-  async findPostById (id: string): Promise<PostEntity | null> {
+  async findPost (
+    id: string,
+    type: string,
+    input: string,
+    title: string,
+    createdDate: string,
+    link: string): Promise<PostEntity | null> {
     try {
       ValidatePostFindById(id)
       const post = await Post.findById(id)
@@ -46,30 +54,30 @@ export class MongoPostRepository implements PostRepository {
     }
   }
 
-  async findPostByTitle (title: string): Promise<PostEntity | null> {
-    try {
-      ValidatePostFindByTitle(title)
-      const postFinded = await Post.findOne({ title: { $regex: new RegExp(title, 'i') } })
-      return postFinded
-    } catch (error) {
-      throw new ValidationError(`Error al buscar el post: ${(error as Error).message}`)
-    }
-  }
+  // async findPostByTitle (title: string): Promise<PostEntity | null> {
+  //   try {
+  //     ValidatePostFindByTitle(title)
+  //     const postFinded = await Post.findOne({ title: { $regex: new RegExp(title, 'i') } })
+  //     return postFinded
+  //   } catch (error) {
+  //     throw new ValidationError(`Error al buscar el post: ${(error as Error).message}`)
+  //   }
+  // }
 
-  async findPostByType (type: string): Promise<PostEntity[] | string> {
-    try {
-      ValidatePostFindByType(type)
-      let post
-      if (type !== 'undefined') {
-        const validTypes = ['social', 'blog', 'ebook']
-        if (!validTypes.includes(type)) throw Error('That is not a valid post type')
-        post = await Post.find({ input: type })
-      } else post = await Post.find()
-      return post
-    } catch (error: any) {
-      return `Error ${error}`
-    }
-  }
+  // async findPostByType (type: string): Promise<PostEntity[] | string> {
+  //   try {
+  //     ValidatePostFindByType(type)
+  //     let post
+  //     if (type !== 'undefined') {
+  //       const validTypes = ['jd', 'social', 'blog', 'ebook']
+  //       if (!validTypes.includes(type)) throw Error('That is not a valid post type')
+  //       post = await Post.find({ input: type })
+  //     } else post = await Post.find()
+  //     return post
+  //   } catch (error: any) {
+  //     return `Error ${error}`
+  //   }
+  // }
 
   async editPost (_id: string, post: PostEntity): Promise<PostEntity | null> {
     try {

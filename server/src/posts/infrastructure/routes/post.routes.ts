@@ -9,11 +9,9 @@ const mongoPostRepository = new MongoPostRepository()
 const postUseCase = new PostUseCase(mongoPostRepository)
 const postController = new PostController(postUseCase)
 
-postRoute.get('/type', postController.getTypeController)
-postRoute.get('/search/id/:id', postController.getIdController)
-postRoute.get('/search/title', postController.getTitleController)
-postRoute.post('/create', postController.postController)
-postRoute.put('/update/:_id', postController.putController)
-postRoute.delete('/delete/:id', postController.deleteController)
+postRoute.post('/create', postController.putPostController)
+postRoute.get('/searchPost', postController.getPostController)
+postRoute.put('/updatePost/:_id', postController.putPostController)
+postRoute.delete('/delete/:id', postController.deletePostController)
 
 export default postRoute
