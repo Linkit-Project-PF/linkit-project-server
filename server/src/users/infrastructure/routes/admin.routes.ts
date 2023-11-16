@@ -11,7 +11,7 @@ const adminController = new AdminControllers(adminUseCase)
 
 adminRoute.get('/find', adminController.getController)
 adminRoute.post('/create', adminController.postController)
-adminRoute.put('/update', adminController.putController)
+adminRoute.put('/update/:id', adminController.putController)
 adminRoute.delete('/delete/:id', adminController.deleteController)
 
 export default adminRoute

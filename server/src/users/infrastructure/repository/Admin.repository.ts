@@ -2,7 +2,7 @@
 import { type AdminEntity } from '../../domain/admin/admin.entity'
 import { type AdminRepository } from '../../domain/admin/admin.repository'
 import { ValidationError } from '../../../errors/errors'
-import { ValidateAdminIfAlreadyonDB } from '../../../errors/validation'
+import { ValidateAdminIfAlreadyonDB, ValidateUserDelete } from '../../../errors/validation'
 import Admin from '../collections/Admin'
 
 export class MongoAdminRepository implements AdminRepository {
@@ -44,21 +44,25 @@ export class MongoAdminRepository implements AdminRepository {
     }
   }
 
-  async editAdmin (id: string, admin: AdminEntity): Promise<AdminEntity | string> {
+  async editAdmin (_id: string, admin: AdminEntity): Promise<AdminEntity | string> {
     try {
-      const editAdmin = await Admin.findByIdAndUpdate(id, admin)
+      const editAdmin = await Admin.findByIdAndUpdate(_id, admin)
       return editAdmin as AdminEntity
     } catch (error: any) {
       throw new ValidationError(`Error al editar el administrador: ${(error as Error).message}`)
     }
   }
 
-  async deleteAdmin (id: string): Promise<AdminEntity | string> {
+  async deleteAdmin (_id: string): Promise<AdminEntity | string> {
     try {
-      const deleteAdmin = await Admin.findByIdAndDelete(id)
-      return deleteAdmin as AdminEntity
-    } catch (error: any) {
-      throw new ValidationError(`Error al eliminar el administrador: ${(error as Error).message}`)
+      ValidateUserDelete(_id)
+      const resultado = await Admin.updateOne(
+        { _id },
+        { $set: { active: false } }
+      )
+      return resultado as unknown as AdminEntity
+    } catch (error) {
+      throw new ValidationError(`Error al eliminar: ${(error as Error).message}`)
     }
   }
 }
