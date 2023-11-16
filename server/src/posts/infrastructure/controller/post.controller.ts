@@ -4,34 +4,7 @@ import { type PostUseCase } from '../../aplication/postUseCase'
 export class PostController {
   constructor (private readonly postUseCase: PostUseCase) {}
 
-  public getTypeController: RequestHandler = async (req, res) => {
-    try {
-      const post = await this.postUseCase.findPostByType(String(req.query.type))
-      return res.status(200).json(post)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
-    }
-  }
-
-  public getIdController: RequestHandler = async (req, res) => {
-    try {
-      const post = await this.postUseCase.findPostById(req.params.id)
-      return res.status(200).json(post)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
-    }
-  }
-
-  public getTitleController: RequestHandler = async (req, res) => {
-    try {
-      const post = await this.postUseCase.findPostByTitle(String(req.query.title))
-      return res.status(200).json(post)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
-    }
-  }
-
-  public postController: RequestHandler = async (req, res) => {
+  public postPostController: RequestHandler = async (req, res) => {
     try {
       const post = await this.postUseCase.createPost(req.body)
       if (typeof post === 'string') return res.status(409).json(post)
@@ -41,7 +14,16 @@ export class PostController {
     }
   }
 
-  public putController: RequestHandler = async (req, res) => {
+  public getPostController: RequestHandler = async (req, res) => {
+    try {
+      const post = await this.postUseCase.findPost(String(req.query.id), String(req.query.type), String(req.query.input), String(req.query.title), String(req.query.createdDate), String(req.query.link))
+      return res.status(200).json(post)
+    } catch (error) {
+      return res.status(400).json((error as Error).message)
+    }
+  }
+
+  public putPostController: RequestHandler = async (req, res) => {
     try {
       const post = await this.postUseCase.editPost(req.params._id, req.body)
       return res.status(200).json(post)
@@ -50,11 +32,11 @@ export class PostController {
     }
   }
 
-  public deleteController: RequestHandler = async (req, res) => {
+  public deletePostController: RequestHandler = async (req, res) => {
     try {
       const { id } = req.params
-      const post = await this.postUseCase.deletePost(id)
-      return res.status(200).json(post)
+      await this.postUseCase.deletePost(id)
+      return res.status(200).json('Publicación eliminada')
     } catch (error) {
       return res.status(400).json((error as Error).message)
     }

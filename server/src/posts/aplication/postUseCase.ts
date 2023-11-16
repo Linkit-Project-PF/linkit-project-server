@@ -13,28 +13,21 @@ export class PostUseCase {
     return PostCreated
   }
 
-  public findPostById = async (id: string): Promise<PostEntity | null> => {
-    const post = await this.PostRepository.findPostById(id)
+  public findPost = async (
+    id: string, type: string, input: string, title: string, createdDate: string, link: string): Promise<PostEntity | string> => {
+    const post = await this.PostRepository.findPost(id, type, input, title, createdDate, link)
     return post
   }
 
-  public findPostByType = async (type: string): Promise<PostEntity[] | string> => {
-    const post = await this.PostRepository.findPostByType(type)
-    return post
+  public editPost = async (
+    _id: string, post: PostEntity): Promise<PostEntity | null> => {
+    const editedPost = await this.PostRepository.editPost(_id, post)
+    return editedPost
   }
 
-  public findPostByTitle = async (title: string): Promise<PostEntity | null> => {
-    const post = await this.PostRepository.findPostByTitle(title)
-    return post
-  }
-
-  public deletePost = async (_id: string): Promise<any> => {
-    const deletepost = await this.PostRepository.deletePost(_id)
+  public deletePost = async (
+    id: string): Promise<string | null> => {
+    const deletepost = await this.PostRepository.deletePost(id)
     return deletepost
-  }
-
-  public editPost = async (id: string, post: PostEntity): Promise<PostEntity | null> => {
-    const editPost = await this.PostRepository.editPost(id, post)
-    return editPost
   }
 }

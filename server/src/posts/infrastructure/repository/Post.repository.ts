@@ -2,7 +2,7 @@ import { type PostEntity } from '../../domain/post.entity'
 import { type PostRepository } from '../../domain/post.repository'
 import { ValidatePostCreate, ValidatePostUpdate, ValidatePostDelete, ValidatePostFindById, ValidatePostFindByType, ValidatePostFindByTitle } from '../../../errors/validation'
 import { ValidationError } from '../../../errors/errors'
-import Post from '../models/Post'
+import Post from '../Collection/Post'
 import mongoDBConnect from '../../../db/mongo'
 
 export class MongoPostRepository implements PostRepository {
@@ -48,30 +48,30 @@ export class MongoPostRepository implements PostRepository {
     }
   }
 
-  async findPostByTitle (title: string): Promise<PostEntity | null> {
-    try {
-      ValidatePostFindByTitle(title)
-      const postFinded = await Post.findOne({ title: { $regex: new RegExp(title, 'i') } })
-      return postFinded
-    } catch (error) {
-      throw new ValidationError(`Error al buscar el post: ${(error as Error).message}`)
-    }
-  }
+  // async findPostByTitle (title: string): Promise<PostEntity | null> {
+  //   try {
+  //     ValidatePostFindByTitle(title)
+  //     const postFinded = await Post.findOne({ title: { $regex: new RegExp(title, 'i') } })
+  //     return postFinded
+  //   } catch (error) {
+  //     throw new ValidationError(`Error al buscar el post: ${(error as Error).message}`)
+  //   }
+  // }
 
-  async findPostByType (type: string): Promise<PostEntity[] | string> {
-    try {
-      ValidatePostFindByType(type)
-      let post
-      if (type !== 'undefined') {
-        const validTypes = ['jd', 'social', 'blog', 'ebook']
-        if (!validTypes.includes(type)) throw Error('That is not a valid post type')
-        post = await Post.find({ input: type })
-      } else post = await Post.find()
-      return post
-    } catch (error: any) {
-      return `Error ${error}`
-    }
-  }
+  // async findPostByType (type: string): Promise<PostEntity[] | string> {
+  //   try {
+  //     ValidatePostFindByType(type)
+  //     let post
+  //     if (type !== 'undefined') {
+  //       const validTypes = ['jd', 'social', 'blog', 'ebook']
+  //       if (!validTypes.includes(type)) throw Error('That is not a valid post type')
+  //       post = await Post.find({ input: type })
+  //     } else post = await Post.find()
+  //     return post
+  //   } catch (error: any) {
+  //     return `Error ${error}`
+  //   }
+  // }
 
   async editPost (_id: string, post: PostEntity): Promise<PostEntity | null> {
     try {

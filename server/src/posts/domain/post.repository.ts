@@ -2,9 +2,7 @@ import { type PostEntity } from './post.entity'
 
 export interface PostRepository {
   createPost: (post: PostEntity) => Promise<PostEntity | string>
-  findPostByType: (type: string) => Promise<PostEntity[] | string>
-  findPostById: (id: string) => Promise<PostEntity | null>
-  findPostByTitle: (title: string) => Promise<PostEntity | null>
-  deletePost: (_id: string) => Promise<any>
-  editPost: (id: string, post: PostEntity) => Promise<PostEntity | null>
+  findPost: (id: string, type: string, input: string, title: string, createdDate: string, link: string) => Promise<PostEntity | string>
+  editPost: (_id: string, post: PostEntity) => Promise<PostEntity | null> //! _id de mongo
+  deletePost: (id: string) => Promise<string | null>
 }
