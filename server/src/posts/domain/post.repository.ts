@@ -1,7 +1,7 @@
 import { type PostEntity } from './post.entity'
 
 export interface PostRepository {
-  createPost: (post: PostEntity) => Promise<PostEntity | null>
+  createPost: (post: PostEntity) => Promise<PostEntity | string>
   findPost: (
     id: string,
     type: string,

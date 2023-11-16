@@ -7,7 +7,7 @@ export class PostUseCase {
 
   public createPost = async (
     post: PostEntity
-  ): Promise<PostEntity | null> => {
+  ): Promise<PostEntity | string> => {
     const newPost = new PostValue(post)
     const PostCreated = await this.PostRepository.createPost(newPost)
     return PostCreated
