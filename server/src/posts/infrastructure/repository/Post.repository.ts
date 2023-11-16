@@ -9,7 +9,6 @@ export class MongoPostRepository implements PostRepository {
   async createPost (post: PostEntity): Promise<PostEntity | string> {
     try {
       ValidatePostCreate(post)
-      console.log(post)
       let postExists = false
       const allTitles = await Post.find({}, 'title input')
       allTitles.forEach(obj => {
