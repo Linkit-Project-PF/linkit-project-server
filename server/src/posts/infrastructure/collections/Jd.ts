@@ -35,7 +35,7 @@ const jdSchema = new Schema({
     maxlength: 200
   },
   requisites: {
-    type: String,
+    type: Array,
     required: true,
     minlength: 0,
     maxlength: 20

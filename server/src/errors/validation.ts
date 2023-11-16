@@ -1,10 +1,11 @@
 import { type UserEntity } from '../users/domain/user/user.entity'
 import { type AdminEntity } from '../users/domain/admin/admin.entity'
 import { type PostEntity } from '../posts/domain/post/post.entity'
+import { type JdEntity } from '../posts/domain/jd/jd.entity'
 import Admin from '../users/infrastructure/collections/Admin'
 import User from '../users/infrastructure/collections/User'
-import { returnUserError, returnConectError, returnPostError } from './returnErrors'
 import Company from '../users/infrastructure/collections/Company'
+import { returnUserError, returnConectError, returnPostError } from './returnErrors'
 
 //* USER ERRORS
 export const ValidateCompanyIfAlreadyonDB = async (email: string): Promise<void> => {
@@ -70,10 +71,20 @@ export const ValidatePostCreate = (post: PostEntity): void => {
   if (!post.type) returnPostError('El tipo de posteo es requerido')
 }
 
+export const ValidateJdCreate = (jd: JdEntity): void => {
+  if (!jd.title) returnPostError('El título es requerido')
+  if (!jd.description) returnPostError('La descripción es requerida')
+}
+
 export const ValidatePostUpdate = (post: PostEntity): void => {
   if (!post.title) returnPostError('El título es requerido')
   if (!post.description) returnPostError('La descripción es requerida')
   if (!post.type) returnPostError('El tipo de posteo es requerido')
+}
+
+export const ValidateJdUpdate = (jd: JdEntity): void => {
+  if (!jd.title) returnPostError('El título es requerido')
+  if (!jd.description) returnPostError('La descripción es requerida')
 }
 
 export const ValidatePostDelete = (_id: string): void => {
@@ -82,14 +93,6 @@ export const ValidatePostDelete = (_id: string): void => {
 
 export const ValidatePostFindByType = (type: string): void => {
   if (!type) returnPostError('El tipo es requerido')
-}
-
-export const ValidatePostFindById = (id: string): void => {
-  if (!id) returnPostError('El id es requerido')
-}
-
-export const ValidatePostFindByTitle = (title: string): void => {
-  if (!title) returnPostError('El título es requerido')
 }
 
 //* GENERAL ERRORS

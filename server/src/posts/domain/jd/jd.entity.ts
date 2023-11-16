@@ -5,10 +5,10 @@ export interface JdEntity {
   description: string
   createdDate: Date
   image?: string | null
-  requisites: string
+  requisites: string[] | string
   modality: string
   location: string
-  stack: string
+  stack: string[] | string
   schedule: string
   archived?: boolean | null
 }
