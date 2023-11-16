@@ -5,6 +5,7 @@ import adminRoute from './users/infrastructure/routes/admin.routes'
 import mongoDBConnect from './db/mongo'
 import userRoute from './users/infrastructure/routes/user.routes'
 import postRoute from './posts/infrastructure/routes/post.routes'
+import jdRoute from './posts/infrastructure/routes/jd.routes'
 import companyRoute from './users/infrastructure/routes/company.routes'
 import authRoute from './users/authentication/Infrastructure/auth.routes'
 
@@ -35,6 +36,7 @@ app.use('/admins', adminRoute)
 app.use('/companies', companyRoute)
 app.use('/users', userRoute)
 app.use('/posts', postRoute)
+app.use('/jds', jdRoute)
 app.use('/auth', authRoute)
 
 mongoDBConnect().then(() => {
