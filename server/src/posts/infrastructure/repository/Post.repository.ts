@@ -6,9 +6,10 @@ import Post from '../Collection/Post'
 import mongoDBConnect from '../../../db/mongo'
 
 export class MongoPostRepository implements PostRepository {
-  async createPost (post: PostEntity): Promise<PostEntity> {
+  async createPost (post: PostEntity): Promise<PostEntity | string> {
     try {
       ValidatePostCreate(post)
+      console.log(post)
       let postExists = false
       const allTitles = await Post.find({}, 'title input')
       allTitles.forEach(obj => {
@@ -38,7 +39,7 @@ export class MongoPostRepository implements PostRepository {
     }
   }
 
-  async findPost (
+  async findPost (//! EL id es el de mongo
     id: string,
     type: string,
     input: string,
