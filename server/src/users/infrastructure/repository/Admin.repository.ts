@@ -19,26 +19,12 @@ export class MongoAdminRepository implements AdminRepository {
   async findAdmin (value: string, filter: string): Promise<AdminEntity | AdminEntity[] | string> {
     try {
       let result
-      switch (filter) {
-        case 'id':
-          result = await Admin.findById(value)
-          break
-        case 'name':
-          result = await Admin.find({ name: value })
-          break
-        case 'email':
-          result = await Admin.find({ email: value })
-          break
-        case 'active':
-          result = await Admin.find({ active: value })
-          break
-        case 'all':
-          result = await Admin.find()
-          break
-        default:
-          result = 'Not a valid parameter'
-      }
-      return result as AdminEntity
+      const validParams = ['name', 'email', 'active']
+      if (filter === 'all') result = await Admin.find()
+      else if (filter === 'id') result = await Admin.findById(value)
+      else if (validParams.includes(filter)) result = await Admin.find({ [filter]: value })
+      else throw Error('Not a valid parameter')
+      return result as AdminEntity[]
     } catch (error: any) {
       throw new ValidationError(`Error al buscar el administrador: ${(error as Error).message}`)
     }

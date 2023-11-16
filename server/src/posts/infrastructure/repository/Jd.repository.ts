@@ -21,11 +21,9 @@ export class MongoJdRepository implements JdRepository {
       const singleValidValues = ['title', 'location', 'modality', 'schedule', 'archived']
       if (filter === 'all') result = await Jd.find()
       else if (filter === 'id') result = await Jd.findById(value)
-      else if (filter === 'stack') {
-        const allJds = await Jd.find()
-        result = allJds.filter(jd => jd.stack.includes(value))
-      } else if (singleValidValues.includes(filter)) result = await Jd.find({ [filter]: value })
-      else result = 'Not a valid parameter'
+      else if (filter === 'stack') (await Jd.find()).filter(jd => jd.stack.includes(value))
+      else if (singleValidValues.includes(filter)) result = await Jd.find({ [filter]: value })
+      else throw Error('Not a valid parameter')
       return result
     } catch (error) {
       return 'No fue posible encontrar la vacante'
