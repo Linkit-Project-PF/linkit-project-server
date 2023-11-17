@@ -9,7 +9,6 @@ export class MongoCompanyRepository implements CompanyRepository {
   async createCompany (company: CompanyEntity): Promise<CompanyEntity | string> {
     try {
       await ValidateCompanyIfAlreadyonDB(company.email)
-      ValidateUserRegister(company)
       const companyCreated = await Company.create(company)
       return companyCreated as CompanyEntity
     } catch (error) {
