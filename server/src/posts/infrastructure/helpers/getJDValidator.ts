@@ -4,7 +4,6 @@ import { type JdEntity } from '../../domain/jd/jd.entity'
 interface JDQuery {
   id?: string
   title?: string
-  createdDate?: Date
   location?: string
   modality?: string
   stack?: string
