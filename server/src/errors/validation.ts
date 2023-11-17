@@ -68,7 +68,7 @@ export const ValidateUserFindById = (id: string): void => {
 export const ValidatePostCreate = (post: PostEntity): void => {
   if (!post.title) returnPostError('El título es requerido')
   if (!post.description) returnPostError('La descripción es requerida')
-  if (!post.input) returnPostError('El tipo de posteo es requerido')
+  if (!post.type) returnPostError('El tipo de posteo es requerido')
 }
 
 export const ValidateJdCreate = (jd: JdEntity): void => {
