@@ -3,7 +3,7 @@ import { Router } from 'express'
 const resourcesRoute = Router()
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-resourcesRoute.get('/contactus', async (req, res): Promise<void> => {
+resourcesRoute.post('/contactus', async (req, res): Promise<void> => {
   try {
     const newContact = await req.body
     res.status(200).json(newContact)
