@@ -11,7 +11,7 @@ const userController = new UserControllers(userUseCase)
 
 userRoute.get('/find', userController.getController)
 userRoute.post('/create', userController.postController)
-userRoute.put('/update', userController.putController)
+userRoute.put('/update/:id', userController.putController)
 userRoute.delete('/delete/:id', userController.deleteController)
 
 export default userRoute
