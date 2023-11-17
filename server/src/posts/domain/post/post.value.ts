@@ -11,6 +11,7 @@ export class PostValue implements PostEntity {
   link?: string | null
   type: string
   archived?: boolean | null
+  category?: string
 
   constructor (post: PostEntity) {
     this.id = randomUUID()
@@ -22,5 +23,6 @@ export class PostValue implements PostEntity {
     this.link = post.link ?? undefined
     this.type = post.type
     this.archived = post.archived ?? false
+    this.category = post.category
   }
 }
