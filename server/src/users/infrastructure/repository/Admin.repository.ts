@@ -32,7 +32,7 @@ export class MongoAdminRepository implements AdminRepository {
 
   async editAdmin (_id: string, admin: AdminEntity): Promise<AdminEntity | string> {
     try {
-      const editAdmin = await Admin.findByIdAndUpdate(_id, admin)
+      const editAdmin = await Admin.findByIdAndUpdate(_id, admin, { new: true })
       return editAdmin as AdminEntity
     } catch (error: any) {
       throw new ValidationError(`Error al editar el administrador: ${(error as Error).message}`)
@@ -42,10 +42,8 @@ export class MongoAdminRepository implements AdminRepository {
   async deleteAdmin (_id: string): Promise<AdminEntity | string> {
     try {
       ValidateUserDelete(_id)
-      const resultado = await Admin.updateOne(
-        { _id },
-        { $set: { active: false } }
-      )
+      const resultado = 'Administrador eliminado'
+      await Admin.findByIdAndUpdate(_id, { $set: { active: false } }, { new: true })
       return resultado as unknown as AdminEntity
     } catch (error) {
       throw new ValidationError(`Error al eliminar: ${(error as Error).message}`)
