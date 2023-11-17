@@ -3,7 +3,7 @@ import { type JdEntity } from '../../domain/jd/jd.entity'
 import { type JdRepository } from '../../domain/jd/jd.repository'
 import Jd from '../collections/Jd'
 import mongoDBConnect from '../../../db/mongo'
-import { ValidateJdCreate, ValidateJdUpdate } from '../../../errors/validation'
+import { ValidateJdCreate } from '../../../errors/validation'
 import { ValidationError } from '../../../errors/errors'
 
 export class MongoJdRepository implements JdRepository {
@@ -34,7 +34,6 @@ export class MongoJdRepository implements JdRepository {
 
   async editJD (_id: string, jd: JdEntity): Promise<JdEntity | any> {
     try {
-      ValidateJdUpdate(jd)
       const editedJd = await Jd.findByIdAndUpdate(_id, jd)
       return editedJd
     } catch (error) {
