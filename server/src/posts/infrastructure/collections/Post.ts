@@ -43,8 +43,14 @@ const postSchema = new Schema({
     type: String,
     required: true,
     minlength: 4,
-    maxlength: 6,
+    maxlength: 8,
     enum: ['blog', 'social', 'ebook']
+  },
+  category: {
+    type: String,
+    required: true,
+    minlength: 4,
+    maxlength: 20
   },
   archived: {
     type: Boolean,

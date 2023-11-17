@@ -8,4 +8,5 @@ export interface PostEntity {
   link?: string | null
   type: string
   archived?: boolean | null
+  category?: string
 }
