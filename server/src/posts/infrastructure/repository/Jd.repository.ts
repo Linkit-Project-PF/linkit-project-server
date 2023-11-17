@@ -34,8 +34,8 @@ export class MongoJdRepository implements JdRepository {
 
   async editJD (_id: string, jd: JdEntity): Promise<JdEntity | any> {
     try {
-      const editedJd = await Jd.findByIdAndUpdate(_id, jd)
-      return editedJd
+      const editedJd = await Jd.findByIdAndUpdate(_id, jd, { new: true })
+      return editedJd as JdEntity
     } catch (error) {
       throw new ValidationError(`Error al crear el jd: ${(error as Error).message}`)
     }

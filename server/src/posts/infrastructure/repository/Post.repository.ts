@@ -1,6 +1,6 @@
 import { type PostEntity } from '../../domain/post/post.entity'
 import { type PostRepository } from '../../domain/post/post.repository'
-import { ValidatePostCreate, ValidatePostUpdate, ValidatePostDelete } from '../../../errors/validation' //, ValidatePostFindByType, ValidatePostFindByTitle
+import { ValidatePostCreate, ValidatePostDelete } from '../../../errors/validation' //, ValidatePostFindByType, ValidatePostFindByTitle
 import { ValidationError } from '../../../errors/errors'
 import Post from '../collections/Post'
 import mongoDBConnect from '../../../db/mongo'
@@ -41,7 +41,7 @@ export class MongoPostRepository implements PostRepository {
   async findPost (value: string, filter: string): Promise<PostEntity | PostEntity[] | string> {
     try {
       let result
-      const validFilters = ['title', 'type', 'archived']
+      const validFilters = ['title', 'type', 'archived', 'category']
       if (filter === 'all') result = await Post.find()
       else if (filter === 'id') result = await Post.findById(value)
       else if (validFilters.includes(filter)) result = await Post.find({ [filter]: value })
