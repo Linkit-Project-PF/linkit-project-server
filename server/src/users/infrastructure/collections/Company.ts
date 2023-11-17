@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto'
 import { Schema, model } from 'mongoose'
 
-const userSchema = new Schema({
+const companySchema = new Schema({
   id: {
     type: String,
     required: true,
@@ -24,11 +24,6 @@ const userSchema = new Schema({
     minlength: 3,
     maxlength: 30
   },
-  phone: {
-    type: String,
-    required: true,
-    minlength: 5
-  },
   country: {
     type: String,
     required: true,
@@ -40,24 +35,17 @@ const userSchema = new Schema({
     minlength: 3,
     maxlength: 30
   },
-  cv: {
-    type: String,
-    required: false,
-    minlength: 3,
-    maxlength: 30
-  },
   role: {
     type: String,
     required: true,
     minlength: 3,
     maxlength: 30,
-    enum: ['user', 'company', 'admin']
+    enum: ['company']
   },
-  technologies: {
-    type: Array,
+  phone: {
+    type: String,
     required: true,
-    minlength: 3,
-    maxlength: 30
+    minlength: 5
   },
   active: {
     type: Boolean,
@@ -66,4 +54,4 @@ const userSchema = new Schema({
   }
 })
 
-export default model('User', userSchema)
+export default model('Company', companySchema)

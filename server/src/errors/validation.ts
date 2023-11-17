@@ -1,9 +1,34 @@
-import { type UserEntity } from '../users/domain/user.entity'
-import { type PostEntity } from '../posts/domain/post.entity'
+import { type UserEntity } from '../users/domain/user/user.entity'
+import { type AdminEntity } from '../users/domain/admin/admin.entity'
+import { type PostEntity } from '../posts/domain/post/post.entity'
+import { type JdEntity } from '../posts/domain/jd/jd.entity'
+import Admin from '../users/infrastructure/collections/Admin'
+import User from '../users/infrastructure/collections/User'
+import Company from '../users/infrastructure/collections/Company'
 import { returnUserError, returnConectError, returnPostError } from './returnErrors'
 
 //* USER ERRORS
-export const ValidateUserRegister = (user: UserEntity): void => {
+export const ValidateCompanyIfAlreadyonDB = async (email: string): Promise<void> => {
+  const allCompanies = await Company.find({}, 'email')
+  allCompanies.forEach(obj => {
+    if (obj.email === email) returnUserError('Este email ya esta en uso')
+  })
+}
+
+export const ValidateAdminIfAlreadyonDB = async (email: string): Promise<void> => {
+  const allAdmins = await Admin.find({}, 'email')
+  allAdmins.forEach(obj => {
+    if (obj.email === email) returnUserError('Este email ya esta en uso')
+  })
+}
+
+export const ValidateUserIfAlreadyonDB = async (email: string): Promise<void> => {
+  const allUsers = await User.find({}, 'email')
+  allUsers.forEach(obj => {
+    if (obj.email === email) returnUserError('Este email ya esta en uso')
+  })
+}
+export const ValidateUserRegister = (user: UserEntity | AdminEntity): void => {
   if (!user.name) returnUserError('El nombre es requerido')
   if (!user.email) returnUserError('El email es requerido')
   if (!user.password) returnUserError('La contraseña es requerida')
@@ -13,6 +38,7 @@ export const ValidateUserRegister = (user: UserEntity): void => {
 }
 
 export const ValidateUserLogin = (email: string, password: string): void => {
+  if (email === 'undefined' || password === 'undefined') returnUserError('Credenciales requeridas')
   if (!email) returnUserError('El email es requerido')
   if (!password) returnUserError('La contraseña es requerida')
 }
@@ -40,35 +66,25 @@ export const ValidateUserFindById = (id: string): void => {
 //* POST ERRORS
 
 export const ValidatePostCreate = (post: PostEntity): void => {
-  if (!post.input) returnPostError('El tipo de posteo es requerido')
-  if (post.input === 'jd') {
-    if (!post.title) returnPostError('El título es requerido')
-    if (!post.description) returnPostError('La descripción es requerida')
-    if (!post.modality) returnPostError('La modalidad es requerida')
-    if (!post.type) returnPostError('El tipo es requerido')
-    if (!post.stack) returnPostError('El stack es requerido')
-    if (!post.location) returnPostError('La ubicación es requerida')
-  } else {
-    if (!post.title) returnPostError('El título es requerido')
-    if (!post.description) returnPostError('La descripción es requerida')
-    if (!post.input) returnPostError('El tipo de posteo es requerido')
-  }
+  if (!post.title) returnPostError('El título es requerido')
+  if (!post.description) returnPostError('La descripción es requerida')
+  if (!post.type) returnPostError('El tipo de posteo es requerido')
+}
+
+export const ValidateJdCreate = (jd: JdEntity): void => {
+  if (!jd.title) returnPostError('El título es requerido')
+  if (!jd.description) returnPostError('La descripción es requerida')
 }
 
 export const ValidatePostUpdate = (post: PostEntity): void => {
-  if (!post.input) returnPostError('El tipo de posteo es requerido')
-  if (post.input === 'jd') {
-    if (!post.title) returnPostError('El título es requerido')
-    if (!post.description) returnPostError('La descripción es requerida')
-    if (!post.modality) returnPostError('La modalidad es requerida')
-    if (!post.type) returnPostError('El tipo es requerido')
-    if (!post.stack) returnPostError('El stack es requerido')
-    if (!post.location) returnPostError('La ubicación es requerida')
-  } else {
-    if (!post.title) returnPostError('El título es requerido')
-    if (!post.description) returnPostError('La descripción es requerida')
-    if (!post.input) returnPostError('El tipo de posteo es requerido')
-  }
+  if (!post.title) returnPostError('El título es requerido')
+  if (!post.description) returnPostError('La descripción es requerida')
+  if (!post.type) returnPostError('El tipo de posteo es requerido')
+}
+
+export const ValidateJdUpdate = (jd: JdEntity): void => {
+  if (!jd.title) returnPostError('El título es requerido')
+  if (!jd.description) returnPostError('La descripción es requerida')
 }
 
 export const ValidatePostDelete = (_id: string): void => {
@@ -77,14 +93,6 @@ export const ValidatePostDelete = (_id: string): void => {
 
 export const ValidatePostFindByType = (type: string): void => {
   if (!type) returnPostError('El tipo es requerido')
-}
-
-export const ValidatePostFindById = (id: string): void => {
-  if (!id) returnPostError('El id es requerido')
-}
-
-export const ValidatePostFindByTitle = (title: string): void => {
-  if (!title) returnPostError('El título es requerido')
 }
 
 //* GENERAL ERRORS

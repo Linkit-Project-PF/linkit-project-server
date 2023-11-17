@@ -1,8 +1,8 @@
-import { type PostEntity } from '../../domain/post.entity'
-import { type PostRepository } from '../../domain/post.repository'
-import { ValidatePostCreate, ValidatePostUpdate, ValidatePostDelete, ValidatePostFindById, ValidatePostFindByType, ValidatePostFindByTitle } from '../../../errors/validation'
+import { type PostEntity } from '../../domain/post/post.entity'
+import { type PostRepository } from '../../domain/post/post.repository'
+import { ValidatePostCreate, ValidatePostUpdate, ValidatePostDelete } from '../../../errors/validation' //, ValidatePostFindByType, ValidatePostFindByTitle
 import { ValidationError } from '../../../errors/errors'
-import Post from '../models/Post'
+import Post from '../collections/Post'
 import mongoDBConnect from '../../../db/mongo'
 
 export class MongoPostRepository implements PostRepository {
@@ -10,20 +10,20 @@ export class MongoPostRepository implements PostRepository {
     try {
       ValidatePostCreate(post)
       let postExists = false
-      const allTitles = await Post.find({}, 'title input')
+      const allTitles = await Post.find({}, 'title type')
       allTitles.forEach(obj => {
-        if (obj.title === post.title && obj.input === post.input) postExists = true
+        if (obj.title === post.title && obj.type === post.type) postExists = true
       })
       if (!postExists) {
         const postCreated = await Post.create(post)
-        return postCreated
+        return postCreated as PostEntity
       } else throw Error('Ya existe otro post de este tipo con este título')
     } catch (error: any) {
       throw new ValidationError(`Error al crear el post: ${(error as Error).message}`)
     }
   }
 
-  async deletePost (id: string): Promise<any> {
+  async deletePost (id: string): Promise<string> {
     try {
       ValidatePostDelete(id)
       await mongoDBConnect()
@@ -34,50 +34,29 @@ export class MongoPostRepository implements PostRepository {
       return 'Post archivado'
     } catch (error) {
       console.error(error)
-      return null
+      return 'Error al intentar archivar el posteo'
     }
   }
 
-  async findPostById (id: string): Promise<PostEntity | null> {
+  async findPost (value: string, filter: string): Promise<PostEntity | PostEntity[] | string> {
     try {
-      ValidatePostFindById(id)
-      const post = await Post.findById(id)
-      return post
+      let result
+      const validFilters = ['title', 'type', 'archived']
+      if (filter === 'all') result = await Post.find()
+      else if (filter === 'id') result = await Post.findById(value)
+      else if (validFilters.includes(filter)) result = await Post.find({ [filter]: value })
+      else throw Error('Not a valid parameter')
+      return result as PostEntity[]
     } catch (error) {
       throw new ValidationError(`Error al buscar el post: ${(error as Error).message}`)
     }
   }
 
-  async findPostByTitle (title: string): Promise<PostEntity | null> {
+  async editPost (_id: string, post: PostEntity): Promise<PostEntity | string> {
     try {
-      ValidatePostFindByTitle(title)
-      const postFinded = await Post.findOne({ title: { $regex: new RegExp(title, 'i') } })
-      return postFinded
-    } catch (error) {
-      throw new ValidationError(`Error al buscar el post: ${(error as Error).message}`)
-    }
-  }
-
-  async findPostByType (type: string): Promise<PostEntity[] | string> {
-    try {
-      ValidatePostFindByType(type)
-      let post
-      if (type !== 'undefined') {
-        const validTypes = ['jd', 'social', 'blog', 'ebook']
-        if (!validTypes.includes(type)) throw Error('That is not a valid post type')
-        post = await Post.find({ input: type })
-      } else post = await Post.find()
-      return post
-    } catch (error: any) {
-      return `Error ${error}`
-    }
-  }
-
-  async editPost (id: string, post: PostEntity): Promise<PostEntity | null> {
-    try {
-      const editedPost = await Post.findByIdAndUpdate(id, post)
+      const editedPost = await Post.findByIdAndUpdate(_id, post)
       ValidatePostUpdate(post)
-      return editedPost
+      return editedPost as PostEntity
     } catch (error) {
       throw new ValidationError(`Error al editar el post: ${(error as Error).message}`)
     }

@@ -1,14 +1,14 @@
 import { type RequestHandler } from 'express'
-import { type UserUseCase } from '../../aplication/userUseCase'
-import getUserValidator from '../helpers/getUserValidator'
+import { type AdminUseCase } from '../../aplication/adminUseCase'
+import getAdminValidator from '../helpers/getAdminValidator'
 
-export class UserControllers {
-  constructor (private readonly userUseCase: UserUseCase) {}
+export class AdminControllers {
+  constructor (private readonly adminUseCase: AdminUseCase) {}
 
   public getController: RequestHandler = async (req, res) => {
     try {
-      const user = await getUserValidator(req.query, this.userUseCase)
-      return res.status(200).json(user)
+      const admin = await getAdminValidator(req.query, this.adminUseCase)
+      return res.status(200).json(admin)
     } catch (error) {
       return res.status(400).json((error as Error).message)
     }
@@ -16,8 +16,8 @@ export class UserControllers {
 
   public postController: RequestHandler = async (req, res) => {
     try {
-      const user = await this.userUseCase.createUser(req.body)
-      return res.status(201).json(user)
+      const admin = await this.adminUseCase.createAdmin(req.body)
+      return res.status(201).json(admin)
     } catch (error) {
       return res.status(400).json((error as Error).message)
     }
@@ -25,8 +25,8 @@ export class UserControllers {
 
   public putController: RequestHandler = async (req, res) => {
     try {
-      const user = await this.userUseCase.editUser(req.params.id, req.body)
-      return res.status(200).json(user)
+      const admin = await this.adminUseCase.editAdmin(req.params.id, req.body)
+      return res.status(200).json(admin)
     } catch (error) {
       return res.status(400).json((error as Error).message)
     }
@@ -34,8 +34,8 @@ export class UserControllers {
 
   public deleteController: RequestHandler = async (req, res) => {
     try {
-      const user = await this.userUseCase.deleteUser(req.params.id)
-      return res.status(200).json(user)
+      const admin = await this.adminUseCase.deleteAdmin(req.params.id)
+      return res.status(200).json(admin)
     } catch (error) {
       return res.status(400).json((error as Error).message)
     }

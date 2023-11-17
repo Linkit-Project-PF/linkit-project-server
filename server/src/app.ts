@@ -1,9 +1,14 @@
 import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
+import adminRoute from './users/infrastructure/routes/admin.routes'
 import mongoDBConnect from './db/mongo'
+import resourcesRoute from './resources/infrastructure/routes/resources.routes'
 import userRoute from './users/infrastructure/routes/user.routes'
 import postRoute from './posts/infrastructure/routes/post.routes'
+import jdRoute from './posts/infrastructure/routes/jd.routes'
+import companyRoute from './users/infrastructure/routes/company.routes'
+import authRoute from './users/authentication/Infrastructure/auth.routes'
 
 const app = express()
 app.use(cors(
@@ -28,8 +33,13 @@ app.use(express.json())
 
 const port = process.env.PORT ?? 3000
 
+app.use('/resources', resourcesRoute)
+app.use('/admins', adminRoute)
+app.use('/companies', companyRoute)
 app.use('/users', userRoute)
 app.use('/posts', postRoute)
+app.use('/jds', jdRoute)
+app.use('/auth', authRoute)
 
 mongoDBConnect().then(() => {
   app.listen(port, () => {

@@ -1,6 +1,6 @@
-import { type PostEntity } from '../domain/post.entity'
-import { type PostRepository } from '../domain/post.repository'
-import { PostValue } from '../domain/post.value'
+import { type PostEntity } from '../domain/post/post.entity'
+import { type PostRepository } from '../domain/post/post.repository'
+import { PostValue } from '../domain/post/post.value'
 
 export class PostUseCase {
   constructor (private readonly PostRepository: PostRepository) {}
@@ -13,28 +13,20 @@ export class PostUseCase {
     return PostCreated
   }
 
-  public findPostById = async (id: string): Promise<PostEntity | null> => {
-    const post = await this.PostRepository.findPostById(id)
+  public findPost = async (value: string, filter: string): Promise<PostEntity | PostEntity[] | string> => {
+    const post = await this.PostRepository.findPost(value, filter)
     return post
   }
 
-  public findPostByType = async (type: string): Promise<PostEntity[] | string> => {
-    const post = await this.PostRepository.findPostByType(type)
-    return post
+  public editPost = async (
+    _id: string, post: PostEntity): Promise<PostEntity | string> => {
+    const editedPost = await this.PostRepository.editPost(_id, post)
+    return editedPost
   }
 
-  public findPostByTitle = async (title: string): Promise<PostEntity | null> => {
-    const post = await this.PostRepository.findPostByTitle(title)
-    return post
-  }
-
-  public deletePost = async (_id: string): Promise<any> => {
-    const deletepost = await this.PostRepository.deletePost(_id)
+  public deletePost = async (
+    id: string): Promise<string | string> => {
+    const deletepost = await this.PostRepository.deletePost(id)
     return deletepost
-  }
-
-  public editPost = async (id: string, post: PostEntity): Promise<PostEntity | null> => {
-    const editPost = await this.PostRepository.editPost(id, post)
-    return editPost
   }
 }
