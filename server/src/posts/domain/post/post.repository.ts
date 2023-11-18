@@ -4,5 +4,5 @@ export interface PostRepository {
   createPost: (post: PostEntity) => Promise<PostEntity | string>
   findPost: (value: string, filter: string) => Promise<PostEntity | PostEntity[] | string>
   editPost: (_id: string, post: PostEntity) => Promise<PostEntity | string>//! _id de mongo
-  deletePost: (id: string) => Promise<PostEntity | string>
+  deletePost: (id: string) => Promise<string>
 }

@@ -3,7 +3,7 @@ import { type ReviewEntity } from '../../domain/review/review.entity'
 
 interface ReviewQuery {
   id?: string
-  name?: string
+  nameUserOrCompany?: string
   rol?: string
   country?: string
   detail?: string

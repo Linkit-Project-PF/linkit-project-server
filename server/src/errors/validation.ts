@@ -2,9 +2,11 @@ import { type UserEntity } from '../users/domain/user/user.entity'
 import { type AdminEntity } from '../users/domain/admin/admin.entity'
 import { type PostEntity } from '../posts/domain/post/post.entity'
 import { type JdEntity } from '../posts/domain/jd/jd.entity'
+import { type ReviewEntity } from '../posts/domain/review/review.entity'
 import Admin from '../users/infrastructure/collections/Admin'
 import User from '../users/infrastructure/collections/User'
 import Company from '../users/infrastructure/collections/Company'
+import Review from '../posts/infrastructure/collections/Review'
 import { returnUserError, returnConectError, returnPostError } from './returnErrors'
 
 //* USER ERRORS
@@ -26,6 +28,13 @@ export const ValidateUserIfAlreadyonDB = async (email: string): Promise<void> =>
   const allUsers = await User.find({}, 'email')
   allUsers.forEach(obj => {
     if (obj.email === email) returnUserError('Este email ya esta en uso')
+  })
+}
+
+export const ValidateReviewIfAlreadyonDB = async (nameUserOrCompany: string): Promise<void> => {
+  const allReviews = await Review.find({}, 'name')
+  allReviews.forEach(obj => {
+    if (obj.nameUserOrCompany === nameUserOrCompany) returnUserError('Esta empresa o usuario ya teienen una reseña')
   })
 }
 export const ValidateUserRegister = (user: UserEntity | AdminEntity): void => {
@@ -74,6 +83,13 @@ export const ValidatePostCreate = (post: PostEntity): void => {
 export const ValidateJdCreate = (jd: JdEntity): void => {
   if (!jd.title) returnPostError('El título es requerido')
   if (!jd.description) returnPostError('La descripción es requerida')
+}
+
+export const ValidateReviewCreate = (review: ReviewEntity): void => {
+  if (!review.nameUserOrCompany) returnPostError('El nombre de la empresa o usuario es requerido')
+  if (!review.rol) returnPostError('El rol es requerido')
+  if (!review.country) returnPostError('El país es requerido')
+  if (!review.detail)returnPostError('La reseña es requerida')
 }
 
 export const ValidatePostUpdate = (post: PostEntity): void => {
