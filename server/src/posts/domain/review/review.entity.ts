@@ -1,7 +1,7 @@
 export interface ReviewEntity {
   id: string
   airTableId?: string | null //! Preguntar a la empresa
-  name: string
+  nameUserOrCompany: string
   rol: string
   createdDate: Date
   image?: string | null

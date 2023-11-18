@@ -8,7 +8,6 @@ export class ReviewController {
   public postController: RequestHandler = async (req, res) => {
     try {
       const review = await this.reviewUseCase.createReview(req.body)
-      console.log(review)
       if (typeof review === 'string') return res.status(409).json(review)
       return res.status(201).json(review)
     } catch (error) {

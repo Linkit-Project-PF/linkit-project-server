@@ -11,7 +11,7 @@ const reviewSchema = new Schema({
     type: String,
     required: false //! Si se requiere, se debe poner en true
   },
-  name: {
+  nameUserOrCompany: {
     type: String,
     required: true,
     minminlength: 1,

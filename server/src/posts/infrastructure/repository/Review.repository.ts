@@ -1,6 +1,6 @@
 import { type ReviewEntity } from '../../domain/review/review.entity'
 import { type ReviewRepository } from '../../domain/review/review.repository'
-// import { ValidatePostCreate, ValidatePostDelete } from '../../../errors/validation' //, ValidatePostFindByType, ValidatePostFindByTitle
+import { ValidateReviewCreate, ValidateReviewIfAlreadyonDB } from '../../../errors/validation' //, ValidatePostFindByType, ValidatePostFindByTitle, ValidatePostDelete
 import { ValidationError } from '../../../errors/errors'
 import Review from '../collections/Review'
 import mongoDBConnect from '../../../db/mongo'
@@ -8,11 +8,13 @@ import mongoDBConnect from '../../../db/mongo'
 export class MongoReviewRepository implements ReviewRepository {
   async createReview (review: ReviewEntity): Promise<ReviewEntity | string> {
     try {
-    //   ValidateReviewCreate(review)
+      const { nameUserOrCompany } = review
+      await ValidateReviewIfAlreadyonDB(nameUserOrCompany)
+      ValidateReviewCreate(review)
       let reviewExists = false
-      const allTitles = await Review.find({}, 'title type')
+      const allTitles = await Review.find({}, 'title type').exec()
       allTitles.forEach(obj => {
-        if (obj.name === review.name) reviewExists = true
+        if (obj.nameUserOrCompany === review.nameUserOrCompany) reviewExists = true
       })
       if (!reviewExists) {
         const reviewCreated = await Review.create(review)
