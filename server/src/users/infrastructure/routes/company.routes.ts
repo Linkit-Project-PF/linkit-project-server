@@ -11,7 +11,7 @@ const companyController = new CompanyControllers(companyCase)
 
 companyRoute.get('/find', companyController.getController)
 companyRoute.post('/create', companyController.postController)
-companyRoute.put('/update', companyController.putController)
+companyRoute.put('/update/:id', companyController.putController)
 companyRoute.delete('/delete/:id', companyController.deleteController)
 
 export default companyRoute
