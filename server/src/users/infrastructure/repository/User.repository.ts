@@ -36,6 +36,7 @@ export class MongoUserRepository implements UserRepository {
       if (filter === 'all') result = await User.find()
       else if (filter === 'id') result = await User.findById(value)
       else if (filter === 'tech') result = (await User.find()).filter(user => user.technologies.includes(value))
+      else if (filter === 'postulation') result = (await User.find()).filter(user => user.postulations.includes(value))
       else if (validSingleParams.includes(filter)) result = await User.find({ [filter]: value })
       else throw Error('Not a valid parameter')
       return result as unknown as UserEntity

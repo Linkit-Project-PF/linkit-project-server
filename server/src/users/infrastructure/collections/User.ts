@@ -63,6 +63,11 @@ const userSchema = new Schema({
     type: Boolean,
     required: true,
     default: true
+  },
+  postulations: {
+    type: Array,
+    required: true,
+    minlength: 0
   }
 })
 
