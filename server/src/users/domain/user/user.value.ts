@@ -14,6 +14,7 @@ export class UserValue implements UserEntity {
   cv?: string | null
   technologies?: string[]
   active: boolean
+  postulations?: string[]
 
   constructor (user: UserEntity) {
     this.id = randomUUID()
@@ -28,5 +29,6 @@ export class UserValue implements UserEntity {
     this.cv = user.cv ?? undefined
     this.technologies = user.technologies ?? []
     this.active = user.active ?? true
+    this.postulations = user.postulations ?? []
   }
 }
