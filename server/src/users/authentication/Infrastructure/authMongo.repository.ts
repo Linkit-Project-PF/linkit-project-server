@@ -22,7 +22,7 @@ export class AuthMongoRepository implements AuthRepository {
 
   async register (entity: UserEntity | CompanyEntity | AdminEntity): Promise<UserEntity | CompanyEntity | AdminEntity | string> {
     try {
-      await createUserWithEmailAndPassword(auth, String(entity.email), String(entity.password))
+      await createUserWithEmailAndPassword(auth, String(entity.email), entity.password ? String(entity.password) : '')
       let entityCreated
       let provider
       if (entity.role === 'user') {

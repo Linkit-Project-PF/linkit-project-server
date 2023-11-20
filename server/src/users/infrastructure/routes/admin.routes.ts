@@ -2,12 +2,15 @@ import { Router } from 'express'
 import { AdminUseCase } from '../../aplication/adminUseCase'
 import { AdminControllers } from '../controllers/admin.controllers'
 import { MongoAdminRepository } from '../repository/Admin.repository'
+import { authValidator } from '../helpers/routeValidator'
 
 const adminRoute = Router()
 
 const mongoAdminRepository = new MongoAdminRepository()
 const adminUseCase = new AdminUseCase(mongoAdminRepository)
 const adminController = new AdminControllers(adminUseCase)
+
+adminRoute.use(authValidator)
 
 adminRoute.get('/find', adminController.getController)
 adminRoute.post('/create', adminController.postController)

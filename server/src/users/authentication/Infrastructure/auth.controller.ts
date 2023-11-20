@@ -15,7 +15,7 @@ export class AuthControllers {
 
   public postController: RequestHandler = async (req, res) => {
     try {
-      const result = await this.authUseCase.register(req.body, String(req.query))
+      const result = await this.authUseCase.register(req.body)
       return res.status(200).json(result)
     } catch (error) {
       return res.status(400).json((error as Error).message)
