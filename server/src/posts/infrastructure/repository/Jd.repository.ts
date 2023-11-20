@@ -41,11 +41,11 @@ export class MongoJdRepository implements JdRepository {
     }
   }
 
-  async deleteJD (id: string): Promise<string | any> {
+  async deleteJD (_id: string): Promise<string | any> {
     try {
       await mongoDBConnect()
       await Jd.updateOne(
-        { id },
+        { _id },
         { $set: { archived: true } }
       )
     } catch (error) {
