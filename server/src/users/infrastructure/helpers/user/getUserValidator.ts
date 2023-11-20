@@ -1,5 +1,5 @@
-import { type UserUseCase } from '../../aplication/userUseCase'
-import { type UserEntity } from '../../domain/user/user.entity'
+import { type UserUseCase } from '../../../aplication/userUseCase'
+import { type UserEntity } from '../../../domain/user/user.entity'
 
 interface UserQuery {
   id?: string

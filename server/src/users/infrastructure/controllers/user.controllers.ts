@@ -1,7 +1,7 @@
 import { type RequestHandler } from 'express'
 import { type UserUseCase } from '../../aplication/userUseCase'
-import getUserValidator from '../helpers/getUserValidator'
-import userAuth from '../helpers/userAuthHelper'
+import getUserValidator from '../helpers/user/getUserValidator'
+import userAuth from '../helpers/user/userAuthHelper'
 
 export class UserControllers {
   constructor (private readonly userUseCase: UserUseCase) {}

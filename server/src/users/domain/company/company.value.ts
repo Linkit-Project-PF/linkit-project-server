@@ -1,8 +1,6 @@
-import { randomUUID } from 'crypto'
 import { type CompanyEntity } from './company.entity'
 
 export class CompanyValue implements CompanyEntity {
-  id: string
   image?: string | undefined
   name: string
   country: string
@@ -14,7 +12,6 @@ export class CompanyValue implements CompanyEntity {
   active?: boolean | null | undefined
 
   constructor (company: CompanyEntity) {
-    this.id = randomUUID()
     this.image = company.image ?? 'DEFAULT_PROFILE_COMPANY_IMAGE'
     this.name = company.name
     this.password = company.password ?? undefined

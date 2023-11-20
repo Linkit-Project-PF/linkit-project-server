@@ -1,5 +1,5 @@
-import { type CompanyUseCase } from '../../aplication/companyUseCase'
-import { type CompanyEntity } from '../../domain/company/company.entity'
+import { type CompanyUseCase } from '../../../aplication/companyUseCase'
+import { type CompanyEntity } from '../../../domain/company/company.entity'
 
 interface CompanyQuery {
   id?: string
