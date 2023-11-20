@@ -1,32 +1,31 @@
-import 'dotenv/config'
-import { type UserEntity } from '../../../domain/user/user.entity'
+import { type CompanyEntity } from '../../../domain/company/company.entity'
 import Admin from '../../collections/Admin'
-import User from '../../collections/User'
+import Company from '../../collections/Company'
 import { objectIDValidator } from '../validateObjectID'
 
 interface authResponse {
-  value: string | UserEntity
+  value: string | CompanyEntity
   code: number
 }
 
-export default async function userAuth (id: string, method: string, editID?: string): Promise<authResponse> {
+export default async function companyAuth (id: string, method: string, editID?: string): Promise<authResponse> {
   try {
     const response: authResponse = { value: '', code: 0 }
-    objectIDValidator(id, 'logged user')
-    if (editID) objectIDValidator(editID, 'target user')
+    objectIDValidator(id, 'logged company')
+    if (editID) objectIDValidator(editID, 'target company')
     const adminUser = await Admin.findById(id)
     if (!adminUser) {
       if (method === 'find') {
-        const validUser = await User.findById(id)
-        if (validUser) {
-          response.value = validUser as UserEntity
+        const validCompany = await Company.findById(id)
+        if (validCompany) {
+          response.value = validCompany as CompanyEntity
           response.code = 200
         } else {
           response.value = 'Unauthorized'
           response.code = 401
         }
       } else {
-        response.value = 'Unauthorized'
+        response.value = 'Unauthorized for this method'
         response.code = 401
       }
     } else {
@@ -41,13 +40,13 @@ export default async function userAuth (id: string, method: string, editID?: str
           response.code = 401
         }
       } else if (method === 'delete' || method === 'edit') {
-        const allUsers = await User.find({}, { projection: { _id: 1 } })
-        let isUser = false
-        allUsers.forEach(user => {
-          if (String(user._id) === editID) isUser = true
+        const allCompanies = await Company.find({}, { projection: { _id: 1 } })
+        let isCompany = false
+        allCompanies.forEach(company => {
+          if (String(company._id) === editID) isCompany = true
         })
-        if (!isUser) {
-          response.value = 'Not a valid id for user. If you are trying to edit/delete another role , use the correct endpoint'
+        if (!isCompany) {
+          response.value = 'Not a valid id for a company. If you are trying to edit/delete another role , use the correct endpoint'
           response.code = 401
         }
       }

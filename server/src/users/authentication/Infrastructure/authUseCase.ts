@@ -11,8 +11,8 @@ export class AuthUseCase {
     return result
   }
 
-  public register = async (entity: UserEntity | CompanyEntity | AdminEntity, type: string): Promise<UserEntity | CompanyEntity | AdminEntity | string> => {
-    const result = await this.authRepository.register(entity, type)
+  public register = async (entity: UserEntity | CompanyEntity | AdminEntity): Promise<UserEntity | CompanyEntity | AdminEntity | string> => {
+    const result = await this.authRepository.register(entity)
     return result
   }
 }
