@@ -53,13 +53,13 @@ export default async function userAuth (id: string, method: string, editID?: str
             response.code = 401
             return response
           }
-          const admins = await Admin.find({}, { projection: { _id: 1 } })
-          let isAdmin = false
-          admins.forEach(admin => {
-            if (String(admin._id) === editID) isAdmin = true
+          const allUsers = await User.find({}, { projection: { _id: 1 } })
+          let isUser = false
+          allUsers.forEach(user => {
+            if (String(user._id) === editID) isUser = true
           })
-          if (isAdmin && id !== process.env.SUPERADM_ID) {
-            response.value = 'Admins cannot edit or delete other admin info'
+          if (!isUser) {
+            response.value = 'Not a valid id for user. If you are trying to edit/delete another role , use the correct endpoint'
             response.code = 401
           }
         }
