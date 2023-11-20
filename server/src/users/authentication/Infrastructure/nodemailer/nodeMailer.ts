@@ -15,6 +15,7 @@ export class MainNodeMailerProvider implements AddEmailAccount {
       }
     })
   }
+  // test
 
   async sendEmail (message: IMessage): Promise<void> {
     await this.transporter.sendMail({
