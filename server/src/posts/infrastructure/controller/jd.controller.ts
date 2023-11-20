@@ -37,7 +37,7 @@ export class JdController {
     try {
       const { id } = req.params
       await this.jdUseCase.deleteJD(id)
-      return res.status(200).json('Vacante eliminada o finalizada')
+      return res.status(200).json('Vacante eliminada')
     } catch (error) {
       return res.status(400).json((error as Error).message)
     }
