@@ -1,6 +1,6 @@
 import { type RequestHandler } from 'express'
 import { type CompanyUseCase } from '../../aplication/companyUseCase'
-import getCompanyValidator from '../helpers/getCompanyValidator'
+import getCompanyValidator from '../helpers/company/getCompanyValidator'
 
 export class CompanyControllers {
   constructor (private readonly companyUseCase: CompanyUseCase) {}

@@ -1,8 +1,6 @@
-import { randomUUID } from 'crypto'
 import { type UserEntity } from './user.entity'
 
 export class UserValue implements UserEntity {
-  id: string
   image?: string
   name: string
   password?: string | null
@@ -14,9 +12,9 @@ export class UserValue implements UserEntity {
   cv?: string | null
   technologies?: string[]
   active: boolean
+  postulations?: string[]
 
   constructor (user: UserEntity) {
-    this.id = randomUUID()
     this.image = user.image ?? 'https://api.dicebear.com/7.x/avataaars-neutral/svg?seed=Callie'
     this.name = user.name
     this.password = user.password ?? undefined
@@ -28,5 +26,6 @@ export class UserValue implements UserEntity {
     this.cv = user.cv ?? undefined
     this.technologies = user.technologies ?? []
     this.active = user.active ?? true
+    this.postulations = user.postulations ?? []
   }
 }

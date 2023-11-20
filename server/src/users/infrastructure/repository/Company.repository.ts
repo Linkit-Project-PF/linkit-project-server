@@ -2,7 +2,7 @@
 import { type CompanyEntity } from '../../domain/company/company.entity'
 import { type CompanyRepository } from '../../domain/company/company.repository'
 import { ValidationError } from '../../../errors/errors'
-import { ValidateCompanyIfAlreadyonDB, ValidateUserDelete, ValidateUserRegister, ValidateUserUpdate } from '../../../errors/validation'
+import { ValidateCompanyIfAlreadyonDB, ValidateUserDelete, ValidateUserUpdate } from '../../../errors/validation'
 import Company from '../collections/Company'
 
 export class MongoCompanyRepository implements CompanyRepository {
@@ -33,7 +33,7 @@ export class MongoCompanyRepository implements CompanyRepository {
   async editCompany (id: string, company: CompanyEntity): Promise<CompanyEntity | string> {
     try {
       ValidateUserUpdate(company)
-      const editedCompany = await Company.findByIdAndUpdate(id, company)
+      const editedCompany = await Company.findByIdAndUpdate(id, company, { new: true })
       return editedCompany as unknown as CompanyEntity
     } catch (error) {
       throw new ValidationError(`Error al editar: ${(error as Error).message}`)
@@ -43,9 +43,9 @@ export class MongoCompanyRepository implements CompanyRepository {
   async deleteCompany (id: string): Promise<CompanyEntity | string> {
     try {
       ValidateUserDelete(id)
-      const resultado = await Company.updateOne(
-        { id },
-        { $set: { active: false } }
+      const resultado = await Company.findByIdAndUpdate(
+        id,
+        { $set: { active: false } }, { new: true }
       )
       return resultado as unknown as CompanyEntity
     } catch (error) {

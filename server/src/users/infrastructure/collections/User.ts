@@ -1,12 +1,6 @@
-import { randomUUID } from 'crypto'
 import { Schema, model } from 'mongoose'
 
 const userSchema = new Schema({
-  id: {
-    type: String,
-    required: true,
-    default: randomUUID()
-  },
   image: {
     type: String,
     required: false,
@@ -63,6 +57,11 @@ const userSchema = new Schema({
     type: Boolean,
     required: true,
     default: true
+  },
+  postulations: {
+    type: Array,
+    required: true,
+    minlength: 0
   }
 })
 

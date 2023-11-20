@@ -19,9 +19,9 @@ export class MongoUserRepository implements UserRepository {
   async deleteUser (id: string): Promise<UserEntity | string> {
     try {
       ValidateUserDelete(id)
-      const resultado = await User.updateOne(
-        { id },
-        { $set: { active: false } }
+      const resultado = await User.findByIdAndUpdate(
+        id,
+        { $set: { active: false } }, { new: true }
       )
       return resultado as unknown as UserEntity
     } catch (error) {
@@ -36,6 +36,7 @@ export class MongoUserRepository implements UserRepository {
       if (filter === 'all') result = await User.find()
       else if (filter === 'id') result = await User.findById(value)
       else if (filter === 'tech') result = (await User.find()).filter(user => user.technologies.includes(value))
+      else if (filter === 'postulation') result = (await User.find()).filter(user => user.postulations.includes(value))
       else if (validSingleParams.includes(filter)) result = await User.find({ [filter]: value })
       else throw Error('Not a valid parameter')
       return result as unknown as UserEntity
@@ -47,7 +48,7 @@ export class MongoUserRepository implements UserRepository {
   async editUser (id: string, user: UserEntity): Promise<UserEntity | string> {
     try {
       ValidateUserUpdate(user)
-      const editedUser = await User.findByIdAndUpdate(id, user)
+      const editedUser = await User.findByIdAndUpdate(id, user, { new: true })
       return editedUser as unknown as UserEntity
     } catch (error) {
       throw new ValidationError(`Error al editar: ${(error as Error).message}`)
