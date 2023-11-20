@@ -2,10 +2,10 @@ import nodemailer from 'nodemailer'
 import type Mail from 'nodemailer/lib/mailer'
 import { type AddEmailAccount, type IMessage } from './add-email'
 
-export class MainNodeMailerProvider implements AddEmailAccount {
+export class MailNodeMailerProvider implements AddEmailAccount {
   private readonly transporter: Mail
 
-  constructor (transporter: Mail) {
+  constructor () {
     this.transporter = nodemailer.createTransport({
       host: process.env.NODEMAILER_HOST,
       port: 587,
@@ -15,7 +15,6 @@ export class MainNodeMailerProvider implements AddEmailAccount {
       }
     })
   }
-  // test
 
   async sendEmail (message: IMessage): Promise<void> {
     await this.transporter.sendMail({
