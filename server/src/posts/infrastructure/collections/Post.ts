@@ -50,7 +50,7 @@ const postSchema = new Schema({
     type: String,
     required: true,
     minlength: 4,
-    maxlength: 20
+    maxlength: 30
   },
   archived: {
     type: Boolean,
