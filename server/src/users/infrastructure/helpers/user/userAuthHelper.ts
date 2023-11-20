@@ -1,8 +1,8 @@
 import 'dotenv/config'
-import { type UserEntity } from '../../domain/user/user.entity'
-import Admin from '../collections/Admin'
-import User from '../collections/User'
-import { objectIDValidator } from './validateObjectID'
+import { type UserEntity } from '../../../domain/user/user.entity'
+import Admin from '../../collections/Admin'
+import User from '../../collections/User'
+import { objectIDValidator } from '../validateObjectID'
 
 interface authResponse {
   value: string | UserEntity

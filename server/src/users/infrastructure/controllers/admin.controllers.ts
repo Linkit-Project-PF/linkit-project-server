@@ -1,6 +1,6 @@
 import { type RequestHandler } from 'express'
 import { type AdminUseCase } from '../../aplication/adminUseCase'
-import getAdminValidator from '../helpers/getAdminValidator'
+import getAdminValidator from '../helpers/admin/getAdminValidator'
 
 export class AdminControllers {
   constructor (private readonly adminUseCase: AdminUseCase) {}

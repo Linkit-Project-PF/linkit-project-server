@@ -1,5 +1,5 @@
-import { type AdminUseCase } from '../../aplication/adminUseCase'
-import { type AdminEntity } from '../../domain/admin/admin.entity'
+import { type AdminUseCase } from '../../../aplication/adminUseCase'
+import { type AdminEntity } from '../../../domain/admin/admin.entity'
 
 interface AdminQuery {
   id?: string

@@ -1,5 +1,4 @@
 export interface CompanyEntity {
-  id: string
   image?: string
   name: string
   country: string
