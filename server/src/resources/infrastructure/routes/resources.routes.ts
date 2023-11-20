@@ -8,7 +8,7 @@ resourcesRoute.post('/contactus', async (req, res): Promise<any> => {
   try {
     const newContact = req.body
     // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
-    base('Users').create([
+    const createContact = await base('Users').create([
       {
         fields: {
           Nombre: newContact.name,
@@ -19,16 +19,8 @@ resourcesRoute.post('/contactus', async (req, res): Promise<any> => {
           Mensaje: newContact.message
         }
       }
-    ], (err: any, records: any) => {
-      if (err) {
-        console.error(err)
-        return
-      }
-      records.forEach((record: any): any => {
-        console.log('Registro creado:', record.getId())
-      })
-    })
-    res.status(200).send('Contacto creado')
+    ])
+    res.status(200).send(createContact[0].fields)
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
