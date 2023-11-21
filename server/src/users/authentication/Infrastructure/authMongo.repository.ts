@@ -13,12 +13,12 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'fire
 import { MongoUserRepository } from '../../infrastructure/repository/User.repository'
 import { MongoCompanyRepository } from '../../infrastructure/repository/Company.repository'
 import { MongoAdminRepository } from '../../infrastructure/repository/Admin.repository'
-// import { type MailNodeMailerProvider } from './nodemailer/nodeMailer'
+import { type MailNodeMailerProvider } from './nodemailer/nodeMailer'
 
 export class AuthMongoRepository implements AuthRepository {
-  // constructor (private readonly mailNodeMailerProvider: MailNodeMailerProvider) {
-  //   this.mailNodeMailerProvider = mailNodeMailerProvider
-  // }
+  constructor (private readonly mailNodeMailerProvider: MailNodeMailerProvider) {
+    this.mailNodeMailerProvider = mailNodeMailerProvider
+  }
 
   async register (entity: UserEntity | CompanyEntity | AdminEntity): Promise<UserEntity | CompanyEntity | AdminEntity | string> {
     try {
@@ -35,22 +35,22 @@ export class AuthMongoRepository implements AuthRepository {
         provider = new MongoAdminRepository()
         entityCreated = await provider.createAdmin(entity as AdminEntity)
       } else entityCreated = 'No entity created, role does not exist'
-      // await this.mailNodeMailerProvider.sendEmail({
-      //   to: {
-      //     name: entity.name,
-      //     email: entity.email
-      //   },
-      //   from: {
-      //     name: 'LinkIT',
-      //     email: 'linkit.project.henry@gmail.com'
-      //   },
-      //   subject: 'Bienvenido a LinkIT',
-      //   html: `<h1>Bienvenido a LinkIT</h1>
-      //   <p>Gracias por registrarte en LinkIT, tu cuenta ha sido creada exitosamente.</p>
-      //   <p>Para continuar con el proceso de registro, por favor ingresa al siguiente link:</p>
-      //   <a href="http://localhost:3000/verify/${entity.email}">http://localhost:3000/verify/${entity.email}</a>`
-      // }
-      // )
+      await this.mailNodeMailerProvider.sendEmail({
+        to: {
+          name: entity.name,
+          email: entity.email
+        },
+        from: {
+          name: 'LinkIT',
+          email: 'linkit.project.henry@gmail.com'
+        },
+        subject: 'Bienvenido a LinkIT',
+        html: `<h1>Bienvenido a LinkIT</h1>
+        <p>Gracias por registrarte en LinkIT, tu cuenta ha sido creada exitosamente.</p>
+        <p>Para continuar con el proceso de registro, por favor ingresa al siguiente link:</p>
+        <a href="http://localhost:3000/verify/${entity.email}">http://localhost:3000/verify/${entity.email}</a>`
+      }
+      )
       return entityCreated
     } catch (error) {
       // TODO Check If validation errors fit here
