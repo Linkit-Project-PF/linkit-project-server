@@ -45,6 +45,11 @@ const companySchema = new Schema({
     type: Boolean,
     required: true,
     default: true
+  },
+  jds: {
+    type: Array,
+    required: true,
+    minlength: 0
   }
 })
 
