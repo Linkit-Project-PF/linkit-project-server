@@ -21,4 +21,13 @@ export class AuthControllers {
       return res.status(400).json((error as Error).message)
     }
   }
+
+  public putController: RequestHandler = async (req, res) => {
+    try {
+      await this.authUseCase.verify(String(req.query.id), String(req.query.role))
+      res.redirect('https://link-it-project.vercel.app')
+    } catch (error) {
+      return res.status(400).json((error as Error).message)
+    }
+  }
 }
