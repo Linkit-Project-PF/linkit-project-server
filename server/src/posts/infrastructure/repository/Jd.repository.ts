@@ -20,7 +20,7 @@ export class MongoJdRepository implements JdRepository {
   async findJD (value: string, filter: string): Promise<JdEntity | JdEntity[] | any> {
     try {
       let result
-      const singleValidValues = ['title', 'location', 'modality', 'schedule', 'archived']
+      const singleValidValues = ['title', 'location', 'modality', 'schedule', 'archived', 'company']
       if (filter === 'all') result = await Jd.find()
       else if (filter === 'id') result = await Jd.findById(value)
       else if (filter === 'stack') result = (await Jd.find()).filter(jd => jd.stack?.includes(value))
