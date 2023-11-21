@@ -19,7 +19,7 @@ export class MongoCompanyRepository implements CompanyRepository {
   async findCompany (value: string, filter: string): Promise<CompanyEntity | CompanyEntity[] | string> {
     try {
       let result
-      const validParams = ['name', 'email', 'active']
+      const validParams = ['name', 'email', 'active', 'jds']
       if (filter === 'all') result = await Company.find()
       else if (filter === 'id') result = await Company.findById(value)
       else if (validParams.includes(filter)) result = await Company.find({ [filter]: value })
