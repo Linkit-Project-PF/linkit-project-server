@@ -10,15 +10,19 @@ import { type AuthRepository } from './auth.repository'
 import { auth } from '../firebase'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 // Repositories
+import Admin from '../../infrastructure/collections/Admin'
+import User from '../../infrastructure/collections/User'
+import Company from '../../infrastructure/collections/Company'
 import { MongoUserRepository } from '../../infrastructure/repository/User.repository'
 import { MongoCompanyRepository } from '../../infrastructure/repository/Company.repository'
 import { MongoAdminRepository } from '../../infrastructure/repository/Admin.repository'
-import { type MailNodeMailerProvider } from './nodemailer/nodeMailer'
+import { objectIDValidator } from '../../infrastructure/helpers/validateObjectID'
+// import { type MailNodeMailerProvider } from './nodemailer/nodeMailer'
 
 export class AuthMongoRepository implements AuthRepository {
-  constructor (private readonly mailNodeMailerProvider: MailNodeMailerProvider) {
-    this.mailNodeMailerProvider = mailNodeMailerProvider
-  }
+  // constructor (private readonly mailNodeMailerProvider: MailNodeMailerProvider) {
+  //   this.mailNodeMailerProvider = mailNodeMailerProvider
+  // }
 
   async register (entity: UserEntity | CompanyEntity | AdminEntity): Promise<UserEntity | CompanyEntity | AdminEntity | string> {
     try {
@@ -35,22 +39,22 @@ export class AuthMongoRepository implements AuthRepository {
         provider = new MongoAdminRepository()
         entityCreated = await provider.createAdmin(entity as AdminEntity)
       } else entityCreated = 'No entity created, role does not exist'
-      await this.mailNodeMailerProvider.sendEmail({
-        to: {
-          name: entity.name,
-          email: entity.email
-        },
-        from: {
-          name: 'LinkIT',
-          email: 'linkit.project.henry@gmail.com'
-        },
-        subject: 'Bienvenido a LinkIT',
-        html: `<h1>Bienvenido a LinkIT</h1>
-        <p>Gracias por registrarte en LinkIT, tu cuenta ha sido creada exitosamente.</p>
-        <p>Para continuar con el proceso de registro, por favor ingresa al siguiente link:</p>
-        <a href="http://localhost:3000/verify/${entity.email}">http://localhost:3000/verify/${entity.email}</a>`
-      }
-      )
+      // await this.mailNodeMailerProvider.sendEmail({
+      //   to: {
+      //     name: entity.name,
+      //     email: entity.email
+      //   },
+      //   from: {
+      //     name: 'LinkIT',
+      //     email: 'linkit.project.henry@gmail.com'
+      //   },
+      //   subject: 'Bienvenido a LinkIT',
+      //   html: `<h1>Bienvenido a LinkIT</h1>
+      //   <p>Gracias por registrarte en LinkIT, tu cuenta ha sido creada exitosamente.</p>
+      //   <p>Para continuar con el proceso de registro, por favor ingresa al siguiente link:</p>
+      //   <a href="http://localhost:3000/verify/${entity.email}">http://localhost:3000/verify/${entity.email}</a>`
+      // }
+      // )
       return entityCreated
     } catch (error) {
       // TODO Check If validation errors fit here
@@ -61,18 +65,36 @@ export class AuthMongoRepository implements AuthRepository {
   async login (email: string, password: string): Promise<UserEntity | CompanyEntity | AdminEntity | string> {
     try {
       await signInWithEmailAndPassword(auth, email, password)
-      const userProvider = new MongoUserRepository()
-      const userResult = await userProvider.findUser(email, 'email') as UserEntity[]
-      if (userResult.length) return userResult[0]
-      const companyProvider = new MongoCompanyRepository()
-      const companyResult = await companyProvider.findCompany(email, 'email') as CompanyEntity[]
-      if (companyResult.length) return companyResult[0]
-      const adminProvider = new MongoAdminRepository()
-      const adminResult = await adminProvider.findAdmin(email, 'email') as AdminEntity[]
-      if (adminResult.length) return adminResult[0]
+      const userResult = await User.find({ email })
+      if (userResult[0]._id) return userResult[0] as UserEntity
+      const companyResult = await Company.find({ email })
+      if (companyResult[0]._id) return companyResult[0] as CompanyEntity
+      const adminResult = await Admin.find({ email })
+      if (adminResult[0]._id) return adminResult[0] as AdminEntity
       return 'User logged but not found on register, contact admin'
     } catch (error) {
       throw new Error(`Error de Inicio de sesión: ${(error as Error).message}`)
+    }
+  }
+
+  async verify (id: string, role: string): Promise<string> {
+    try {
+      if (id === 'undefined' || role === 'undefined') throw Error('Missing user information')
+      objectIDValidator(id, 'user to verify')
+      if (role === 'user') {
+        const user = await User.findById(id)
+        if (!user) throw Error('No User found with that id.')
+        await User.updateOne({ _id: user._id }, { $set: { active: true } }, { new: true })
+      } else if (role === 'company') {
+        const company = await Company.findById(id)
+        if (!company) throw Error('No Company found with that id.')
+        await Company.updateOne({ email: company.email }, { $set: { active: true } }, { new: true })
+      } else {
+        throw Error('Not a valid role')
+      }
+      return 'Completed'
+    } catch (error: any) {
+      throw Error('Error verifying: ' + error.message)
     }
   }
 }

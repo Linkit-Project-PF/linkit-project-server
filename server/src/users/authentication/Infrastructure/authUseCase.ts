@@ -15,4 +15,9 @@ export class AuthUseCase {
     const result = await this.authRepository.register(entity)
     return result
   }
+
+  public verify = async (id: string, role: string): Promise<string> => {
+    const result = await this.authRepository.verify(id, role)
+    return result
+  }
 }
