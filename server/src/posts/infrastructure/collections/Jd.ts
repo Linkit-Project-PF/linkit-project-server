@@ -57,7 +57,7 @@ const jdSchema = new Schema({
     type: Array,
     required: true,
     minlength: 0,
-    maxlength: 20
+    maxlength: 50
   },
   schedule: {
     type: String,
@@ -70,6 +70,17 @@ const jdSchema = new Schema({
     type: Boolean,
     required: true,
     default: false
+  },
+  company: {
+    type: String,
+    required: true,
+    minlength: 1,
+    maxlength: 100
+  },
+  users: {
+    type: Array,
+    minlength: 0,
+    required: true
   }
 })
 //! Revisar estos campos para ver si son los requeridos por el Front

@@ -83,6 +83,7 @@ export const ValidatePostCreate = (post: PostEntity): void => {
 export const ValidateJdCreate = (jd: JdEntity): void => {
   if (!jd.title) returnPostError('El título es requerido')
   if (!jd.description) returnPostError('La descripción es requerida')
+  if (!jd.company)returnPostError('El nombre de la empresa es requerido')
 }
 
 export const ValidateReviewCreate = (review: ReviewEntity): void => {
@@ -101,6 +102,7 @@ export const ValidatePostUpdate = (post: PostEntity): void => {
 export const ValidateJdUpdate = (jd: JdEntity): void => {
   if (!jd.title) returnPostError('El título es requerido')
   if (!jd.description) returnPostError('La descripción es requerida')
+  if (!jd.company)returnPostError('El nombre de la empresa es requerido')
 }
 
 export const ValidatePostDelete = (_id: string): void => {
