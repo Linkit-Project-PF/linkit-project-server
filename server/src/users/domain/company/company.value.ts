@@ -10,6 +10,7 @@ export class CompanyValue implements CompanyEntity {
   role?: string | null | undefined
   linkedin?: string | null | undefined
   active?: boolean | null | undefined
+  jds: string[]
 
   constructor (company: CompanyEntity) {
     this.image = company.image ?? 'DEFAULT_PROFILE_COMPANY_IMAGE'
@@ -21,5 +22,6 @@ export class CompanyValue implements CompanyEntity {
     this.role = company.role ?? 'company'
     this.linkedin = company.linkedin ?? undefined
     this.active = company.active ?? true
+    this.jds = company.jds
   }
 }

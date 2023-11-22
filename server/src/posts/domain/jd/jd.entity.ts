@@ -11,4 +11,6 @@ export interface JdEntity {
   stack: string[] | string
   schedule: string
   archived?: boolean | null
+  company: string
+  users?: string[] | string
 }

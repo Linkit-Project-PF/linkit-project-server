@@ -14,6 +14,8 @@ export class JdValue implements JdEntity {
   stack: string[] | string
   schedule: string
   archived?: boolean | null
+  company: string
+  users?: string[] | string
 
   constructor (jd: JdEntity) {
     this.id = randomUUID()
@@ -28,5 +30,7 @@ export class JdValue implements JdEntity {
     this.stack = jd.stack
     this.schedule = jd.schedule
     this.archived = jd.archived ?? false
+    this.company = jd.company
+    this.users = jd.users
   }
 }

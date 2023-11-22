@@ -7,6 +7,6 @@ export interface CompanyEntity {
   password?: string | null
   role?: string | null
   linkedin?: string | null
-  // TODO Add jobOffers as a prop with type JDEntity
   active?: boolean | null
+  jds: string[]
 }
