@@ -18,10 +18,10 @@ const postSchema = new Schema({
     maxlength: 40
   },
   description: {
-    type: String,
+    type: Array,
     required: true,
-    minlength: 10,
-    maxlength: 3000
+    minlength: 0,
+    maxlength: 200
   },
   createdDate: {
     type: Date,
