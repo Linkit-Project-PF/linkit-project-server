@@ -1,16 +1,10 @@
-import { randomUUID } from 'crypto'
 import { Schema, model } from 'mongoose'
 
 const jdSchema = new Schema({
-  id: {
-    type: String,
-    default: randomUUID(),
-    required: true
-  },
-  airTableId: {
-    type: String,
-    required: false //! Si se requiere, se debe poner en true
-  },
+  // airTableId: {
+  //   type: String,
+  //   required: false //! Si se requiere, se debe poner en true
+  // },
   code: {
     type: String,
     required: true,
@@ -28,12 +22,6 @@ const jdSchema = new Schema({
     required: true,
     minlength: 10,
     maxlength: 3000
-  },
-  image: {
-    type: String,
-    required: false,
-    minlength: 3,
-    maxlength: 200
   },
   type: {
     type: String,
@@ -60,12 +48,6 @@ const jdSchema = new Schema({
     minlength: 0,
     maxlength: 50
   },
-  requisites: {
-    type: Array,
-    required: true,
-    minlength: 0,
-    maxlength: 20
-  },
   aboutUs: {
     type: String,
     required: true,
@@ -74,15 +56,15 @@ const jdSchema = new Schema({
   },
   aboutClient: {
     type: String,
-    required: true,
+    required: false,
     minlength: 10,
     maxlength: 3000
   },
   responsabilities: {
     type: String,
     required: true,
-    minlength: 10,
-    maxlength: 3000
+    minlength: 0,
+    maxlength: 20
   },
   requirements: {
     type: Array,
@@ -107,7 +89,7 @@ const jdSchema = new Schema({
     required: true,
     default: true
   },
-  archived: {
+  archieved: {
     type: Boolean,
     required: true,
     default: false
@@ -129,5 +111,4 @@ const jdSchema = new Schema({
     default: Date()
   }
 })
-//! Revisar estos campos para ver si son los requeridos por el Front
 export default model('Jd', jdSchema)
