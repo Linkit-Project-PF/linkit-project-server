@@ -18,9 +18,9 @@ const postSchema = new Schema({
     maxlength: 40
   },
   description: {
-    type: Array,
+    type: String,
     required: true,
-    minlength: 0,
+    minlength: 3,
     maxlength: 200
   },
   headers: {
@@ -50,7 +50,7 @@ const postSchema = new Schema({
     required: true,
     minlength: 4,
     maxlength: 8,
-    enum: ['blog', 'social', 'v']
+    enum: ['blog', 'social', 'ebook']
   },
   category: {
     type: String,
