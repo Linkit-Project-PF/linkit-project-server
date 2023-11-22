@@ -1,23 +1,20 @@
 export interface JdEntity {
-  id: string
-  airTableId?: string | null//! Preguntar a la empresa
+  // airTableId?: string | null//! Preguntar a la empresa
   code: string
   title: string
   description: string
-  image?: string | null
   type: string
   location: string
   modality: string
-  stack: string[] | string
+  stack: string[]
   aboutUs: string
-  aboutClient: string
+  aboutClient?: string | null
   responsabilities: string
-  requirements: string[] | string
-  niceToHave: string[] | string
-  benefits: string[] | string
-  archived?: boolean | null
-  active: boolean
+  requirements: string[]
+  niceToHave: string[]
+  benefits: string[]
+  archieved: boolean
   company: string
-  users?: string[] | string
+  users: string[]
   createdDate: Date
 }

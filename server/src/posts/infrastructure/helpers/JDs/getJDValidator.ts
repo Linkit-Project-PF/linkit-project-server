@@ -8,7 +8,7 @@ interface JDQuery {
   modality?: string
   stack?: string
   schedule?: string
-  archived?: string
+  archieved?: string
 }
 
 export default async function getJDValidator (query: JDQuery, jdUseCase: JdUseCase): Promise<JdEntity | JdEntity[] | string> {

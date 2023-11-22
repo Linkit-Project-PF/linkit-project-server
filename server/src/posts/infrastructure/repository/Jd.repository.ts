@@ -20,7 +20,7 @@ export class MongoJdRepository implements JdRepository {
   async findJD (value: string, filter: string): Promise<JdEntity | JdEntity[] | any> {
     try {
       let result
-      const singleValidValues = ['title', 'location', 'modality', 'schedule', 'archived', 'company']
+      const singleValidValues = ['title', 'location', 'modality', 'schedule', 'archieved', 'company']
       if (filter === 'all') result = await Jd.find()
       else if (filter === 'id') result = await Jd.findById(value)
       else if (filter === 'stack') result = (await Jd.find()).filter(jd => jd.stack?.includes(value))
@@ -44,7 +44,7 @@ export class MongoJdRepository implements JdRepository {
   async deleteJD (_id: string): Promise<string | any> {
     try {
       await mongoDBConnect()
-      await Jd.findByIdAndUpdate(_id, { $set: { archived: true } }, { new: true })
+      await Jd.findByIdAndUpdate(_id, { $set: { archieved: true } }, { new: true })
     } catch (error) {
       return 'Error al intentar archivar el jd'
     }
