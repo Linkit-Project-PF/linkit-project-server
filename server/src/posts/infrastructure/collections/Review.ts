@@ -1,17 +1,11 @@
-import { randomUUID } from 'crypto'
 import { Schema, model } from 'mongoose'
 
 const reviewSchema = new Schema({
-  id: {
-    type: String,
-    default: randomUUID(),
-    required: true
-  },
-  airTableId: {
-    type: String,
-    required: false //! Si se requiere, se debe poner en true
-  },
-  nameUserOrCompany: {
+  // airTableId: {
+  //   type: String,
+  //   required: false //! Si se requiere, se debe poner en true
+  // },
+  name: {
     type: String,
     required: true,
     minminlength: 1,

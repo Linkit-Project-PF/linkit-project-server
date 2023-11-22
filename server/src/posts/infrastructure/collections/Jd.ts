@@ -51,13 +51,13 @@ const jdSchema = new Schema({
   aboutUs: {
     type: String,
     required: true,
-    minlength: 10,
+    minlength: 3,
     maxlength: 3000
   },
   aboutClient: {
     type: String,
     required: false,
-    minlength: 10,
+    minlength: 0,
     maxlength: 3000
   },
   responsabilities: {
@@ -84,12 +84,7 @@ const jdSchema = new Schema({
     minlength: 0,
     maxlength: 20
   },
-  active: {
-    type: Boolean,
-    required: true,
-    default: true
-  },
-  archieved: {
+  archived: {
     type: Boolean,
     required: true,
     default: false

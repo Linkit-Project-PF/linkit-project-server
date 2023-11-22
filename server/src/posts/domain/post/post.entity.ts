@@ -1,6 +1,5 @@
 export interface PostEntity {
-  id: string
-  airTableId?: string | null //! Preguntar a la empresa
+  // airTableId?: string | null //! Preguntar a la empresa
   title: string
   description: string
   headers?: string[]
@@ -9,5 +8,5 @@ export interface PostEntity {
   link?: string | null
   type: string
   archived?: boolean | null
-  category?: string
+  category?: string | null
 }
