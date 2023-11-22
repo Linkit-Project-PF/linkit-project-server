@@ -24,7 +24,9 @@ export class MongoUserRepository implements UserRepository {
           cv: user.cv ?? '',
           technologies: user.technologies?.join(','),
           postulations: user.postulations?.join(','),
-          active: user.active?.toString() ?? true.toString()
+          active: user.active?.toString() ?? true.toString(),
+          internStatus: user.internStatus ?? '',
+          userStatus: user.userStatus ?? ''
         })
 
         console.log('Created record')
@@ -54,7 +56,7 @@ export class MongoUserRepository implements UserRepository {
   async findUser (value: string, filter: string): Promise<UserEntity | UserEntity[] | string> {
     try {
       let result
-      const validSingleParams = ['name', 'email', 'active', 'country']
+      const validSingleParams = ['name', 'email', 'active', 'country', 'userStatus', 'internStatus']
       if (filter === 'all') result = await User.find()
       else if (filter === 'id') result = await User.findById(value)
       else if (filter === 'tech') result = (await User.find()).filter(user => user.technologies.includes(value))

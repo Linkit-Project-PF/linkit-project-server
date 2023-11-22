@@ -12,4 +12,6 @@ export interface UserEntity {
   postulations?: string[]
   // TODO Add postulations with interface JDS
   active?: boolean | null
+  userStatus?: string | null
+  internStatus?: string | null
 }
