@@ -31,10 +31,10 @@ export const ValidateUserIfAlreadyonDB = async (email: string): Promise<void> =>
   })
 }
 
-export const ValidateReviewIfAlreadyonDB = async (nameUserOrCompany: string): Promise<void> => {
+export const ValidateReviewIfAlreadyonDB = async (name: string): Promise<void> => {
   const allReviews = await Review.find({}, 'name')
   allReviews.forEach(obj => {
-    if (obj.nameUserOrCompany === nameUserOrCompany) returnUserError('Esta empresa o usuario ya teienen una reseña')
+    if (obj.name === name) returnUserError('Esta empresa o usuario ya tiene una reseña')
   })
 }
 export const ValidateUserRegister = (user: UserEntity | AdminEntity): void => {
@@ -87,7 +87,7 @@ export const ValidateJdCreate = (jd: JdEntity): void => {
 }
 
 export const ValidateReviewCreate = (review: ReviewEntity): void => {
-  if (!review.nameUserOrCompany) returnPostError('El nombre de la empresa o usuario es requerido')
+  if (!review.name) returnPostError('El nombre de la empresa o usuario es requerido')
   if (!review.rol) returnPostError('El rol es requerido')
   if (!review.country) returnPostError('El país es requerido')
   if (!review.detail)returnPostError('La reseña es requerida')

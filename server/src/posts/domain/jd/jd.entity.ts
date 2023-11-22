@@ -13,7 +13,7 @@ export interface JdEntity {
   requirements: string[]
   niceToHave: string[]
   benefits: string[]
-  archieved: boolean
+  archived: boolean
   company: string
   users: string[]
   createdDate: Date
