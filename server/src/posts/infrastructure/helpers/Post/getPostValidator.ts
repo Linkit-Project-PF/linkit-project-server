@@ -1,5 +1,5 @@
-import { type PostUseCase } from '../../aplication/postUseCase'
-import { type PostEntity } from '../../domain/post/post.entity'
+import { type PostUseCase } from '../../../aplication/postUseCase'
+import { type PostEntity } from '../../../domain/post/post.entity'
 
 interface PostQuery {
   id?: string

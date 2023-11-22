@@ -12,10 +12,14 @@ interface UserQuery {
 export default async function getUserValidator (query: UserQuery, userUseCase: UserUseCase): Promise<UserEntity | UserEntity[] | string> {
   try {
     let user
-    if (Object.keys(query).length) {
-      const filter: string = Object.keys(query)[0]
-      const value: string = Object.values(query)[0]
-      user = await userUseCase.findUser(value, filter)
+    const filters = Object.keys(query)
+    const values = Object.values(query)
+    if (filters.length) {
+      if (filters.length === 1) {
+        user = await userUseCase.findUser(values[0], filters[0])
+      } else {
+        user = await userUseCase.findUser(values, filters, true)
+      }
     } else {
       user = await userUseCase.findUser('', 'all')
     }

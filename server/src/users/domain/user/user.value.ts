@@ -13,6 +13,8 @@ export class UserValue implements UserEntity {
   technologies?: string[]
   active: boolean
   postulations?: string[]
+  userStatus?: string | null
+  internStatus?: string | null
 
   constructor (user: UserEntity) {
     this.image = user.image ?? 'https://api.dicebear.com/7.x/avataaars-neutral/svg?seed=Callie'
@@ -27,5 +29,7 @@ export class UserValue implements UserEntity {
     this.technologies = user.technologies ?? []
     this.active = user.active ?? true
     this.postulations = user.postulations ?? []
+    this.userStatus = user.userStatus ?? undefined
+    this.internStatus = user.internStatus ?? undefined
   }
 }

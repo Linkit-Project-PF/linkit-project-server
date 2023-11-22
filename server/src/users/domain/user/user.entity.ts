@@ -10,6 +10,7 @@ export interface UserEntity {
   cv?: string | null
   technologies?: string[]
   postulations?: string[]
-  // TODO Add postulations with interface JDS
   active?: boolean | null
+  userStatus?: string | null
+  internStatus?: string | null
 }

@@ -62,6 +62,17 @@ const userSchema = new Schema({
     type: Array,
     required: true,
     minlength: 0
+  },
+  userStatus: {
+    type: String,
+    minlength: 0,
+    required: false
+  },
+  internStatus: {
+    type: String,
+    required: false,
+    minlength: 0,
+    enum: ['Descartado', 'Contratado', 'Descartado x el cliente', 'Desistió', 'Presentado al cliente', 'Listo para presentar', 'Sourced', 'No contactar - Blacklist', 'Candidato para backup', 'listo para segunda entrevista de cliente/test técnico', 'Ofertado']
   }
 })
 

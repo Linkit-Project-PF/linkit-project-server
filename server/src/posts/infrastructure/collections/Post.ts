@@ -23,6 +23,12 @@ const postSchema = new Schema({
     minlength: 0,
     maxlength: 200
   },
+  headers: {
+    type: Array,
+    required: false,
+    minlength: 0,
+    maxlength: 200
+  },
   createdDate: {
     type: Date,
     required: false,
@@ -44,7 +50,7 @@ const postSchema = new Schema({
     required: true,
     minlength: 4,
     maxlength: 8,
-    enum: ['blog', 'social', 'ebook']
+    enum: ['blog', 'social', 'v']
   },
   category: {
     type: String,

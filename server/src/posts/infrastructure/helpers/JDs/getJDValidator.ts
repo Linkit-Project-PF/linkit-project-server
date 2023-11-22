@@ -1,5 +1,5 @@
-import { type JdUseCase } from '../../aplication/jdUseCase'
-import { type JdEntity } from '../../domain/jd/jd.entity'
+import { type JdUseCase } from '../../../aplication/jdUseCase'
+import { type JdEntity } from '../../../domain/jd/jd.entity'
 
 interface JDQuery {
   id?: string

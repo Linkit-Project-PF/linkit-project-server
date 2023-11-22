@@ -1,10 +1,10 @@
-/* eslint-disable indent */
 import { type UserEntity } from '../../domain/user/user.entity'
 import { type UserRepository } from '../../domain/user/user.reposiroty'
 import { ValidateUserDelete, ValidateUserUpdate, ValidateId } from '../../../errors/validation'
 import { ValidationError } from '../../../errors/errors'
 import User from '../collections/User'
 import base from '../../../db/airtable'
+import UserCombinedFilters from '../helpers/user/UserCombinedFilters'
 
 export class MongoUserRepository implements UserRepository {
   async createUser (user: UserEntity): Promise<UserEntity | string> {
@@ -24,7 +24,9 @@ export class MongoUserRepository implements UserRepository {
           cv: user.cv ?? '',
           technologies: user.technologies?.join(','),
           postulations: user.postulations?.join(','),
-          active: user.active?.toString() ?? true.toString()
+          active: user.active?.toString() ?? true.toString(),
+          internStatus: user.internStatus ?? '',
+          userStatus: user.userStatus ?? ''
         })
 
         console.log('Created record')
@@ -51,16 +53,20 @@ export class MongoUserRepository implements UserRepository {
     }
   }
 
-  async findUser (value: string, filter: string): Promise<UserEntity | UserEntity[] | string> {
+  async findUser (value: string[] | string, filter: string[] | string, combined?: boolean): Promise<UserEntity | UserEntity[] | string> {
     try {
       let result
-      const validSingleParams = ['name', 'email', 'active', 'country']
-      if (filter === 'all') result = await User.find()
-      else if (filter === 'id') result = await User.findById(value)
-      else if (filter === 'tech') result = (await User.find()).filter(user => user.technologies.includes(value))
-      else if (filter === 'postulation') result = (await User.find()).filter(user => user.postulations.includes(value))
-      else if (validSingleParams.includes(filter)) result = await User.find({ [filter]: value })
-      else throw Error('Not a valid parameter')
+      const validSingleParams = ['name', 'email', 'active', 'country', 'userStatus', 'internStatus']
+      if (!combined) {
+        if (filter === 'all') result = await User.find()
+        else if (filter === 'id') result = await User.findById(value)
+        else if (filter === 'technologies') result = (await User.find()).filter(user => user.technologies.includes(value))
+        else if (filter === 'postulation') result = (await User.find()).filter(user => user.postulations.includes(value))
+        else if (validSingleParams.includes(filter as string)) result = await User.find({ [filter as string]: value })
+        else throw Error('Not a valid parameter')
+      } else {
+        result = UserCombinedFilters(filter as string[], value as string[], validSingleParams, ['technologies', 'postulation'])
+      }
       return result as unknown as UserEntity
     } catch (error) {
       throw new ValidationError(`Error al buscar: ${(error as Error).message}`)
