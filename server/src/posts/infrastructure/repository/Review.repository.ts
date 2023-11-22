@@ -8,13 +8,13 @@ import mongoDBConnect from '../../../db/mongo'
 export class MongoReviewRepository implements ReviewRepository {
   async createReview (review: ReviewEntity): Promise<ReviewEntity | string> {
     try {
-      const { nameUserOrCompany } = review
-      await ValidateReviewIfAlreadyonDB(nameUserOrCompany)
+      const { name } = review
+      await ValidateReviewIfAlreadyonDB(name)
       ValidateReviewCreate(review)
       let reviewExists = false
       const allTitles = await Review.find({}, 'title type').exec()
       allTitles.forEach(obj => {
-        if (obj.nameUserOrCompany === review.nameUserOrCompany) reviewExists = true
+        if (obj.name === review.name) reviewExists = true
       })
       if (!reviewExists) {
         const reviewCreated = await Review.create(review)
