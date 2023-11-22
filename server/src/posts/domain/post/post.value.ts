@@ -6,6 +6,7 @@ export class PostValue implements PostEntity {
   airTableId?: string | null //! Preguntar a la empresa
   title: string
   description: string[] | string
+  headers: string[]
   createdDate: Date
   image?: string | null
   link?: string | null
@@ -18,6 +19,7 @@ export class PostValue implements PostEntity {
     this.airTableId = post.airTableId ?? undefined //! Si se va a implementar debe ser obigatorio
     this.title = post.title
     this.description = post.description ?? []
+    this.headers = post.headers
     this.createdDate = post.createdDate
     this.image = post.image ?? undefined
     this.link = post.link ?? undefined
