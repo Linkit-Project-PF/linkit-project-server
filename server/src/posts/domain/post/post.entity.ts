@@ -2,7 +2,7 @@ export interface PostEntity {
   id: string
   airTableId?: string | null //! Preguntar a la empresa
   title: string
-  description: string[] | string
+  description: string
   headers?: string[]
   createdDate: Date
   image?: string | null
