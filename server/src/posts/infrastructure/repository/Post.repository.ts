@@ -16,7 +16,7 @@ export class MongoPostRepository implements PostRepository {
       })
       if (!postExists) {
         const postCreated = await Post.create(post)
-        return postCreated as PostEntity
+        return postCreated as unknown as PostEntity
       } else throw Error('Ya existe otro post de este tipo con este título')
     } catch (error: any) {
       throw new ValidationError(`Error al crear el post: ${(error as Error).message}`)
@@ -46,7 +46,7 @@ export class MongoPostRepository implements PostRepository {
       else if (filter === 'id') result = await Post.findById(value)
       else if (validFilters.includes(filter)) result = await Post.find({ [filter]: value })
       else throw Error('Not a valid parameter')
-      return result as PostEntity[]
+      return result as unknown as PostEntity[]
     } catch (error) {
       throw new ValidationError(`Error al buscar el post: ${(error as Error).message}`)
     }
@@ -55,7 +55,7 @@ export class MongoPostRepository implements PostRepository {
   async editPost (_id: string, post: PostEntity): Promise<PostEntity | string> {
     try {
       const editedPost = await Post.findByIdAndUpdate(_id, post)
-      return editedPost as PostEntity
+      return editedPost as unknown as PostEntity
     } catch (error) {
       throw new ValidationError(`Error al editar el post: ${(error as Error).message}`)
     }
