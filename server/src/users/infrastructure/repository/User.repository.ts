@@ -4,12 +4,34 @@ import { type UserRepository } from '../../domain/user/user.reposiroty'
 import { ValidateUserDelete, ValidateUserUpdate, ValidateId } from '../../../errors/validation'
 import { ValidationError } from '../../../errors/errors'
 import User from '../collections/User'
+import base from '../../../db/airtable'
 
 export class MongoUserRepository implements UserRepository {
   async createUser (user: UserEntity): Promise<UserEntity | string> {
     try {
       // TODO: Add ValidateUserIfAlreadyonDB
       const userCreated = await User.create(user)
+
+      try {
+        await base('UsersInfo').create({
+          image: user.image ?? '',
+          name: user.name,
+          country: user.country,
+          phone: user.phone,
+          email: user.email,
+          role: user.role ?? 'user',
+          linkedin: user.linkedin ?? '',
+          cv: user.cv ?? '',
+          technologies: user.technologies?.join(','),
+          postulations: user.postulations?.join(','),
+          active: user.active?.toString() ?? true.toString()
+        })
+
+        console.log('Created record')
+      } catch (airtableError) {
+        console.error('Error creating record in Airtable:', airtableError)
+      }
+
       return userCreated as UserEntity
     } catch (error: any) {
       throw new ValidationError(`Error de registro: ${(error as Error).message}`)
