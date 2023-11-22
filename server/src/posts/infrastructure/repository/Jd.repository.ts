@@ -40,10 +40,11 @@ export class MongoJdRepository implements JdRepository {
     }
   }
 
-  async deleteJD (_id: string): Promise<string | any> {
+  async deleteJD (_id: string): Promise<JdEntity[] | string> {
     try {
-      await mongoDBConnect()
       await Jd.findByIdAndUpdate(_id, { $set: { archived: true } }, { new: true })
+      const allJds = await Jd.find()
+      return allJds
     } catch (error) {
       return 'Error al intentar archivar el jd'
     }
