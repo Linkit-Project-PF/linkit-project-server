@@ -11,8 +11,8 @@ export class UserUseCase {
     return userCreated
   }
 
-  public findUser = async (value: string, filter: string): Promise<UserEntity | UserEntity[] | string> => {
-    const user = await this.userRepository.findUser(value, filter)
+  public findUser = async (value: string | string[], filter: string | string[], combined?: boolean): Promise<UserEntity | UserEntity[] | string> => {
+    const user = await this.userRepository.findUser(value, filter, combined)
     return user
   }
 
