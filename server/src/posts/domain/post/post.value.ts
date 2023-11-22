@@ -5,7 +5,7 @@ export class PostValue implements PostEntity {
   id: string
   airTableId?: string | null //! Preguntar a la empresa
   title: string
-  description: string
+  description: string[] | string
   createdDate: Date
   image?: string | null
   link?: string | null
@@ -17,7 +17,7 @@ export class PostValue implements PostEntity {
     this.id = randomUUID()
     this.airTableId = post.airTableId ?? undefined //! Si se va a implementar debe ser obigatorio
     this.title = post.title
-    this.description = post.description
+    this.description = post.description ?? []
     this.createdDate = post.createdDate
     this.image = post.image ?? undefined
     this.link = post.link ?? undefined
