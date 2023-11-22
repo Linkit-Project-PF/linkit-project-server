@@ -1,5 +1,5 @@
-import { type ReviewUseCase } from '../../aplication/reviewUseCase'
-import { type ReviewEntity } from '../../domain/review/review.entity'
+import { type ReviewUseCase } from '../../../aplication/reviewUseCase'
+import { type ReviewEntity } from '../../../domain/review/review.entity'
 
 interface ReviewQuery {
   id?: string
