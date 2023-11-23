@@ -10,7 +10,7 @@ import jdRoute from './posts/infrastructure/routes/jd.routes'
 import companyRoute from './users/infrastructure/routes/company.routes'
 import authRoute from './users/authentication/Infrastructure/auth.routes'
 import reviewRoute from './posts/infrastructure/routes/review.routes'
-
+import googleRoute from './resources/infrastructure/routes/google.routes'
 const app = express()
 app.use(cors(
   {
@@ -42,6 +42,7 @@ app.use('/posts', postRoute)
 app.use('/jds', jdRoute)
 app.use('/auth', authRoute)
 app.use('/reviews', reviewRoute)
+app.use('/googleSpreadsheet', googleRoute)
 
 mongoDBConnect().then(() => {
   app.listen(port, () => {
