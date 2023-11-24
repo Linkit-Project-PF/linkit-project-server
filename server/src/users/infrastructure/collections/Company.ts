@@ -20,7 +20,7 @@ const companySchema = new Schema({
   },
   country: {
     type: String,
-    required: true,
+    required: false,
     minlength: 2
   },
   linkedin: {
@@ -38,7 +38,7 @@ const companySchema = new Schema({
   },
   phone: {
     type: String,
-    required: true,
+    required: false,
     minlength: 5
   },
   active: {

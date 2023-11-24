@@ -3,8 +3,8 @@ import { type CompanyEntity } from './company.entity'
 export class CompanyValue implements CompanyEntity {
   image?: string | undefined
   name: string
-  country: string
-  phone: string
+  country?: string | null
+  phone?: string | null
   email: string
   password?: string | null | undefined
   role?: string | null | undefined
@@ -17,8 +17,8 @@ export class CompanyValue implements CompanyEntity {
     this.name = company.name
     this.password = company.password ?? undefined
     this.email = company.email
-    this.country = company.country
-    this.phone = company.phone
+    this.country = company.country ?? undefined
+    this.phone = company.phone ?? undefined
     this.role = company.role ?? 'company'
     this.linkedin = company.linkedin ?? undefined
     this.active = company.active ?? true

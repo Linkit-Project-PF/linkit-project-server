@@ -1,8 +1,8 @@
 export interface CompanyEntity {
   image?: string
   name: string
-  country: string
-  phone: string
+  country?: string | null
+  phone?: string | null
   email: string
   password?: string | null
   role?: string | null
