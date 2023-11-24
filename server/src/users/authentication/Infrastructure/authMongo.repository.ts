@@ -18,6 +18,7 @@ import { MongoCompanyRepository } from '../../infrastructure/repository/Company.
 import { MongoAdminRepository } from '../../infrastructure/repository/Admin.repository'
 import { objectIDValidator } from '../../infrastructure/helpers/validateObjectID'
 // import { type MailNodeMailerProvider } from './nodemailer/nodeMailer'
+// import { docMail } from './nodemailer/docMail'
 
 export class AuthMongoRepository implements AuthRepository {
   // constructor (private readonly mailNodeMailerProvider: MailNodeMailerProvider) {
@@ -49,10 +50,7 @@ export class AuthMongoRepository implements AuthRepository {
       //     email: 'linkit.project.henry@gmail.com'
       //   },
       //   subject: 'Bienvenido a LinkIT',
-      //   html: `<h1>Bienvenido a LinkIT</h1>
-      //   <p>Gracias por registrarte en LinkIT, tu cuenta ha sido creada exitosamente.</p>
-      //   <p>Para continuar con el proceso de registro, por favor ingresa al siguiente link:</p>
-      //   <a href="http://localhost:3000/verify/${entity.email}">http://localhost:3000/verify/${entity.email}</a>`
+      //   html: docMail
       // }
       // )
       return entityCreated

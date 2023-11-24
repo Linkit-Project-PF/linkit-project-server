@@ -29,7 +29,7 @@ export default async function companyAuth (id: string, method: string, editID?: 
         response.code = 401
       }
     } else {
-      if (adminUser.active) {
+      if (!adminUser.active) {
         response.value = 'Admin is not active'
         response.code = 401
         return response
