@@ -1,7 +1,6 @@
 import { type ReviewEntity } from './review.entity'
 
 export class ReviewValue implements ReviewEntity {
-  // airTableId?: string | null //! Preguntar a la empresa
   name: string
   rol: string
   createdDate: Date
@@ -11,7 +10,6 @@ export class ReviewValue implements ReviewEntity {
   archived?: boolean
 
   constructor (review: ReviewEntity) {
-    // this.airTableId = review.airTableId ?? undefined //! Si se va a implementar debe ser obigatorio
     this.name = review.name
     this.rol = review.rol
     this.createdDate = review.createdDate

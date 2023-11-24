@@ -1,6 +1,10 @@
 import { Schema, model } from 'mongoose'
 
 const userSchema = new Schema({
+  airTableId: {
+    type: String,
+    required: false
+  },
   image: {
     type: String,
     required: false,

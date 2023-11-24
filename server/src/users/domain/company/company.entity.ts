@@ -1,4 +1,5 @@
 export interface CompanyEntity {
+  airTableId?: string | null
   image?: string
   name: string
   country?: string | null
