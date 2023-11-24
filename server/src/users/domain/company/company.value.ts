@@ -8,7 +8,7 @@ export class CompanyValue implements CompanyEntity {
   phone?: string | null
   email: string
   password?: string | null | undefined
-  role?: string | null | undefined
+  role: string
   linkedin?: string | null | undefined
   active?: boolean | null | undefined
   jds: string[]
