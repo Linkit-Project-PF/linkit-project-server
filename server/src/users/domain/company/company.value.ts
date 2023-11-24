@@ -1,6 +1,7 @@
 import { type CompanyEntity } from './company.entity'
 
 export class CompanyValue implements CompanyEntity {
+  airTableId?: string | null
   image?: string | undefined
   name: string
   country?: string | null
@@ -13,6 +14,7 @@ export class CompanyValue implements CompanyEntity {
   jds: string[]
 
   constructor (company: CompanyEntity) {
+    this.airTableId = company.airTableId ?? undefined
     this.image = company.image ?? 'DEFAULT_PROFILE_COMPANY_IMAGE'
     this.name = company.name
     this.password = company.password ?? undefined

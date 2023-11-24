@@ -1,7 +1,6 @@
 import { type PostEntity } from './post.entity'
 
 export class PostValue implements PostEntity {
-  // airTableId?: string | null //! Preguntar a la empresa
   title: string
   description: string
   headers?: string[]
@@ -13,7 +12,6 @@ export class PostValue implements PostEntity {
   category?: string | null
 
   constructor (post: PostEntity) {
-    // this.airTableId = post.airTableId ?? undefined //! Si se va a implementar debe ser obigatorio
     this.title = post.title
     this.description = post.description
     this.headers = post.headers ?? undefined

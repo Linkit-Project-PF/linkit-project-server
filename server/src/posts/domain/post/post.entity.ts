@@ -1,5 +1,4 @@
 export interface PostEntity {
-  // airTableId?: string | null //! Preguntar a la empresa
   title: string
   description: string
   headers?: string[]

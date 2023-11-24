@@ -1,4 +1,5 @@
 export interface UserEntity {
+  airTableId?: string | null
   image?: string
   name: string
   country?: string | null

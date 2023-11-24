@@ -1,10 +1,6 @@
 import { Schema, model } from 'mongoose'
 
 const reviewSchema = new Schema({
-  // airTableId: {
-  //   type: String,
-  //   required: false //! Si se requiere, se debe poner en true
-  // },
   name: {
     type: String,
     required: true,

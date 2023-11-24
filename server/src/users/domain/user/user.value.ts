@@ -1,6 +1,7 @@
 import { type UserEntity } from './user.entity'
 
 export class UserValue implements UserEntity {
+  airTableId?: string | null
   image?: string
   name: string
   password?: string | null
@@ -17,6 +18,7 @@ export class UserValue implements UserEntity {
   internStatus?: string | null
 
   constructor (user: UserEntity) {
+    this.airTableId = user.airTableId ?? undefined
     this.image = user.image ?? 'https://api.dicebear.com/7.x/avataaars-neutral/svg?seed=Callie'
     this.name = user.name
     this.password = user.password ?? undefined
