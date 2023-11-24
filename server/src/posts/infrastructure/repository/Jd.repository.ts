@@ -1,7 +1,6 @@
 import { type JdEntity } from '../../domain/jd/jd.entity'
 import { type JdRepository } from '../../domain/jd/jd.repository'
 import Jd from '../collections/Jd'
-import mongoDBConnect from '../../../db/mongo'
 import { ValidateJdCreate } from '../../../errors/validation'
 import { ValidationError } from '../../../errors/errors'
 
@@ -10,6 +9,7 @@ export class MongoJdRepository implements JdRepository {
     try {
       ValidateJdCreate(jd)
       const jdCreated = await Jd.create(jd)
+      // TODO Create company on airtable here, follow user/company create logic.
       return jdCreated
     } catch (error) {
       throw new ValidationError(`Error al crear el jd: ${(error as Error).message}`)

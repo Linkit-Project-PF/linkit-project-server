@@ -2,14 +2,23 @@
 import { type CompanyEntity } from '../../domain/company/company.entity'
 import { type CompanyRepository } from '../../domain/company/company.repository'
 import { ValidationError } from '../../../errors/errors'
-import { ValidateCompanyIfAlreadyonDB, ValidateUserDelete, ValidateUserUpdate } from '../../../errors/validation'
+import { ValidateCompanyIfAlreadyonDB, ValidateUserDelete } from '../../../errors/validation'
 import Company from '../collections/Company'
+import base from '../../../db/airtable'
 
 export class MongoCompanyRepository implements CompanyRepository {
   async createCompany (company: CompanyEntity): Promise<CompanyEntity | string> {
     try {
       await ValidateCompanyIfAlreadyonDB(company.email)
-      const companyCreated = await Company.create(company)
+      const mongoCompany = await Company.create(company)
+      const mongoID = String(mongoCompany._id)
+      const airtableCompany = await base('UsersInfo').create({
+        Nombre: company.name,
+        Email: company.email,
+        Rol: company.role,
+        WebID: mongoID
+      })
+      const companyCreated = await Company.findByIdAndUpdate(mongoID, { airTableId: airtableCompany.getId() }, { new: true })
       return companyCreated as CompanyEntity
     } catch (error) {
       throw new ValidationError(`Error de registro: ${(error as Error).message}`)
@@ -32,7 +41,6 @@ export class MongoCompanyRepository implements CompanyRepository {
 
   async editCompany (id: string, company: CompanyEntity): Promise<CompanyEntity | string> {
     try {
-      ValidateUserUpdate(company)
       const editedCompany = await Company.findByIdAndUpdate(id, company, { new: true })
       return editedCompany as unknown as CompanyEntity
     } catch (error) {

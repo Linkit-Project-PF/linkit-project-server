@@ -10,30 +10,16 @@ export class MongoUserRepository implements UserRepository {
   async createUser (user: UserEntity): Promise<UserEntity | string> {
     try {
       // TODO: Add ValidateUserIfAlreadyonDB
-      const userCreated = await User.create(user)
-
-      try {
-        await base('UsersInfo').create({
-          image: user.image ?? '',
-          name: user.name,
-          country: user.country ?? '',
-          phone: user.phone ?? '',
-          email: user.email,
-          role: user.role ?? 'user',
-          linkedin: user.linkedin ?? '',
-          cv: user.cv ?? '',
-          technologies: user.technologies?.join(', '),
-          postulations: user.postulations?.join(', '),
-          active: user.active?.toString() ?? true.toString(),
-          internStatus: user.internStatus ?? '',
-          userStatus: user.userStatus ?? ''
-        })
-
-        console.log('Created record')
-      } catch (airtableError) {
-        console.error('Error creating record in Airtable:', airtableError)
-      }
-
+      const mongoUser = await User.create(user)
+      const mongoID = String(mongoUser._id)
+      const airtableUser = await base('UsersInfo').create({
+        Nombre: user.name.split(' ')[0],
+        Apellido: user.name.split(' ')[1],
+        Email: user.email,
+        Rol: user.role,
+        WebID: mongoID
+      })
+      const userCreated = await User.findByIdAndUpdate(mongoID, { airTableId: airtableUser.getId() }, { new: true })
       return userCreated as UserEntity
     } catch (error: any) {
       throw new ValidationError(`Error de registro: ${(error as Error).message}`)
