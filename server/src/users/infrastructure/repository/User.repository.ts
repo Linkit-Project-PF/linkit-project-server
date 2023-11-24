@@ -16,14 +16,14 @@ export class MongoUserRepository implements UserRepository {
         await base('UsersInfo').create({
           image: user.image ?? '',
           name: user.name,
-          country: user.country,
-          phone: user.phone,
+          country: user.country ?? '',
+          phone: user.phone ?? '',
           email: user.email,
           role: user.role ?? 'user',
           linkedin: user.linkedin ?? '',
           cv: user.cv ?? '',
-          technologies: user.technologies?.join(','),
-          postulations: user.postulations?.join(','),
+          technologies: user.technologies?.join(', '),
+          postulations: user.postulations?.join(', '),
           active: user.active?.toString() ?? true.toString(),
           internStatus: user.internStatus ?? '',
           userStatus: user.userStatus ?? ''
