@@ -4,7 +4,7 @@ import { ValidateUserDelete, ValidateUserUpdate, ValidateId } from '../../../err
 import { ValidationError } from '../../../errors/errors'
 import User from '../collections/User'
 import base from '../../../db/airtable'
-import UserCombinedFilters from '../helpers/user/UserCombinedFilters'
+import CombinedFilters from '../helpers/CombinedFilters'
 
 export class MongoUserRepository implements UserRepository {
   async createUser (user: UserEntity): Promise<UserEntity | string> {
@@ -43,15 +43,16 @@ export class MongoUserRepository implements UserRepository {
     try {
       let result
       const validSingleParams = ['name', 'email', 'active', 'country', 'userStatus', 'internStatus']
+      const validIncludeFilters = ['technologies', 'postulations']
       if (!combined) {
         if (filter === 'all') result = await User.find()
         else if (filter === 'id') result = await User.findById(value)
-        else if (filter === 'technologies') result = (await User.find()).filter(user => user.technologies.includes(value))
-        else if (filter === 'postulation') result = (await User.find()).filter(user => user.postulations.includes(value))
-        else if (validSingleParams.includes(filter as string)) result = await User.find({ [filter as string]: value })
+        else if (validIncludeFilters.includes(filter as string)) {
+          result = (await User.find()).filter(user => (user as any)[filter as string].includes(value))
+        } else if (validSingleParams.includes(filter as string)) result = await User.find({ [filter as string]: value })
         else throw Error('Not a valid parameter')
       } else {
-        result = UserCombinedFilters(filter as string[], value as string[], validSingleParams, ['technologies', 'postulation'])
+        result = CombinedFilters(filter as string[], value as string[], validSingleParams, validIncludeFilters, 'user')
       }
       return result as unknown as UserEntity
     } catch (error) {
