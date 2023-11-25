@@ -11,29 +11,33 @@ export class MongoJdRepository implements JdRepository {
       ValidateJdCreate(jd)
       const jdCreated = await Jd.create(jd)
       const mongoID = String(jdCreated._id)
-      const airtableJd = base('JDs').create({
-        Code: jd.code,
-        Title: jd.title,
-        Description: jd.description,
-        Type: jd.type,
-        Location: jd.location,
-        Modality: jd.modality,
-        Stack: jd.stack,
-        AboutUs: jd.aboutUs,
-        AboutClient: jd.aboutClient,
-        Responsabilities: jd.responsabilities,
-        Requirements: jd.requirements,
-        NiceToHave: jd.niceToHave,
-        Benefits: jd.benefits,
-        Archived: jd.archived,
-        Company: jd.company,
-        Status: jd.status,
-        Users: jd.users,
-        CreatedDate: jd.createdDate
-      })
-      const jdCreatedWithAirtableId = await Jd.findByIdAndUpdate(mongoID, { airTableId: airtableJd.getId() }, { new: true })
+      const airtableJd = await base('JD').create([
+        {
+          fields: {
+            Code: jd.code,
+            Title: jd.title,
+            Description: jd.description,
+            Type: jd.type,
+            Location: jd.location,
+            Modality: jd.modality,
+            Stack: jd.stack,
+            AboutUs: jd.aboutUs,
+            AboutClient: jd.aboutClient,
+            Responsabilities: jd.responsabilities,
+            Requirements: jd.requirements,
+            NiceToHave: jd.niceToHave,
+            Benefits: jd.benefits,
+            Archived: jd.archived,
+            Company: jd.company,
+            Status: jd.status,
+            Users: jd.users,
+            CreatedDate: jd.createdDate,
+            webId: mongoID
+          }
+        } as any]
+      )
       // TODO Create company on airtable here, follow user/company create logic.
-      return jdCreatedWithAirtableId as JdEntity
+      return airtableJd as any
     } catch (error) {
       throw new ValidationError(`Error al crear el jd: ${(error as Error).message}`)
     }
