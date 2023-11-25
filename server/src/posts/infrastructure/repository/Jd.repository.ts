@@ -4,6 +4,7 @@ import Jd from '../schema/Jd'
 import base from '../../../db/airtable'
 import { ValidateJdCreate } from '../../../errors/validation'
 import { ValidationError } from '../../../errors/errors'
+import CombinedFilters from '../../../users/infrastructure/helpers/CombinedFilters'
 
 export class MongoJdRepository implements JdRepository {
   async createJD (jd: JdEntity): Promise<JdEntity | string> {
@@ -36,16 +37,22 @@ export class MongoJdRepository implements JdRepository {
     }
   }
 
-  async findJD (value: string, filter: string): Promise<JdEntity | JdEntity[] | any> {
+  async findJD (value: string | string[], filter: string | string[], combined?: boolean): Promise<JdEntity | JdEntity[] | any> {
     try {
       let result
-      const singleValidValues = ['title', 'location', 'type', 'modality', 'archived', 'company']
-      if (filter === 'all') result = await Jd.find()
-      else if (filter === 'id') result = await Jd.findById(value)
-      else if (filter === 'stack') result = (await Jd.find()).filter(jd => jd.stack.includes(value))
-      else if (singleValidValues.includes(filter)) result = await Jd.find({ [filter]: value })
-      else throw Error('Not a valid parameter')
-      return result
+      const validSingleParams = ['title', 'location', 'type', 'modality', 'archived', 'company', 'airTableId', 'code', 'status']
+      const validIncludeFilters = ['stack', 'users']
+      if (!combined) {
+        if (filter === 'all') result = await Jd.find()
+        else if (filter === 'id') result = await Jd.findById(value)
+        else if (validIncludeFilters.includes(filter as string)) {
+          result = (await Jd.find()).filter(jd => (jd as any)[filter as string].includes(value))
+        } else if (validSingleParams.includes(filter as string)) result = await Jd.find({ [filter as string]: value })
+        else throw Error('Not a valid parameter')
+      } else {
+        result = CombinedFilters(filter as string[], value as string[], validSingleParams, validIncludeFilters, 'jd')
+      }
+      return result as unknown as JdEntity
     } catch (error) {
       return 'No fue posible encontrar la vacante'
     }

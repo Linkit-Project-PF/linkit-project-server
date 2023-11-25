@@ -2,11 +2,15 @@ import { type JdUseCase } from '../../../aplication/jdUseCase'
 import { type JdEntity } from '../../../domain/jd/jd.entity'
 
 interface JDQuery {
+  airTableId?: string
   id?: string
+  code?: string
   title?: string
   location?: string
   modality?: string
   stack?: string
+  status?: string
+  users?: string
   type?: string
   archived?: string
   company?: string
@@ -15,11 +19,14 @@ interface JDQuery {
 export default async function getJDValidator (query: JDQuery, jdUseCase: JdUseCase): Promise<JdEntity | JdEntity[] | string> {
   try {
     let jd
-    if (Object.keys(query).length) {
-      const filter: string = Object.keys(query)[0]
-      const value: string = Object.values(query)[0]
-      console.log(filter, value)
-      jd = await jdUseCase.findJD(value, filter)
+    const filters: string[] = Object.keys(query)
+    const values: string[] = Object.values(query)
+    if (filters.length) {
+      if (filters.length === 1) {
+        jd = await jdUseCase.findJD(values[0], filters[0])
+      } else {
+        jd = await jdUseCase.findJD(values, filters, true)
+      }
     } else {
       jd = await jdUseCase.findJD('', 'all')
     }
