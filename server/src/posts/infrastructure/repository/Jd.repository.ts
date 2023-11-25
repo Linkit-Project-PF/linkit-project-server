@@ -1,16 +1,36 @@
 import { type JdEntity } from '../../domain/jd/jd.entity'
 import { type JdRepository } from '../../domain/jd/jd.repository'
-import Jd from '../collections/Jd'
+import Jd from '../schema/Jd'
+import base from '../../../db/airtable'
 import { ValidateJdCreate } from '../../../errors/validation'
 import { ValidationError } from '../../../errors/errors'
 
 export class MongoJdRepository implements JdRepository {
-  async createJD (jd: JdEntity): Promise<JdEntity | any> {
+  async createJD (jd: JdEntity): Promise<JdEntity | string> {
     try {
       ValidateJdCreate(jd)
       const jdCreated = await Jd.create(jd)
-      // TODO Create company on airtable here, follow user/company create logic.
-      return jdCreated
+      const mongoID = String(jdCreated._id)
+      const airtableJd = await base('JD').create({
+        Title: jd.title,
+        Description: jd.description,
+        Type: jd.type,
+        Location: jd.location,
+        Modality: jd.modality,
+        Stack: jd.stack.join(', '),
+        AboutUs: jd.aboutUs,
+        AboutClient: jd.aboutClient ?? '',
+        Responsabilities: jd.responsabilities,
+        Requirements: jd.requirements.join(', '),
+        NiceToHave: jd.niceToHave.join(', '),
+        Benefits: jd.benefits.join(', '),
+        Company: jd.company,
+        Status: jd.status,
+        WebID: mongoID,
+        Code: jd.code
+      })
+      const JdCreated = await Jd.findByIdAndUpdate(mongoID, { airTableId: airtableJd.getId() }, { new: true })
+      return JdCreated as JdEntity
     } catch (error) {
       throw new ValidationError(`Error al crear el jd: ${(error as Error).message}`)
     }

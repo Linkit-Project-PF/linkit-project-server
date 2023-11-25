@@ -2,7 +2,7 @@ import { type ReviewEntity } from '../../domain/review/review.entity'
 import { type ReviewRepository } from '../../domain/review/review.repository'
 import { ValidateReviewCreate, ValidateReviewIfAlreadyonDB } from '../../../errors/validation' //, ValidatePostFindByType, ValidatePostFindByTitle, ValidatePostDelete
 import { ValidationError } from '../../../errors/errors'
-import Review from '../collections/Review'
+import Review from '../schema/Review'
 import mongoDBConnect from '../../../db/mongo'
 
 export class MongoReviewRepository implements ReviewRepository {

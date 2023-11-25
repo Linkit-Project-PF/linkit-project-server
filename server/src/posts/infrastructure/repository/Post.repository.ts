@@ -2,7 +2,7 @@ import { type PostEntity } from '../../domain/post/post.entity'
 import { type PostRepository } from '../../domain/post/post.repository'
 import { ValidatePostCreate, ValidatePostDelete } from '../../../errors/validation'
 import { ValidationError } from '../../../errors/errors'
-import Post from '../collections/Post'
+import Post from '../schema/Post'
 import mongoDBConnect from '../../../db/mongo'
 
 export class MongoPostRepository implements PostRepository {

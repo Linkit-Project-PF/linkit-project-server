@@ -15,6 +15,7 @@ export interface JdEntity {
   benefits: string[]
   archived: boolean
   company: string
+  status: string
   users: string[]
   createdDate: Date
 }
