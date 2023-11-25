@@ -6,7 +6,7 @@ import { type ReviewEntity } from '../posts/domain/review/review.entity'
 import Admin from '../users/infrastructure/collections/Admin'
 import User from '../users/infrastructure/collections/User'
 import Company from '../users/infrastructure/collections/Company'
-import Review from '../posts/infrastructure/collections/Review'
+import Review from '../posts/infrastructure/schema/Review'
 import { returnUserError, returnConectError, returnPostError } from './returnErrors'
 
 //* USER ERRORS

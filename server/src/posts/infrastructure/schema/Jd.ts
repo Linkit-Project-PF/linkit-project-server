@@ -26,8 +26,9 @@ const jdSchema = new Schema({
   type: {
     type: String,
     required: true,
-    minlength: 3,
-    maxlength: 40
+    minlength: 2,
+    maxlength: 9,
+    enum: ['full-time', 'part-time', 'freelance']
   },
   location: {
     type: String,
@@ -40,7 +41,7 @@ const jdSchema = new Schema({
     required: true,
     minlength: 2,
     maxlength: 9,
-    enum: ['full-time', 'part-time', 'freelance']
+    enum: ['remote', 'specific-remote', 'on-site', 'hybrid']
   },
   stack: {
     type: Array,
@@ -94,6 +95,13 @@ const jdSchema = new Schema({
     required: true,
     minlength: 1,
     maxlength: 100
+  },
+  status: {
+    type: String,
+    required: true,
+    minlength: 2,
+    maxlength: 9,
+    enum: ['open', 'first-interview', 'second-interview', 'closed']
   },
   users: {
     type: Array,

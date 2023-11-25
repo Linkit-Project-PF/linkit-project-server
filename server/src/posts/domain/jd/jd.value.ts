@@ -17,6 +17,7 @@ export class JdValue implements JdEntity {
   benefits: string[]
   archived: boolean
   company: string
+  status: string
   users: string[]
   createdDate: Date
 
@@ -37,6 +38,7 @@ export class JdValue implements JdEntity {
     this.benefits = jd.benefits
     this.archived = jd.archived
     this.company = jd.company
+    this.status = jd.status
     this.users = jd.users
     this.createdDate = jd.createdDate
   }

@@ -1,6 +1,6 @@
 import Admin from '../../../../users/infrastructure/collections/Admin'
 import { objectIDValidator } from '../../../../users/infrastructure/helpers/validateObjectID'
-import Jd from '../../collections/Jd'
+import Jd from '../../schema/Jd'
 import { type JdEntity } from '../../../domain/jd/jd.entity'
 
 interface authResponse {

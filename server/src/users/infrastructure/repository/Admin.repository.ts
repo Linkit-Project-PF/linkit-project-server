@@ -25,7 +25,7 @@ export class MongoAdminRepository implements AdminRepository {
       else if (validParams.includes(filter)) result = await Admin.find({ [filter]: value })
       else throw Error('Not a valid parameter')
       return result as AdminEntity[]
-    } catch (error: any) {
+    } catch (error) {
       throw new ValidationError(`Error al buscar el administrador: ${(error as Error).message}`)
     }
   }
