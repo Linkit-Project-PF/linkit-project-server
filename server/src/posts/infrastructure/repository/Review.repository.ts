@@ -2,8 +2,8 @@ import { type ReviewEntity } from '../../domain/review/review.entity'
 import { type ReviewRepository } from '../../domain/review/review.repository'
 import { ValidateReviewCreate, ValidateReviewIfAlreadyonDB } from '../../../errors/validation' //, ValidatePostFindByType, ValidatePostFindByTitle, ValidatePostDelete
 import { ValidationError } from '../../../errors/errors'
-import Review from '../collections/Review'
-import mongoDBConnect from '../../../db/mongo'
+import Review from '../schema/Review'
+import { objectIDValidator } from '../../../users/infrastructure/helpers/validateObjectID'
 
 export class MongoReviewRepository implements ReviewRepository {
   async createReview (review: ReviewEntity): Promise<ReviewEntity | string> {
@@ -21,22 +21,20 @@ export class MongoReviewRepository implements ReviewRepository {
         return reviewCreated as ReviewEntity
       } else throw Error('Ya existe otro review de este tipo con este título')
     } catch (error: any) {
-      throw new ValidationError(`Error al crear el review: ${(error as Error).message}`)
+      throw new ValidationError(`Error creating review: ${(error as Error).message}`)
     }
   }
 
   async deleteReview (id: string): Promise<string> {
     try {
-    //   ValidateReviewDelete(id)
-      await mongoDBConnect()
+      objectIDValidator(id, 'review to delete')
       await Review.updateOne(
         { id },
         { $set: { archived: true } }
       )
-      return 'Review archivado'
+      return 'Review deleted'
     } catch (error) {
-      console.error(error)
-      return 'Error al intentar archivar la reseña'
+      throw Error('Error deleting review: ' + (error as Error).message)
     }
   }
 
@@ -50,16 +48,16 @@ export class MongoReviewRepository implements ReviewRepository {
       else throw Error('Not a valid parameter')
       return result as ReviewEntity[]
     } catch (error) {
-      throw new ValidationError(`Error al buscar el review: ${(error as Error).message}`)
+      throw new ValidationError(`Error searching review: ${(error as Error).message}`)
     }
   }
 
-  async editReview (_id: string, review: ReviewEntity): Promise<ReviewEntity | string> {
+  async editReview (_id: string, review: any): Promise<ReviewEntity | string> {
     try {
-      const editedReview = await Review.findByIdAndUpdate(_id, review)
+      const editedReview = await Review.findByIdAndUpdate(_id, review, { new: true })
       return editedReview as ReviewEntity
     } catch (error) {
-      throw new ValidationError(`Error al editar la reseña: ${(error as Error).message}`)
+      throw new ValidationError(`Error editing review: ${(error as Error).message}`)
     }
   }
 }

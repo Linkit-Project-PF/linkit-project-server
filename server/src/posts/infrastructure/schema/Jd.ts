@@ -3,7 +3,8 @@ import { Schema, model } from 'mongoose'
 const jdSchema = new Schema({
   // airTableId: {
   //   type: String,
-  //   required: false //! Si se requiere, se debe poner en true
+  //   required: false,
+  //   default: ''
   // },
   code: {
     type: String,
@@ -15,19 +16,17 @@ const jdSchema = new Schema({
     type: String,
     required: true,
     minlength: 3,
-    maxlength: 40
+    maxlength: 100
   },
   description: {
     type: String,
     required: true,
-    minlength: 10,
-    maxlength: 3000
+    minlength: 10
   },
   type: {
     type: String,
     required: true,
-    minlength: 3,
-    maxlength: 40
+    enum: ['full-time', 'part-time', 'freelance']
   },
   location: {
     type: String,
@@ -38,9 +37,7 @@ const jdSchema = new Schema({
   modality: {
     type: String,
     required: true,
-    minlength: 2,
-    maxlength: 9,
-    enum: ['full-time', 'part-time', 'freelance']
+    enum: ['remote', 'specific-remote', 'on-site', 'hybrid']
   },
   stack: {
     type: Array,
@@ -51,38 +48,29 @@ const jdSchema = new Schema({
   aboutUs: {
     type: String,
     required: true,
-    minlength: 3,
-    maxlength: 3000
+    minlength: 3
   },
   aboutClient: {
     type: String,
     required: false,
-    minlength: 0,
-    maxlength: 3000
+    default: ''
   },
   responsabilities: {
     type: String,
     required: true,
-    minlength: 0,
-    maxlength: 20
+    default: ''
   },
   requirements: {
     type: Array,
-    required: true,
-    minlength: 0,
-    maxlength: 20
+    required: true
   },
   niceToHave: {
     type: Array,
-    required: true,
-    minlength: 0,
-    maxlength: 20
+    required: true
   },
   benefits: {
     type: Array,
-    required: true,
-    minlength: 0,
-    maxlength: 20
+    required: true
   },
   archived: {
     type: Boolean,
@@ -95,9 +83,13 @@ const jdSchema = new Schema({
     minlength: 1,
     maxlength: 100
   },
+  status: {
+    type: String,
+    required: true,
+    enum: ['open', 'first-interview', 'second-interview', 'closed']
+  },
   users: {
     type: Array,
-    minlength: 0,
     required: true
   },
   createdDate: {

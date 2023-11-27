@@ -1,11 +1,12 @@
 export interface CompanyEntity {
+  airTableId?: string | null
   image?: string
-  name: string
+  companyName: string
+  repName?: string | null
   country?: string | null
-  phone?: string | null
   email: string
   password?: string | null
-  role?: string | null
+  role: string
   linkedin?: string | null
   active?: boolean | null
   jds: string[]

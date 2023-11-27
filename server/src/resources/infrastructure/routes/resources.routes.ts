@@ -7,7 +7,6 @@ const resourcesRoute = Router()
 resourcesRoute.post('/contactus', async (req, res): Promise<any> => {
   try {
     const newContact = req.body
-    // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
     await base('UsersInfo').create([
       {
         fields: {

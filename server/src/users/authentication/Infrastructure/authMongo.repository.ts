@@ -10,9 +10,9 @@ import { type AuthRepository } from './auth.repository'
 import { auth } from '../firebase'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 // Repositories
-import Admin from '../../infrastructure/collections/Admin'
-import User from '../../infrastructure/collections/User'
-import Company from '../../infrastructure/collections/Company'
+import Admin from '../../infrastructure/schema/Admin'
+import User from '../../infrastructure/schema/User'
+import Company from '../../infrastructure/schema/Company'
 import { MongoUserRepository } from '../../infrastructure/repository/User.repository'
 import { MongoCompanyRepository } from '../../infrastructure/repository/Company.repository'
 import { MongoAdminRepository } from '../../infrastructure/repository/Admin.repository'
@@ -27,7 +27,6 @@ export class AuthMongoRepository implements AuthRepository {
 
   async register (entity: UserEntity | CompanyEntity | AdminEntity): Promise<UserEntity | CompanyEntity | AdminEntity | string> {
     try {
-      await createUserWithEmailAndPassword(auth, String(entity.email), entity.password ? String(entity.password) : '')
       let entityCreated
       let provider
       if (entity.role === 'user') {
@@ -53,6 +52,7 @@ export class AuthMongoRepository implements AuthRepository {
       //   html: docMail
       // }
       // )
+      await createUserWithEmailAndPassword(auth, String(entity.email), entity.password ? String(entity.password) : '')
       return entityCreated
     } catch (error) {
       // TODO Check If validation errors fit here
@@ -60,16 +60,20 @@ export class AuthMongoRepository implements AuthRepository {
     }
   }
 
-  async login (email: string, password: string): Promise<UserEntity | CompanyEntity | AdminEntity | string> {
+  async login (email: string, password: string, role: string): Promise<UserEntity | CompanyEntity | AdminEntity> {
     try {
+      console.log(role)
+      if (role === 'user') {
+        const result1 = await User.find({ email })
+        const result2 = await Admin.find({ email })
+        if (result1.length) return result1 as unknown as UserEntity
+        if (result2.length) return result2 as unknown as AdminEntity
+      } else if (role === 'company') {
+        const result = await Company.find({ email })
+        if (result.length) return result as unknown as CompanyEntity
+      } else throw Error('Provide a valid role for login')
       await signInWithEmailAndPassword(auth, email, password)
-      const userResult = await User.find({ email })
-      if (userResult[0]._id) return userResult[0] as UserEntity
-      const companyResult = await Company.find({ email })
-      if (companyResult[0]._id) return companyResult[0] as CompanyEntity
-      const adminResult = await Admin.find({ email })
-      if (adminResult[0]._id) return adminResult[0] as AdminEntity
-      return 'User logged but not found on register, contact admin'
+      throw Error(`${role} not found, please be sure you are using the right login for your role`)
     } catch (error) {
       throw new Error(`Error de Inicio de sesión: ${(error as Error).message}`)
     }

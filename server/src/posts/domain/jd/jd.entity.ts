@@ -1,5 +1,5 @@
 export interface JdEntity {
-  // airTableId?: string | null//! Preguntar a la empresa
+  // airTableId?: string | null
   code: string
   title: string
   description: string
@@ -15,6 +15,7 @@ export interface JdEntity {
   benefits: string[]
   archived: boolean
   company: string
+  status: string
   users: string[]
   createdDate: Date
 }

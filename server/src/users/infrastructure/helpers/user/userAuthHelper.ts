@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import { type UserEntity } from '../../../domain/user/user.entity'
-import Admin from '../../collections/Admin'
-import User from '../../collections/User'
+import Admin from '../../schema/Admin'
+import User from '../../schema/User'
 import { objectIDValidator } from '../validateObjectID'
 
 interface authResponse {

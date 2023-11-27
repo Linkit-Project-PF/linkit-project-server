@@ -1,21 +1,15 @@
 import { Schema, model } from 'mongoose'
 
 const reviewSchema = new Schema({
-  // airTableId: {
-  //   type: String,
-  //   required: false //! Si se requiere, se debe poner en true
-  // },
   name: {
     type: String,
     required: true,
     minminlength: 1,
-    maxlength: 40
+    maxlength: 50
   },
   rol: {
     type: String,
     required: true,
-    minminlength: 1,
-    maxlength: 7,
     enum: ['company', 'user']
   },
   createdDate: {
@@ -26,20 +20,18 @@ const reviewSchema = new Schema({
   image: {
     type: String,
     required: false,
-    minlength: 0,
-    maxlength: 300
+    maxlength: 300,
+    default: ''
   },
   country: {
     type: String,
     required: false,
     minlength: 3,
-    maxlenght: 100
+    default: ''
   },
   detail: {
     type: String,
-    required: true,
-    minlength: 0,
-    maxlength: 3000
+    required: true
   },
   archived: {
     type: Boolean,
