@@ -3,18 +3,18 @@ import { Schema, model } from 'mongoose'
 const userSchema = new Schema({
   airTableId: {
     type: String,
-    required: false
+    required: false,
+    default: ''
   },
   image: {
     type: String,
     required: false,
-    minlength: 3
+    minlength: 3,
+    default: ''
   },
   name: {
     type: String,
-    required: true,
-    minlength: 3,
-    maxlength: 30
+    required: true
   },
   email: {
     type: String,
@@ -22,40 +22,36 @@ const userSchema = new Schema({
     minlength: 3,
     maxlength: 30
   },
-  phone: {
-    type: String,
-    required: false,
-    minlength: 5
-  },
   country: {
     type: String,
     required: false,
-    minlength: 2
+    minlength: 2,
+    default: ''
   },
   linkedin: {
     type: String,
     required: false,
-    minlength: 3,
-    maxlength: 30
+    default: ''
   },
   cv: {
     type: String,
     required: false,
     minlength: 3,
-    maxlength: 30
+    default: ''
+  },
+  englishLevel: {
+    type: String,
+    required: false,
+    enum: ['low', 'medium', 'high', 'bilignual']
   },
   role: {
     type: String,
     required: true,
-    minlength: 3,
-    maxlength: 30,
     enum: ['user']
   },
   technologies: {
     type: Array,
-    required: true,
-    minlength: 3,
-    maxlength: 30
+    required: true
   },
   active: {
     type: Boolean,
@@ -66,18 +62,19 @@ const userSchema = new Schema({
     type: Array,
     required: true,
     minlength: 0
-  },
-  userStatus: {
-    type: String,
-    minlength: 0,
-    required: false
-  },
-  internStatus: {
-    type: String,
-    required: false,
-    minlength: 0,
-    enum: ['Descartado', 'Contratado', 'Descartado x el cliente', 'Desistió', 'Presentado al cliente', 'Listo para presentar', 'Sourced', 'No contactar - Blacklist', 'Candidato para backup', 'listo para segunda entrevista de cliente/test técnico', 'Ofertado']
   }
+  // TODO This should be a separated entity when relations are created. State is not static for each user.
+  // userStatus: {
+  //   type: String,
+  //   minlength: 0,
+  //   required: false
+  // },
+  // internStatus: {
+  //   type: String,
+  //   required: false,
+  //   minlength: 0,
+  //   enum: ['Descartado', 'Contratado', 'Descartado x el cliente', 'Desistió', 'Presentado al cliente', 'Listo para presentar', 'Sourced', 'No contactar - Blacklist', 'Candidato para backup', 'listo para segunda entrevista de cliente/test técnico', 'Ofertado']
+  // }
 })
 
 export default model('User', userSchema)
