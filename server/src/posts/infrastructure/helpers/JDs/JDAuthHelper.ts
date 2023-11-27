@@ -1,4 +1,4 @@
-import Admin from '../../../../users/infrastructure/collections/Admin'
+import Admin from '../../../../users/infrastructure/schema/Admin'
 import { objectIDValidator } from '../../../../users/infrastructure/helpers/validateObjectID'
 import Jd from '../../schema/Jd'
 import { type JdEntity } from '../../../domain/jd/jd.entity'

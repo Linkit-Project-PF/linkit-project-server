@@ -2,13 +2,13 @@ import { type AdminEntity } from '../../domain/admin/admin.entity'
 import { type AdminRepository } from '../../domain/admin/admin.repository'
 import { ValidationError } from '../../../errors/errors'
 import { validateIfEmailExists } from '../../../errors/validation'
-import Admin from '../collections/Admin'
+import Admin from '../schema/Admin'
 import { objectIDValidator } from '../helpers/validateObjectID'
 
 export class MongoAdminRepository implements AdminRepository {
   async createAdmin (admin: AdminEntity): Promise<AdminEntity> {
     try {
-      await validateIfEmailExists(admin.email, 'admin')
+      await validateIfEmailExists(admin.email)
       const adminCreated = await Admin.create(admin)
       return adminCreated as unknown as AdminEntity
     } catch (error) {

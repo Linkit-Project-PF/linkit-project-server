@@ -9,7 +9,6 @@ const userSchema = new Schema({
   image: {
     type: String,
     required: false,
-    minlength: 3,
     default: ''
   },
   name: {
@@ -25,7 +24,6 @@ const userSchema = new Schema({
   country: {
     type: String,
     required: false,
-    minlength: 2,
     default: ''
   },
   linkedin: {
@@ -36,7 +34,6 @@ const userSchema = new Schema({
   cv: {
     type: String,
     required: false,
-    minlength: 3,
     default: ''
   },
   englishLevel: {

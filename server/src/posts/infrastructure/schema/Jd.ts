@@ -1,11 +1,11 @@
 import { Schema, model } from 'mongoose'
 
 const jdSchema = new Schema({
-  airTableId: {
-    type: String,
-    required: false,
-    default: ''
-  },
+  // airTableId: {
+  //   type: String,
+  //   required: false,
+  //   default: ''
+  // },
   code: {
     type: String,
     required: true,

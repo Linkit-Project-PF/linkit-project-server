@@ -6,8 +6,8 @@ import { type AuthRepository } from './auth.repository'
 export class AuthUseCase {
   constructor (private readonly authRepository: AuthRepository) {}
 
-  public login = async (email: string, password: string): Promise<UserEntity | CompanyEntity | AdminEntity | string> => {
-    const result = await this.authRepository.login(email, password)
+  public login = async (email: string, password: string, role: string): Promise<UserEntity | CompanyEntity | AdminEntity | string> => {
+    const result = await this.authRepository.login(email, password, role)
     return result
   }
 

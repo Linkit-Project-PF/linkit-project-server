@@ -1,7 +1,7 @@
 import { type JdEntity } from '../../../posts/domain/jd/jd.entity'
 import Jd from '../../../posts/infrastructure/schema/Jd'
 import { type UserEntity } from '../../domain/user/user.entity'
-import User from '../collections/User'
+import User from '../schema/User'
 
 export default async function CombinedFilters (filters: string[], values: string[], validSingleFilters: string[], validIncludeFilters: string[], type: string): Promise<UserEntity[] | JdEntity[]> {
   try {

@@ -12,12 +12,16 @@ const companySchema = new Schema({
     minlength: 3,
     default: ''
   },
-  // TODO Add company Name. name is company administrator, companyName is the name of the company.
   companyName: {
     type: String,
     required: true,
     minlength: 3,
-    maxlength: 40
+    maxlength: 50
+  },
+  repName: {
+    type: String,
+    required: false,
+    default: ''
   },
   email: {
     type: String,
@@ -28,13 +32,11 @@ const companySchema = new Schema({
   country: {
     type: String,
     required: false,
-    minlength: 2,
     default: ''
   },
   linkedin: {
     type: String,
     required: false,
-    minlength: 3,
     default: ''
   },
   role: {
