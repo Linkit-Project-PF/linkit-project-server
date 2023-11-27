@@ -1,7 +1,7 @@
 import { type JdEntity } from './jd.entity'
 
 export class JdValue implements JdEntity {
-  airTableId?: string | null
+  // airTableId?: string | null
   code: string
   title: string
   description: string
@@ -22,7 +22,7 @@ export class JdValue implements JdEntity {
   createdDate: Date
 
   constructor (jd: JdEntity) {
-    this.airTableId = jd.airTableId ?? undefined
+    // this.airTableId = jd.airTableId ?? undefined
     this.code = jd.code
     this.title = jd.title
     this.description = jd.description

@@ -1,6 +1,6 @@
 import { type CompanyEntity } from '../../../domain/company/company.entity'
-import Admin from '../../collections/Admin'
-import Company from '../../collections/Company'
+import Admin from '../../schema/Admin'
+import Company from '../../schema/Company'
 import { objectIDValidator } from '../validateObjectID'
 
 interface authResponse {
@@ -18,7 +18,7 @@ export default async function companyAuth (id: string, method: string, editID?: 
       if (method === 'find') {
         const validCompany = await Company.findById(id)
         if (validCompany) {
-          response.value = validCompany as CompanyEntity
+          response.value = validCompany as unknown as CompanyEntity
           response.code = 200
         } else {
           response.value = 'Unauthorized'

@@ -2,7 +2,7 @@
 import { type CompanyEntity } from '../../domain/company/company.entity'
 import { type CompanyRepository } from '../../domain/company/company.repository'
 import { ValidationError } from '../../../errors/errors'
-import Company from '../collections/Company'
+import Company from '../schema/Company'
 import base from '../../../db/airtable'
 import { objectIDValidator } from '../helpers/validateObjectID'
 import { validateIfEmailExists } from '../../../errors/validation'
@@ -10,11 +10,11 @@ import { validateIfEmailExists } from '../../../errors/validation'
 export class MongoCompanyRepository implements CompanyRepository {
   async createCompany (company: CompanyEntity): Promise<CompanyEntity> {
     try {
-      await validateIfEmailExists(company.email, 'company')
+      await validateIfEmailExists(company.email)
       const mongoCompany = await Company.create(company)
       const mongoID = String(mongoCompany._id)
       const airtableCompany = await base('UsersInfo').create({
-        Nombre: company.name,
+        Nombre: company.companyName,
         Email: company.email,
         Rol: company.role,
         WebID: mongoID

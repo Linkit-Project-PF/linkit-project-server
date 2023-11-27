@@ -2,7 +2,7 @@ import { type UserEntity } from '../../domain/user/user.entity'
 import { type UserRepository } from '../../domain/user/user.reposiroty'
 import { validateIfEmailExists } from '../../../errors/validation'
 import { ValidationError } from '../../../errors/errors'
-import User from '../collections/User'
+import User from '../schema/User'
 import base from '../../../db/airtable'
 import CombinedFilters from '../helpers/CombinedFilters'
 import { objectIDValidator } from '../helpers/validateObjectID'
@@ -10,7 +10,7 @@ import { objectIDValidator } from '../helpers/validateObjectID'
 export class MongoUserRepository implements UserRepository {
   async createUser (user: UserEntity): Promise<UserEntity> {
     try {
-      await validateIfEmailExists(user.email, 'user')
+      await validateIfEmailExists(user.email)
       const mongoUser = await User.create(user)
       const mongoID = String(mongoUser._id)
       const airtableUser = await base('UsersInfo').create({

@@ -1,5 +1,5 @@
 export interface JdEntity {
-  airTableId?: string | null
+  // airTableId?: string | null
   code: string
   title: string
   description: string
