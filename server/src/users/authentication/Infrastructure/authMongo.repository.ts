@@ -27,6 +27,8 @@ export class AuthMongoRepository implements AuthRepository {
 
   async register (entity: UserEntity | CompanyEntity | AdminEntity): Promise<UserEntity | CompanyEntity | AdminEntity | string> {
     try {
+      // TODO Add Email and Password validator so Mongo can be done before firebase
+      await createUserWithEmailAndPassword(auth, String(entity.email), entity.password ? String(entity.password) : '')
       let entityCreated
       let provider
       if (entity.role === 'user') {
@@ -52,7 +54,6 @@ export class AuthMongoRepository implements AuthRepository {
       //   html: docMail
       // }
       // )
-      await createUserWithEmailAndPassword(auth, String(entity.email), entity.password ? String(entity.password) : '')
       return entityCreated
     } catch (error) {
       // TODO Check If validation errors fit here
@@ -62,6 +63,7 @@ export class AuthMongoRepository implements AuthRepository {
 
   async login (email: string, password: string, role: string): Promise<UserEntity | CompanyEntity | AdminEntity> {
     try {
+      await signInWithEmailAndPassword(auth, email, password)
       if (role === 'user') {
         const result1 = await User.find({ email })
         const result2 = await Admin.find({ email })
@@ -71,7 +73,6 @@ export class AuthMongoRepository implements AuthRepository {
         const result = await Company.find({ email })
         if (result.length) return result[0] as CompanyEntity
       } else throw Error('Provide a valid role for login')
-      await signInWithEmailAndPassword(auth, email, password)
       throw Error(`${role} not found, please be sure you are using the right login for your role`)
     } catch (error) {
       throw new Error(`Error de Inicio de sesión: ${(error as Error).message}`)
