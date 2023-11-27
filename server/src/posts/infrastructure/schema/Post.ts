@@ -4,20 +4,17 @@ const postSchema = new Schema({
   title: {
     type: String,
     required: true,
-    minlength: 3,
-    maxlength: 40
+    minlength: 3
   },
   description: {
     type: String,
     required: true,
-    minlength: 3,
-    maxlength: 200
+    minlength: 3
   },
   headers: {
     type: Array,
-    required: false,
-    minlength: 0,
-    maxlength: 200
+    required: true,
+    minlength: 0
   },
   createdDate: {
     type: Date,
@@ -28,25 +25,24 @@ const postSchema = new Schema({
     type: String,
     required: false,
     minlength: 3,
-    maxlength: 200
+    maxlength: 200,
+    default: ''
   },
   link: {
     type: String,
     required: false,
-    minlength: 5
+    minlength: 5,
+    default: ''
   },
   type: {
     type: String,
     required: true,
-    minlength: 4,
-    maxlength: 8,
     enum: ['blog', 'social', 'ebook']
   },
   category: {
     type: String,
     required: true,
-    minlength: 4,
-    maxlength: 30
+    minlength: 4
   },
   archived: {
     type: Boolean,
