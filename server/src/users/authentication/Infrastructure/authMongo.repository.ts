@@ -62,15 +62,14 @@ export class AuthMongoRepository implements AuthRepository {
 
   async login (email: string, password: string, role: string): Promise<UserEntity | CompanyEntity | AdminEntity> {
     try {
-      console.log(role)
       if (role === 'user') {
         const result1 = await User.find({ email })
         const result2 = await Admin.find({ email })
-        if (result1.length) return result1 as unknown as UserEntity
-        if (result2.length) return result2 as unknown as AdminEntity
+        if (result1.length) return result1[0] as UserEntity
+        if (result2.length) return result2[0] as AdminEntity
       } else if (role === 'company') {
         const result = await Company.find({ email })
-        if (result.length) return result as unknown as CompanyEntity
+        if (result.length) return result[0] as CompanyEntity
       } else throw Error('Provide a valid role for login')
       await signInWithEmailAndPassword(auth, email, password)
       throw Error(`${role} not found, please be sure you are using the right login for your role`)
