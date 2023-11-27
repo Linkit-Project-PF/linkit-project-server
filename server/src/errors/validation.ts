@@ -10,25 +10,16 @@ import Review from '../posts/infrastructure/schema/Review'
 import { returnUserError, returnConectError, returnPostError } from './returnErrors'
 
 //* USER ERRORS
-export const ValidateCompanyIfAlreadyonDB = async (email: string): Promise<void> => {
-  const allCompanies = await Company.find({}, 'email')
-  allCompanies.forEach(obj => {
-    if (obj.email === email) returnUserError('Este email ya esta en uso')
-  })
-}
-
-export const ValidateAdminIfAlreadyonDB = async (email: string): Promise<void> => {
-  const allAdmins = await Admin.find({}, 'email')
-  allAdmins.forEach(obj => {
-    if (obj.email === email) returnUserError('Este email ya esta en uso')
-  })
-}
-
-export const ValidateUserIfAlreadyonDB = async (email: string): Promise<void> => {
-  const allUsers = await User.find({}, 'email')
-  allUsers.forEach(obj => {
-    if (obj.email === email) returnUserError('Este email ya esta en uso')
-  })
+export const validateIfEmailExists = async (email: string, role: string): Promise<void> => {
+  let result
+  if (role === 'admin') {
+    result = await Admin.find({ email })
+  } else if (role === 'user') {
+    result = await User.find({ email })
+  } else if (role === 'company') {
+    result = await Company.find({ email })
+  } else result = []
+  if (result.length) throw Error('This email is already registered')
 }
 
 export const ValidateReviewIfAlreadyonDB = async (name: string): Promise<void> => {
@@ -60,16 +51,8 @@ export const ValidateUserUpdate = (user: UserEntity): void => {
   if (!user.phone) returnUserError('El teléfono es requerido')
 }
 
-export const ValidateUserDelete = (_id: string): void => {
-  if (!_id) returnUserError('El id es requerido')
-}
-
 export const ValidateId = (_id: string): void => {
   if (_id === 'id super admin') returnUserError('Acción inválida, no se puede cambiar el rol del Administrador')
-}
-
-export const ValidateUserFindById = (id: string): void => {
-  if (!id) returnUserError('El id es requerido')
 }
 
 //* POST ERRORS
@@ -103,10 +86,6 @@ export const ValidateJdUpdate = (jd: JdEntity): void => {
   if (!jd.title) returnPostError('El título es requerido')
   if (!jd.description) returnPostError('La descripción es requerida')
   if (!jd.company)returnPostError('El nombre de la empresa es requerido')
-}
-
-export const ValidatePostDelete = (_id: string): void => {
-  if (!_id) returnPostError('El id es requerido')
 }
 
 export const ValidatePostFindByType = (type: string): void => {
