@@ -1,12 +1,13 @@
 import { type PostEntity } from '../../domain/post/post.entity'
 import { type PostRepository } from '../../domain/post/post.repository'
-import { ValidatePostCreate, ValidatePostDelete } from '../../../errors/validation'
+import { ValidatePostCreate } from '../../../errors/validation'
 import { ValidationError } from '../../../errors/errors'
 import Post from '../schema/Post'
 import mongoDBConnect from '../../../db/mongo'
+import { objectIDValidator } from '../../../users/infrastructure/helpers/validateObjectID'
 
 export class MongoPostRepository implements PostRepository {
-  async createPost (post: PostEntity): Promise<PostEntity | string> {
+  async createPost (post: PostEntity): Promise<PostEntity> {
     try {
       ValidatePostCreate(post)
       let postExists = false
@@ -16,29 +17,28 @@ export class MongoPostRepository implements PostRepository {
       })
       if (!postExists) {
         const postCreated = await Post.create(post)
-        return postCreated as unknown as PostEntity
-      } else throw Error('Ya existe otro post de este tipo con este título')
+        return postCreated as PostEntity
+      } else throw Error('Post title already exists')
     } catch (error: any) {
-      throw new ValidationError(`Error al crear el post: ${(error as Error).message}`)
+      throw new ValidationError(`Error creating post: ${(error as Error).message}`)
     }
   }
 
   async deletePost (id: string): Promise<string> {
     try {
-      ValidatePostDelete(id)
+      objectIDValidator(id, 'post to delete')
       await mongoDBConnect()
-      await Post.updateOne(
-        { id },
-        { $set: { archived: true } }
+      await Post.findByIdAndUpdate(
+        id,
+        { archived: true }
       )
-      return 'Post archivado'
+      return 'Post deleted'
     } catch (error) {
-      console.error(error)
-      return 'Error al intentar archivar el posteo'
+      throw new ValidationError(`Error deleting post: ${(error as Error).message}`)
     }
   }
 
-  async findPost (value: string, filter: string): Promise<PostEntity | PostEntity[] | string> {
+  async findPost (value: string, filter: string): Promise<PostEntity | PostEntity[]> {
     try {
       let result
       const validFilters = ['title', 'type', 'archived', 'category']
@@ -46,18 +46,18 @@ export class MongoPostRepository implements PostRepository {
       else if (filter === 'id') result = await Post.findById(value)
       else if (validFilters.includes(filter)) result = await Post.find({ [filter]: value })
       else throw Error('Not a valid parameter')
-      return result as unknown as PostEntity[]
+      return result as PostEntity[]
     } catch (error) {
-      throw new ValidationError(`Error al buscar el post: ${(error as Error).message}`)
+      throw new ValidationError(`Error searching post: ${(error as Error).message}`)
     }
   }
 
-  async editPost (_id: string, post: PostEntity): Promise<PostEntity | string> {
+  async editPost (_id: string, post: any): Promise<PostEntity> {
     try {
-      const editedPost = await Post.findByIdAndUpdate(_id, post)
-      return editedPost as unknown as PostEntity
+      const editedPost = await Post.findByIdAndUpdate(_id, post, { new: true })
+      return editedPost as PostEntity
     } catch (error) {
-      throw new ValidationError(`Error al editar el post: ${(error as Error).message}`)
+      throw new ValidationError(`Error editing post: ${(error as Error).message}`)
     }
   }
 }
