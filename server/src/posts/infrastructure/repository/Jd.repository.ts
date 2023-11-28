@@ -15,26 +15,6 @@ export class MongoJdRepository implements JdRepository {
       await validateIfJdCodeExists(jd.code)
       ValidateJdCreate(jd)
       const jdCreated = await Jd.create(jd)
-      // const mongoID = String(jdCreated._id)
-      // const airtableJd = await base('JD').create({
-      //   Title: jd.title,
-      //   Description: jd.description,
-      //   Type: jd.type,
-      //   Location: jd.location,
-      //   Modality: jd.modality,
-      //   Stack: jd.stack.join(', '),
-      //   AboutUs: jd.aboutUs,
-      //   AboutClient: jd.aboutClient ?? '',
-      //   Responsabilities: jd.responsabilities,
-      //   Requirements: jd.requirements.join(', '),
-      //   NiceToHave: jd.niceToHave.join(', '),
-      //   Benefits: jd.benefits.join(', '),
-      //   Company: jd.company,
-      //   Status: jd.status,
-      //   WebID: mongoID,
-      //   Code: jd.code
-      // })
-      // const JdCreated = await Jd.findByIdAndUpdate(mongoID, { airTableId: airtableJd.getId() }, { new: true })
       return jdCreated as JdEntity
     } catch (error) {
       throw new ValidationError(`Error creating jd: ${(error as Error).message}`)
