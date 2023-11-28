@@ -7,7 +7,7 @@ const resourcesRoute = Router()
 resourcesRoute.post('/contactus', async (req, res): Promise<any> => {
   try {
     const newContact = req.body
-    await base('UsersInfo').create([
+    await base('Users').create([
       {
         fields: {
           Nombre: newContact.name,
