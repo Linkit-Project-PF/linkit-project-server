@@ -1,7 +1,6 @@
-import { type JdEntity } from './jd.entity'
+import { type usersPosted, type JdEntity } from './jd.entity'
 
 export class JdValue implements JdEntity {
-  // airTableId?: string | null
   code: string
   title: string
   description: string
@@ -18,7 +17,7 @@ export class JdValue implements JdEntity {
   archived: boolean
   company: string
   status: string
-  users: string[]
+  users: usersPosted[]
   createdDate: Date
 
   constructor (jd: JdEntity) {

@@ -20,7 +20,7 @@ export class MongoCompanyRepository implements CompanyRepository {
         WebID: mongoID
       })
       const companyCreated = await Company.findByIdAndUpdate(mongoID, { airTableId: airtableCompany.getId() }, { new: true })
-      return companyCreated as unknown as CompanyEntity
+      return companyCreated as CompanyEntity
     } catch (error) {
       throw new ValidationError(`Error on register: ${(error as Error).message}`)
     }
@@ -36,7 +36,7 @@ export class MongoCompanyRepository implements CompanyRepository {
         result = await Company.findById(value)
       } else if (validParams.includes(filter)) result = await Company.find({ [filter]: value })
       else throw Error('Not a valid parameter')
-      return result as unknown as CompanyEntity
+      return result as CompanyEntity
     } catch (error) {
       throw new ValidationError(`Error on search: ${(error as Error).message}`)
     }
@@ -45,8 +45,10 @@ export class MongoCompanyRepository implements CompanyRepository {
   async editCompany (id: string, info: any): Promise<CompanyEntity> {
     try {
       objectIDValidator(id, 'company to edit')
+      const invalidEdit = ['_id', 'role', 'airTableId', 'jds']
+      Object.keys(info).forEach(key => { if (invalidEdit.includes(key)) throw Error('ID/airtableID/role or jds cannot be changed through this route') })
       const editedCompany = await Company.findByIdAndUpdate(id, info, { new: true })
-      return editedCompany as unknown as CompanyEntity
+      return editedCompany as CompanyEntity
     } catch (error) {
       throw new ValidationError(`Error editing: ${(error as Error).message}`)
     }
@@ -59,7 +61,7 @@ export class MongoCompanyRepository implements CompanyRepository {
         id,
         { active: false }, { new: true }
       )
-      return resultado as unknown as CompanyEntity
+      return resultado as CompanyEntity
     } catch (error) {
       throw new ValidationError(`Error on delete: ${(error as Error).message}`)
     }

@@ -18,7 +18,7 @@ export default async function companyAuth (id: string, method: string, editID?: 
       if (method === 'find') {
         const validCompany = await Company.findById(id)
         if (validCompany) {
-          response.value = validCompany as unknown as CompanyEntity
+          response.value = validCompany as CompanyEntity
           response.code = 200
         } else {
           response.value = 'Unauthorized'
