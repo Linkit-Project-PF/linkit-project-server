@@ -7,9 +7,9 @@ export interface JdEntity {
   location: string
   modality: string
   stack: string[]
-  aboutUs: string
+  aboutUs?: string | null
   aboutClient?: string | null
-  responsabilities: string
+  responsabilities?: string | null
   requirements: string[]
   niceToHave: string[]
   benefits: string[]
