@@ -31,6 +31,10 @@ const adminSchema = new Schema({
     type: Boolean,
     required: true,
     default: true
+  },
+  createdDate: {
+    type: Date,
+    default: Date()
   }
 })
 

@@ -39,7 +39,8 @@ const userSchema = new Schema({
   englishLevel: {
     type: String,
     required: false,
-    enum: ['low', 'medium', 'high', 'bilignual']
+    enum: ['low', 'medium', 'high', 'bilingual', ''],
+    default: ''
   },
   role: {
     type: String,
@@ -57,21 +58,12 @@ const userSchema = new Schema({
   },
   postulations: {
     type: Array,
-    required: true,
-    minlength: 0
+    required: true
+  },
+  registeredDate: {
+    type: Date,
+    default: Date()
   }
-  // TODO This should be a separated entity when relations are created. State is not static for each user.
-  // userStatus: {
-  //   type: String,
-  //   minlength: 0,
-  //   required: false
-  // },
-  // internStatus: {
-  //   type: String,
-  //   required: false,
-  //   minlength: 0,
-  //   enum: ['Descartado', 'Contratado', 'Descartado x el cliente', 'Desistió', 'Presentado al cliente', 'Listo para presentar', 'Sourced', 'No contactar - Blacklist', 'Candidato para backup', 'listo para segunda entrevista de cliente/test técnico', 'Ofertado']
-  // }
 })
 
 export default model('User', userSchema)

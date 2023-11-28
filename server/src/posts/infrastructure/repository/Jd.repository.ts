@@ -1,7 +1,6 @@
 import { type JdEntity } from '../../domain/jd/jd.entity'
 import { type JdRepository } from '../../domain/jd/jd.repository'
 import Jd from '../schema/Jd'
-// import base from '../../../db/airtable'
 import { ValidateJdCreate, validateIfJdCodeExists } from '../../../errors/validation'
 import { ValidationError } from '../../../errors/errors'
 import CombinedFilters from '../../../users/infrastructure/helpers/CombinedFilters'
@@ -38,7 +37,7 @@ export class MongoJdRepository implements JdRepository {
       } else {
         result = CombinedFilters(filter as string[], value as string[], validSingleParams, validIncludeFilters, 'jd')
       }
-      return result as JdEntity
+      return result as JdEntity[]
     } catch (error) {
       throw new ValidationError(`Error searching jd: ${(error as Error).message}`)
     }
@@ -46,8 +45,12 @@ export class MongoJdRepository implements JdRepository {
 
   async editJD (_id: string, jd: any): Promise<JdEntity> {
     try {
+      objectIDValidator(_id, 'jd to edit')
+      const invalidEdit = ['_id', 'users']
+      Object.keys(jd).forEach(key => { if (invalidEdit.includes(key)) throw Error('ID/users cannot be changed through this route') })
       const editedJd = await Jd.findByIdAndUpdate(_id, jd, { new: true })
-      return editedJd as JdEntity
+      if (editedJd) return editedJd as JdEntity
+      else throw Error('JobDescription not found')
     } catch (error) {
       throw new ValidationError(`Error creating jd: ${(error as Error).message}`)
     }
@@ -58,7 +61,7 @@ export class MongoJdRepository implements JdRepository {
       await Jd.findByIdAndUpdate(_id, { archived: true }, { new: true })
       //* This is set like this for Front-End requirements.
       const allJds = await Jd.find()
-      return allJds
+      return allJds as JdEntity[]
     } catch (error) {
       throw Error('Error deleting jd: ' + (error as Error).message)
     }

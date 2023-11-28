@@ -1,4 +1,4 @@
-import { type UserEntity } from './user.entity'
+import { type postulations, type UserEntity } from './user.entity'
 
 export class UserValue implements UserEntity {
   airTableId?: string | null
@@ -13,7 +13,7 @@ export class UserValue implements UserEntity {
   cv?: string | null
   technologies?: string[]
   active: boolean
-  postulations?: string[]
+  postulations?: postulations[]
   userStatus?: string | null
   internStatus?: string | null
 

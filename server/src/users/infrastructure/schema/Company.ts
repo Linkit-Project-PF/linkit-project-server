@@ -52,6 +52,10 @@ const companySchema = new Schema({
   jds: {
     type: Array,
     required: true
+  },
+  registeredDate: {
+    type: Date,
+    default: Date()
   }
 })
 
