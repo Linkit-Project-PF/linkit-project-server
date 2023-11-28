@@ -1,3 +1,8 @@
+export interface postulations {
+  jd: string
+  status: string
+}
+
 export interface UserEntity {
   airTableId?: string | null
   image?: string
@@ -10,7 +15,7 @@ export interface UserEntity {
   linkedin?: string | null
   cv?: string | null
   technologies?: string[]
-  postulations?: string[]
+  postulations?: postulations[]
   active?: boolean | null
   userStatus?: string | null
   internStatus?: string | null

@@ -34,7 +34,7 @@ export class MongoUserRepository implements UserRepository {
         id,
         { $set: { active: false } }, { new: true }
       )
-      return resultado as unknown as UserEntity
+      return resultado as UserEntity
     } catch (error) {
       throw new ValidationError(`Error on delete: ${(error as Error).message}`)
     }
@@ -57,7 +57,7 @@ export class MongoUserRepository implements UserRepository {
       } else {
         result = CombinedFilters(filter as string[], value as string[], validSingleParams, validIncludeFilters, 'user')
       }
-      return result as UserEntity
+      return result as UserEntity[]
     } catch (error) {
       throw new ValidationError(`Error searching: ${(error as Error).message}`)
     }
@@ -66,6 +66,8 @@ export class MongoUserRepository implements UserRepository {
   async editUser (id: string, info: any): Promise<UserEntity> {
     try {
       objectIDValidator(id, 'user to edit')
+      const invalidEdit = ['_id', 'role', 'airTableId', 'postulations']
+      Object.keys(info).forEach(key => { if (invalidEdit.includes(key)) throw Error('ID/airtableID/role or postulations cannot be changed through this route') })
       const editedUser = await User.findByIdAndUpdate(id, info, { new: true })
       return editedUser as UserEntity
     } catch (error) {

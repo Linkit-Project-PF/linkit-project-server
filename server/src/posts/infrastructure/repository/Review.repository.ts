@@ -54,8 +54,12 @@ export class MongoReviewRepository implements ReviewRepository {
 
   async editReview (_id: string, review: any): Promise<ReviewEntity | string> {
     try {
+      objectIDValidator(_id, 'review to edit')
+      const invalidEdit = ['_id']
+      Object.keys(review).forEach(key => { if (invalidEdit.includes(key)) throw Error('ID cannot be changed') })
       const editedReview = await Review.findByIdAndUpdate(_id, review, { new: true })
-      return editedReview as ReviewEntity
+      if (editedReview) return editedReview as ReviewEntity
+      else throw Error('Review not found')
     } catch (error) {
       throw new ValidationError(`Error editing review: ${(error as Error).message}`)
     }

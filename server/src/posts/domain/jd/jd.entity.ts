@@ -1,5 +1,9 @@
+export interface usersPosted {
+  user: string
+  status: string
+}
+
 export interface JdEntity {
-  // airTableId?: string | null
   code: string
   title: string
   description: string
@@ -16,6 +20,6 @@ export interface JdEntity {
   archived: boolean
   company: string
   status: string
-  users: string[]
+  users: usersPosted[]
   createdDate: Date
 }
