@@ -25,4 +25,9 @@ export class UserUseCase {
     const deleteUser = await this.userRepository.deleteUser(id)
     return deleteUser
   }
+
+  public relateJd = async (userID: string, jdID: string, status: string, operation: string): Promise<UserEntity> => {
+    const userRelated = await this.userRepository.relateJd(userID, jdID, status, operation)
+    return userRelated
+  }
 }

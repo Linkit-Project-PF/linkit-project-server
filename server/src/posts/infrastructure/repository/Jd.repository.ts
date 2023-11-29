@@ -6,6 +6,7 @@ import { ValidationError } from '../../../errors/errors'
 import CombinedFilters from '../../../users/infrastructure/helpers/CombinedFilters'
 import { objectIDValidator } from '../../../users/infrastructure/helpers/validateObjectID'
 import validateCompany from '../helpers/JDs/validateCompany'
+import User from '../../../users/infrastructure/schema/User'
 
 export class MongoJdRepository implements JdRepository {
   async createJD (jd: JdEntity): Promise<JdEntity> {
@@ -46,8 +47,8 @@ export class MongoJdRepository implements JdRepository {
   async editJD (_id: string, jd: any): Promise<JdEntity> {
     try {
       objectIDValidator(_id, 'jd to edit')
-      const invalidEdit = ['_id', 'users']
-      Object.keys(jd).forEach(key => { if (invalidEdit.includes(key)) throw Error('ID/users cannot be changed through this route') })
+      const invalidEdit = ['_id', 'users', 'createdDate']
+      Object.keys(jd).forEach(key => { if (invalidEdit.includes(key)) throw Error('ID/users/date cannot be changed through this route') })
       const editedJd = await Jd.findByIdAndUpdate(_id, jd, { new: true })
       if (editedJd) return editedJd as JdEntity
       else throw Error('JobDescription not found')
@@ -56,7 +57,7 @@ export class MongoJdRepository implements JdRepository {
     }
   }
 
-  async deleteJD (_id: string): Promise<JdEntity[] | string> {
+  async deleteJD (_id: string): Promise<JdEntity[]> {
     try {
       await Jd.findByIdAndUpdate(_id, { archived: true }, { new: true })
       //* This is set like this for Front-End requirements.
@@ -64,6 +65,26 @@ export class MongoJdRepository implements JdRepository {
       return allJds as JdEntity[]
     } catch (error) {
       throw Error('Error deleting jd: ' + (error as Error).message)
+    }
+  }
+
+  async relateUser (jdID: string, userid: string, status: string, operation: string): Promise<JdEntity> {
+    try {
+      if (!status || !operation || !jdID || !userid) throw Error('Missing parameters: operation, jd, user and status needed')
+      objectIDValidator(jdID, 'jd in relation')
+      objectIDValidator(userid, 'user to relate')
+      if (operation === 'create') {
+        const jd = await Jd.findById(jdID)
+        if (!jd) throw Error('Job Description does not exist')
+        const user = await User.findById(userid, '_id')
+        if (!user) throw Error('User does not exist')
+        const objectToAdd = { user: user._id, status }
+        jd.users.push(objectToAdd)
+        const replacedJD = await Jd.findOneAndReplace({ _id: jdID }, jd, { new: true })
+        return replacedJD as JdEntity
+      } else throw Error('Not a valid operation')
+    } catch (error) {
+      throw Error(`Error relating user to jd: ${(error as Error).message}`)
     }
   }
 }

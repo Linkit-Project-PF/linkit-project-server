@@ -16,5 +16,6 @@ companyRoute.get('/find', companyController.getController)
 companyRoute.post('/create', companyController.postController)
 companyRoute.put('/update/:id', companyController.putController)
 companyRoute.delete('/delete/:id', companyController.deleteController)
+companyRoute.put('/jdRelation', companyController.relationController)
 
 export default companyRoute
