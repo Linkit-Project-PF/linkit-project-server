@@ -17,6 +17,4 @@ export interface UserEntity {
   technologies?: string[]
   postulations?: postulations[]
   active?: boolean | null
-  userStatus?: string | null
-  internStatus?: string | null
 }
