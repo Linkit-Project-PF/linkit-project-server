@@ -108,7 +108,7 @@ export class MongoUserRepository implements UserRepository {
         let index
         user.postulations.forEach((obj, idx) => { if (String(obj.jd) === jdID) { existing = true; index = idx } })
         if (!existing || typeof index === 'undefined') throw Error('JD is not related to this user')
-        if (status === jd.users[index].status) throw Error('Status is the same as the previous one')
+        if (status === user.postulations[index].status) throw Error('Status is the same as the previous one')
         user.postulations[index].status = status
       } else if (operation === 'delete') {
         let existing = false
