@@ -14,8 +14,6 @@ export class UserValue implements UserEntity {
   technologies?: string[]
   active: boolean
   postulations?: postulations[]
-  userStatus?: string | null
-  internStatus?: string | null
 
   constructor (user: UserEntity) {
     this.airTableId = user.airTableId ?? undefined
@@ -31,7 +29,5 @@ export class UserValue implements UserEntity {
     this.technologies = user.technologies ?? []
     this.active = user.active ?? true
     this.postulations = user.postulations ?? []
-    this.userStatus = user.userStatus ?? undefined
-    this.internStatus = user.internStatus ?? undefined
   }
 }
