@@ -73,16 +73,30 @@ export class MongoJdRepository implements JdRepository {
       if (!status || !operation || !jdID || !userid) throw Error('Missing parameters: operation, jd, user and status needed')
       objectIDValidator(jdID, 'jd in relation')
       objectIDValidator(userid, 'user to relate')
+      const jd = await Jd.findById(jdID)
+      if (!jd) throw Error('Job Description does not exist')
+      const user = await User.findById(userid, '_id')
+      if (!user) throw Error('User does not exist')
       if (operation === 'create') {
-        const jd = await Jd.findById(jdID)
-        if (!jd) throw Error('Job Description does not exist')
-        const user = await User.findById(userid, '_id')
-        if (!user) throw Error('User does not exist')
+        jd.users.forEach(obj => { if (obj.user === userid) throw Error('User already related to this JD') })
         const objectToAdd = { user: user._id, status }
         jd.users.push(objectToAdd)
-        const replacedJD = await Jd.findOneAndReplace({ _id: jdID }, jd, { new: true })
-        return replacedJD as JdEntity
+      } else if (operation === 'status') {
+        let existing = false
+        let index
+        jd.users.forEach((obj, idx) => { if (String(obj.user) === userid) { existing = true; index = idx } })
+        if (!existing || typeof index === 'undefined') throw Error('User is not related to this JD')
+        if (status === jd.users[index].status) throw Error('Status is the same as the previous one')
+        jd.users[index].status = status
+      } else if (operation === 'delete') {
+        let existing = false
+        let index
+        jd.users.forEach((obj, idx) => { if (String(obj.user) === userid) { existing = true; index = idx } })
+        if (!existing || typeof index === 'undefined') throw Error('User is not related to this JD')
+        jd.users.splice(index, 1)
       } else throw Error('Not a valid operation')
+      const replacedJD = await Jd.findOneAndReplace({ _id: jdID }, jd, { new: true })
+      return replacedJD as JdEntity
     } catch (error) {
       throw Error(`Error relating user to jd: ${(error as Error).message}`)
     }

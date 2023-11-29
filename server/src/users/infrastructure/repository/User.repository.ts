@@ -93,18 +93,32 @@ export class MongoUserRepository implements UserRepository {
   async relateJd (userID: string, jdID: string, status: string, operation: string): Promise<UserEntity> {
     try {
       if (!status || !operation || !userID || !jdID) throw Error('Missing parameters: operation, user, jd and status needed')
-      objectIDValidator(userID, 'jd in relation')
-      objectIDValidator(jdID, 'user to relate')
+      objectIDValidator(userID, 'user to relate')
+      objectIDValidator(jdID, 'jd in relation')
+      const jd = await Jd.findById(jdID, '_id')
+      if (!jd) throw Error('Job Description does not exist')
+      const user = await User.findById(userID)
+      if (!user) throw Error('User does not exist')
       if (operation === 'create') {
-        const jd = await Jd.findById(jdID, '_id')
-        if (!jd) throw Error('Job Description does not exist')
-        const user = await User.findById(userID)
-        if (!user) throw Error('User does not exist')
+        user.postulations.forEach(obj => { if (obj.jd === jdID) throw Error('Jd already related to this user') })
         const objectToAdd = { jd: jd._id, status }
         user.postulations.push(objectToAdd)
-        const replacedUser = await User.findOneAndReplace({ _id: userID }, user, { new: true })
-        return replacedUser as UserEntity
+      } else if (operation === 'status') {
+        let existing = false
+        let index
+        user.postulations.forEach((obj, idx) => { if (String(obj.jd) === jdID) { existing = true; index = idx } })
+        if (!existing || typeof index === 'undefined') throw Error('JD is not related to this user')
+        if (status === jd.users[index].status) throw Error('Status is the same as the previous one')
+        user.postulations[index].status = status
+      } else if (operation === 'delete') {
+        let existing = false
+        let index
+        user.postulations.forEach((obj, idx) => { if (String(obj.jd) === jdID) { existing = true; index = idx } })
+        if (!existing || typeof index === 'undefined') throw Error('JD is not related to this user')
+        user.postulations.splice(index, 1)
       } else throw Error('Not a valid operation')
+      const replacedUser = await User.findOneAndReplace({ _id: userID }, user, { new: true })
+      return replacedUser as UserEntity
     } catch (error) {
       throw Error(`Error relating jd to user: ${(error as Error).message}`)
     }

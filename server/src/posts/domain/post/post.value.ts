@@ -9,7 +9,7 @@ export class PostValue implements PostEntity {
   link?: string | null
   type: string
   archived?: boolean | null
-  category?: string | null
+  category: string
 
   constructor (post: PostEntity) {
     this.title = post.title
@@ -20,6 +20,6 @@ export class PostValue implements PostEntity {
     this.link = post.link ?? undefined
     this.type = post.type
     this.archived = post.archived ?? false
-    this.category = post.category ?? undefined
+    this.category = post.category
   }
 }
