@@ -49,4 +49,14 @@ export class CompanyControllers {
       return res.status(400).json((error as Error).message)
     }
   }
+
+  public relationController: RequestHandler = async (req, res) => {
+    try {
+      const { jd, company, operation } = req.body
+      const result = await this.companyUseCase.relateJd(jd, company, operation)
+      return res.status(200).json(result)
+    } catch (error) {
+      return res.status(400).json((error as Error).message)
+    }
+  }
 }

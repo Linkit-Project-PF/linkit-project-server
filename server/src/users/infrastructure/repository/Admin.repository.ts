@@ -24,6 +24,7 @@ export class MongoAdminRepository implements AdminRepository {
       else if (filter === 'id') {
         objectIDValidator(value, 'admin to search')
         result = await Admin.findById(value)
+        if (!result) throw Error('No admins found under that id')
       } else if (validParams.includes(filter)) result = await Admin.find({ [filter]: value })
       else throw Error('Not a valid parameter')
       return result as AdminEntity
@@ -35,8 +36,8 @@ export class MongoAdminRepository implements AdminRepository {
   async editAdmin (_id: string, info: any): Promise<AdminEntity> {
     try {
       objectIDValidator(_id, 'admin to edit')
-      const invalidEdit = ['_id', 'role']
-      Object.keys(info).forEach(key => { if (invalidEdit.includes(key)) throw Error('ID/role cannot be changed') })
+      const invalidEdit = ['_id', 'role', 'createdDate']
+      Object.keys(info).forEach(key => { if (invalidEdit.includes(key)) throw Error('ID/role/date cannot be changed') })
       const editAdmin = await Admin.findByIdAndUpdate(_id, info, { new: true })
       return editAdmin as AdminEntity
     } catch (error: any) {
