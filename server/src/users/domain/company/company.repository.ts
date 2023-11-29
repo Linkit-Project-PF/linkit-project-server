@@ -1,8 +1,9 @@
 import { type CompanyEntity } from './company.entity'
 
 export interface CompanyRepository {
-  findCompany: (value: string, filter: string) => Promise<CompanyEntity | CompanyEntity[] | string>
-  createCompany: (company: CompanyEntity) => Promise <CompanyEntity | string>
-  deleteCompany: (id: string) => Promise<CompanyEntity | string>
-  editCompany: (id: string, company: CompanyEntity) => Promise<CompanyEntity | string>
+  findCompany: (value: string, filter: string) => Promise<CompanyEntity | CompanyEntity[]>
+  createCompany: (company: CompanyEntity) => Promise <CompanyEntity>
+  deleteCompany: (id: string) => Promise<CompanyEntity>
+  editCompany: (id: string, company: CompanyEntity) => Promise<CompanyEntity>
+  relateJd: (jdID: string, companyID: string, operation: string) => Promise<CompanyEntity>
 }

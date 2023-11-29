@@ -55,8 +55,8 @@ export class MongoPostRepository implements PostRepository {
   async editPost (_id: string, post: any): Promise<PostEntity> {
     try {
       objectIDValidator(_id, 'post to edit')
-      const invalidEdit = ['_id']
-      Object.keys(post).forEach(key => { if (invalidEdit.includes(key)) throw Error('ID cannot be changed') })
+      const invalidEdit = ['_id', 'createdDate']
+      Object.keys(post).forEach(key => { if (invalidEdit.includes(key)) throw Error('ID/date cannot be changed') })
       const editedPost = await Post.findByIdAndUpdate(_id, post, { new: true })
       if (editedPost) return editedPost as PostEntity
       else throw Error('Post not found')
