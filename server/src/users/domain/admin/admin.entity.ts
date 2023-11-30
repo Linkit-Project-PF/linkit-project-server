@@ -6,4 +6,5 @@ export interface AdminEntity {
   password?: string | null
   role?: string | null
   active?: boolean | null
+  createdDate: Date
 }

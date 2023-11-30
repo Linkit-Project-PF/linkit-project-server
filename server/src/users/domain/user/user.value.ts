@@ -4,16 +4,17 @@ export class UserValue implements UserEntity {
   airTableId?: string | null
   image?: string
   name: string
-  password?: string | null
   email: string
   country?: string | null
-  phone?: string | null
-  role: string
   linkedin?: string | null
   cv?: string | null
+  englishLevel?: string | null
+  role: string
   technologies?: string[]
-  active: boolean
+  active?: boolean | null
   postulations?: postulations[]
+  registeredDate: Date
+  password?: string | null
 
   constructor (user: UserEntity) {
     this.airTableId = user.airTableId ?? undefined
@@ -22,10 +23,10 @@ export class UserValue implements UserEntity {
     this.password = user.password ?? undefined
     this.email = user.email
     this.country = user.country ?? undefined
-    this.phone = user.phone ?? undefined
     this.role = user.role ?? 'user'
     this.linkedin = user.linkedin ?? undefined
     this.cv = user.cv ?? undefined
+    this.registeredDate = user.registeredDate
     this.technologies = user.technologies ?? []
     this.active = user.active ?? true
     this.postulations = user.postulations ?? []

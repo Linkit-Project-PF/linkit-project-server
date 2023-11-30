@@ -13,8 +13,7 @@ const postSchema = new Schema({
   },
   headers: {
     type: Array,
-    required: true,
-    minlength: 0
+    required: true
   },
   createdDate: {
     type: Date,
@@ -24,14 +23,12 @@ const postSchema = new Schema({
   image: {
     type: String,
     required: false,
-    minlength: 3,
     maxlength: 200,
     default: ''
   },
   link: {
     type: String,
     required: false,
-    minlength: 5,
     default: ''
   },
   type: {

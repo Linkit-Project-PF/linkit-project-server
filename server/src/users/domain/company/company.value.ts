@@ -5,17 +5,19 @@ export class CompanyValue implements CompanyEntity {
   image?: string
   companyName: string
   repName?: string | null
-  country?: string | null
   email: string
-  password?: string | null
-  role: string
+  country?: string | null
   linkedin?: string | null
+  role: string
+  interested?: string | null
   active?: boolean | null
   jds: string[]
+  registeredDate: Date
+  password?: string | null
 
   constructor (company: CompanyEntity) {
     this.airTableId = company.airTableId ?? undefined
-    this.image = company.image ?? 'DEFAULT_PROFILE_COMPANY_IMAGE'
+    this.image = company.image ?? undefined
     this.companyName = company.companyName
     this.password = company.password ?? undefined
     this.email = company.email
@@ -23,6 +25,8 @@ export class CompanyValue implements CompanyEntity {
     this.role = company.role ?? 'company'
     this.linkedin = company.linkedin ?? undefined
     this.active = company.active ?? true
+    this.interested = company.interested ?? undefined
+    this.registeredDate = company.registeredDate
     this.jds = company.jds
   }
 }
