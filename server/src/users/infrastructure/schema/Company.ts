@@ -9,7 +9,6 @@ const companySchema = new Schema({
   image: {
     type: String,
     required: false,
-    minlength: 3,
     default: ''
   },
   companyName: {
