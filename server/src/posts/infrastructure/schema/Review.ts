@@ -26,7 +26,6 @@ const reviewSchema = new Schema({
   country: {
     type: String,
     required: false,
-    minlength: 3,
     default: ''
   },
   detail: {

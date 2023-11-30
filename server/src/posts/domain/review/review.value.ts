@@ -7,7 +7,7 @@ export class ReviewValue implements ReviewEntity {
   image?: string | null
   country: string
   detail: string
-  archived?: boolean
+  archived?: boolean | null
 
   constructor (review: ReviewEntity) {
     this.name = review.name

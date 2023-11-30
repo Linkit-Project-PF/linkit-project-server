@@ -44,6 +44,12 @@ const companySchema = new Schema({
     required: true,
     enum: ['company']
   },
+  interested: {
+    type: String,
+    required: false,
+    default: '',
+    enum: ['payroll', 'recruiting', 'staff-aug', '']
+  },
   active: {
     type: Boolean,
     required: true,

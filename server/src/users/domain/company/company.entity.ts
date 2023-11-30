@@ -3,11 +3,13 @@ export interface CompanyEntity {
   image?: string
   companyName: string
   repName?: string | null
-  country?: string | null
   email: string
-  password?: string | null
-  role: string
+  country?: string | null
   linkedin?: string | null
+  role: string
+  interested?: string | null
   active?: boolean | null
   jds: string[]
+  registeredDate: Date
+  password?: string | null
 }
