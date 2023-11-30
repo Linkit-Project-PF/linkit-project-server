@@ -3,18 +3,18 @@ import { type PostEntity } from './post.entity'
 export class PostValue implements PostEntity {
   title: string
   description: string
-  headers?: string[]
+  headers: string[]
   createdDate: Date
   image?: string | null
   link?: string | null
   type: string
-  archived?: boolean | null
+  archived: boolean | null
   category: string
 
   constructor (post: PostEntity) {
     this.title = post.title
     this.description = post.description
-    this.headers = post.headers ?? undefined
+    this.headers = post.headers
     this.createdDate = post.createdDate
     this.image = post.image ?? undefined
     this.link = post.link ?? undefined

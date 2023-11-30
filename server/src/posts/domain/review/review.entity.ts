@@ -5,5 +5,5 @@ export interface ReviewEntity {
   image?: string | null
   country: string
   detail: string
-  archived?: boolean
+  archived?: boolean | null
 }

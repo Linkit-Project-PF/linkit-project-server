@@ -6,8 +6,9 @@ export class AdminValue implements AdminEntity {
   email: string
   country?: string | null
   password?: string | null
-  role: string
-  active: boolean
+  role?: string | null
+  active?: boolean | null
+  createdDate: Date
 
   constructor (admin: AdminEntity) {
     this.image = admin.image ?? 'https://api.dicebear.com/7.x/avataaars-neutral/svg?seed=Callie'
@@ -17,5 +18,6 @@ export class AdminValue implements AdminEntity {
     this.password = admin.password ?? undefined
     this.role = admin.role ?? 'admin'
     this.active = admin.active ?? true
+    this.createdDate = admin.createdDate
   }
 }
