@@ -18,7 +18,7 @@ import { MongoCompanyRepository } from '../../infrastructure/repository/Company.
 import { MongoAdminRepository } from '../../infrastructure/repository/Admin.repository'
 import { objectIDValidator } from '../../infrastructure/helpers/validateObjectID'
 import { type MailNodeMailerProvider } from './nodemailer/nodeMailer'
-import { docMail } from './nodemailer/docMail'
+import { validateIfEmailExists } from '../../../errors/validation'
 
 export class AuthMongoRepository implements AuthRepository {
   constructor (private readonly mailNodeMailerProvider: MailNodeMailerProvider) {
@@ -28,32 +28,20 @@ export class AuthMongoRepository implements AuthRepository {
   async register (entity: UserEntity | CompanyEntity | AdminEntity): Promise<UserEntity | CompanyEntity | AdminEntity | string> {
     try {
       // TODO Add Email and Password validator so Mongo can be done before firebase
+      await validateIfEmailExists(entity.email)
       await createUserWithEmailAndPassword(auth, String(entity.email), entity.password ? String(entity.password) : '')
       let entityCreated
       let provider
       if (entity.role === 'user') {
-        provider = new MongoUserRepository()
+        provider = new MongoUserRepository(this.mailNodeMailerProvider)
         entityCreated = await provider.createUser(entity as UserEntity)
       } else if (entity.role === 'company') {
-        provider = new MongoCompanyRepository()
+        provider = new MongoCompanyRepository(this.mailNodeMailerProvider)
         entityCreated = await provider.createCompany(entity as CompanyEntity)
       } else if (entity.role === 'admin') {
-        provider = new MongoAdminRepository()
+        provider = new MongoAdminRepository(this.mailNodeMailerProvider)
         entityCreated = await provider.createAdmin(entity as AdminEntity)
       } else entityCreated = 'No entity created, role does not exist'
-      await this.mailNodeMailerProvider.sendEmail({
-        to: {
-          name: 'name' in entity ? entity.name : entity.companyName,
-          email: entity.email
-        },
-        from: {
-          name: 'LinkIT',
-          email: 'linkit.project.henry@gmail.com'
-        },
-        subject: 'Bienvenido a LinkIT',
-        html: docMail
-      }
-      )
       return entityCreated
     } catch (error) {
       // TODO Check If validation errors fit here

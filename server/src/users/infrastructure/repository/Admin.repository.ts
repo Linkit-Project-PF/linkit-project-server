@@ -1,15 +1,23 @@
 import { type AdminEntity } from '../../domain/admin/admin.entity'
 import { type AdminRepository } from '../../domain/admin/admin.repository'
 import { ValidationError } from '../../../errors/errors'
+import { adminMailCreate } from '../../authentication/Infrastructure/nodemailer/verifyMail/adminMailCreate'
+import { type MailNodeMailerProvider } from '../../authentication/Infrastructure/nodemailer/nodeMailer'
 import { validateIfEmailExists } from '../../../errors/validation'
 import Admin from '../schema/Admin'
 import { objectIDValidator } from '../helpers/validateObjectID'
 
 export class MongoAdminRepository implements AdminRepository {
+  constructor (private readonly mailNodeMailerProvider: MailNodeMailerProvider) {
+    this.mailNodeMailerProvider = mailNodeMailerProvider
+  }
+
   async createAdmin (admin: AdminEntity): Promise<AdminEntity> {
     try {
       await validateIfEmailExists(admin.email)
       const adminCreated = await Admin.create(admin)
+      // TODO Add email sending for admin
+      await this.mailNodeMailerProvider.sendEmail(adminMailCreate(admin))
       return adminCreated as AdminEntity
     } catch (error) {
       throw new ValidationError(`Error on register: ${(error as Error).message}`)

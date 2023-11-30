@@ -2,12 +2,15 @@ import { type CompanyEntity } from '../../domain/company/company.entity'
 import { type CompanyRepository } from '../../domain/company/company.repository'
 import { ValidationError } from '../../../errors/errors'
 import Company from '../schema/Company'
+import { companyMailCreate } from '../../authentication/Infrastructure/nodemailer/verifyMail/companyMail'
 import base from '../../../db/airtable'
+import { type MailNodeMailerProvider } from '../../authentication/Infrastructure/nodemailer/nodeMailer'
 import { objectIDValidator } from '../helpers/validateObjectID'
 import { validateIfEmailExists } from '../../../errors/validation'
 import Jd from '../../../posts/infrastructure/schema/Jd'
 
 export class MongoCompanyRepository implements CompanyRepository {
+  constructor (private readonly mailNodeMailerProvider: MailNodeMailerProvider) {}
   async createCompany (company: CompanyEntity): Promise<CompanyEntity> {
     try {
       await validateIfEmailExists(company.email)
@@ -19,6 +22,7 @@ export class MongoCompanyRepository implements CompanyRepository {
         Rol: company.role,
         WebID: mongoID
       })
+      await this.mailNodeMailerProvider.sendEmail(companyMailCreate(company))
       const companyCreated = await Company.findByIdAndUpdate(mongoID, { airTableId: airtableCompany.getId() }, { new: true })
       return companyCreated as CompanyEntity
     } catch (error) {
