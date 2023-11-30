@@ -3,10 +3,12 @@ import { UserUseCase } from '../../aplication/userUseCase'
 import { UserControllers } from '../controllers/user.controllers'
 import { MongoUserRepository } from '../repository/User.repository'
 import { authValidator } from '../helpers/routeValidator'
+import { MailNodeMailerProvider } from '../../authentication/Infrastructure/nodemailer/nodeMailer'
 
 const userRoute = Router()
 
-const mongoUserRepository = new MongoUserRepository()
+const mailProvider = new MailNodeMailerProvider()
+const mongoUserRepository = new MongoUserRepository(mailProvider)
 const userUseCase = new UserUseCase(mongoUserRepository)
 const userController = new UserControllers(userUseCase)
 
