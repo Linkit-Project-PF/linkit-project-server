@@ -52,7 +52,6 @@ export const ValidateUserUpdate = (user: UserEntity): void => {
   if (!user.email) returnUserError('El email es requerido')
   if (!user.role) returnUserError('El rol es requerido')
   if (!user.country) returnUserError('El país es requerido')
-  if (!user.phone) returnUserError('El teléfono es requerido')
 }
 
 export const ValidateId = (_id: string): void => {
