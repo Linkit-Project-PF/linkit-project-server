@@ -4,7 +4,7 @@ const postSchema = new Schema({
   title: {
     type: String,
     required: true,
-    minlength: 3
+    minlength: 1
   },
   description: {
     type: String,

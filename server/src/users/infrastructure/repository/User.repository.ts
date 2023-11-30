@@ -2,6 +2,8 @@ import { type UserEntity } from '../../domain/user/user.entity'
 import { type UserRepository } from '../../domain/user/user.reposiroty'
 import { validateIfEmailExists } from '../../../errors/validation'
 import { ValidationError } from '../../../errors/errors'
+import { userMailCreate } from '../../authentication/Infrastructure/nodemailer/verifyMail/userMail'
+import { type MailNodeMailerProvider } from '../../authentication/Infrastructure/nodemailer/nodeMailer'
 import User from '../schema/User'
 import base from '../../../db/airtable'
 import CombinedFilters from '../helpers/CombinedFilters'
@@ -9,6 +11,8 @@ import { objectIDValidator } from '../helpers/validateObjectID'
 import Jd from '../../../posts/infrastructure/schema/Jd'
 
 export class MongoUserRepository implements UserRepository {
+  constructor (private readonly mailNodeMailerProvider: MailNodeMailerProvider) {}
+
   async createUser (user: UserEntity): Promise<UserEntity> {
     try {
       await validateIfEmailExists(user.email)
@@ -21,6 +25,7 @@ export class MongoUserRepository implements UserRepository {
         Rol: user.role,
         WebID: mongoID
       })
+      await this.mailNodeMailerProvider.sendEmail(userMailCreate(user))
       const userCreated = await User.findByIdAndUpdate(mongoID, { airTableId: airtableUser.getId() }, { new: true })
       return userCreated as UserEntity
     } catch (error: any) {
