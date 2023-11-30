@@ -5,21 +5,21 @@ export const docMail = `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitiona
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta content="telephone=no" name="format-detection">
 <title></title>
-<!--[if (mso 16)]>
+[if (mso 16)]>
   <style type="text/css">
   a {text-decoration: none;}
   </style>
-  <![endif]-->
-<!--[if gte mso 9]><style>sup { font-size: 100% !important; }</style><![endif]-->
-<!--[if gte mso 9]>
+  <![endif]
+[if gte mso 9]><style>sup { font-size: 100% !important; }</style><![endif]
+[if gte mso 9]>
 <xml>
   <o:OfficeDocumentSettings>
   <o:AllowPNG></o:AllowPNG>
   <o:PixelsPerInch>96</o:PixelsPerInch>
   </o:OfficeDocumentSettings>
 </xml>
-<![endif]-->
-<!--[if mso]>
+[endif]
+[if mso]>
 <style type="text/css">
    ul {
 margin: 0 !important;
@@ -58,8 +58,13 @@ margin-left: 47px !important;
                     
                 <td width="560" class="esd-container-frame" align="center" valign="top">
                     <table cellpadding="0" cellspacing="0" width="100%">
-                        <tbody><tr><td align="center" class="esd-empty-container" style="display: none"></td>
-                    </tr></tbody></table>
+                        <tbody><tr>
+          <td align="center" class="esd-block-image" style="font-size: 0">
+              <a target="_blank">
+                  <img class="adapt-img" src="https://fcoqzhd.stripocdn.email/content/guids/CABINET_43b45519799d201a2b57e63f4ea687bca879216df4f4c7dc05c38df3b54f4ab9/images/image.png" alt="" width="560">
+              </a>
+          </td>
+      </tr></tbody></table>
                 </td>
             
                     

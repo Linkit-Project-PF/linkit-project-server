@@ -17,13 +17,13 @@ import { MongoUserRepository } from '../../infrastructure/repository/User.reposi
 import { MongoCompanyRepository } from '../../infrastructure/repository/Company.repository'
 import { MongoAdminRepository } from '../../infrastructure/repository/Admin.repository'
 import { objectIDValidator } from '../../infrastructure/helpers/validateObjectID'
-// import { type MailNodeMailerProvider } from './nodemailer/nodeMailer'
-// import { docMail } from './nodemailer/docMail'
+import { type MailNodeMailerProvider } from './nodemailer/nodeMailer'
+import { docMail } from './nodemailer/docMail'
 
 export class AuthMongoRepository implements AuthRepository {
-  // constructor (private readonly mailNodeMailerProvider: MailNodeMailerProvider) {
-  //   this.mailNodeMailerProvider = mailNodeMailerProvider
-  // }
+  constructor (private readonly mailNodeMailerProvider: MailNodeMailerProvider) {
+    this.mailNodeMailerProvider = mailNodeMailerProvider
+  }
 
   async register (entity: UserEntity | CompanyEntity | AdminEntity): Promise<UserEntity | CompanyEntity | AdminEntity | string> {
     try {
@@ -41,19 +41,19 @@ export class AuthMongoRepository implements AuthRepository {
         provider = new MongoAdminRepository()
         entityCreated = await provider.createAdmin(entity as AdminEntity)
       } else entityCreated = 'No entity created, role does not exist'
-      // await this.mailNodeMailerProvider.sendEmail({
-      //   to: {
-      //     name: entity.name,
-      //     email: entity.email
-      //   },
-      //   from: {
-      //     name: 'LinkIT',
-      //     email: 'linkit.project.henry@gmail.com'
-      //   },
-      //   subject: 'Bienvenido a LinkIT',
-      //   html: docMail
-      // }
-      // )
+      await this.mailNodeMailerProvider.sendEmail({
+        to: {
+          name: 'name' in entity ? entity.name : entity.companyName,
+          email: entity.email
+        },
+        from: {
+          name: 'LinkIT',
+          email: 'linkit.project.henry@gmail.com'
+        },
+        subject: 'Bienvenido a LinkIT',
+        html: docMail
+      }
+      )
       return entityCreated
     } catch (error) {
       // TODO Check If validation errors fit here
