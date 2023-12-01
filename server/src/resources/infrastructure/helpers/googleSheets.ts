@@ -1,4 +1,3 @@
-// googleSheets.ts
 import * as fs from 'fs/promises'
 import * as path from 'path'
 import { authenticate } from '@google-cloud/local-auth'
