@@ -14,6 +14,7 @@ export class MongoJdRepository implements JdRepository {
       await validateCompany(jd.company)
       await validateIfJdCodeExists(jd.code)
       ValidateJdCreate(jd)
+      jd.stack = jd.stack.map(stack => stack.toLowerCase())
       const jdCreated = await Jd.create(jd)
       return jdCreated as JdEntity
     } catch (error) {
@@ -24,7 +25,7 @@ export class MongoJdRepository implements JdRepository {
   async findJD (value: string | string[], filter: string | string[], combined?: boolean): Promise<JdEntity | JdEntity[]> {
     try {
       let result
-      const validSingleParams = ['title', 'location', 'type', 'modality', 'archived', 'company', 'airTableId', 'code', 'status']
+      const validSingleParams = ['title', 'location', 'type', 'modality', 'archived', 'company', 'code', 'status']
       const validIncludeFilters = ['stack', 'users']
       if (!combined) {
         if (filter === 'all') result = await Jd.find()
@@ -32,9 +33,29 @@ export class MongoJdRepository implements JdRepository {
           objectIDValidator(value as string, 'Jd to find')
           result = await Jd.findById(value)
         } else if (validIncludeFilters.includes(filter as string)) {
-          result = (await Jd.find()).filter(jd => (jd as any)[filter as string].includes(value))
-        } else if (validSingleParams.includes(filter as string)) result = await Jd.find({ [filter as string]: value })
-        else throw Error('Not a valid parameter')
+          if (filter === 'users') {
+            result = await Jd.find({})
+            result = result.filter((jd: JdEntity) => {
+              let exists = false
+              jd.users.forEach(user => {
+                if (user.user.toString() === value) exists = true
+              })
+              console.log(exists)
+              return exists
+            })
+          } else {
+            const values = (value as string).split(', ').map(value => value.trim().toLowerCase())
+            if (values.length > 1) {
+              result = await Jd.find()
+              for (let i = 0; i < values.length; i++) {
+                console.log(values[i])
+                result = result.filter((jd: JdEntity) => (jd as any)[filter as string].includes(values[i]))
+              }
+            } else { result = (await Jd.find()).filter(jd => (jd as any)[filter as string].includes(value)) }
+          }
+        } else if (validSingleParams.includes(filter as string)) {
+          result = await Jd.find({ [filter as string]: value })
+        } else throw Error('Not a valid parameter')
       } else {
         result = CombinedFilters(filter as string[], value as string[], validSingleParams, validIncludeFilters, 'jd')
       }
