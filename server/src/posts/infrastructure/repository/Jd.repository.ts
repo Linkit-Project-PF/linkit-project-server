@@ -44,7 +44,7 @@ export class MongoJdRepository implements JdRepository {
               return exists
             })
           } else {
-            const values = (value as string).split(', ').map(value => value.trim().toLowerCase())
+            const values = (value as string).split(',').map(value => value.trim().toLowerCase())
             if (values.length > 1) {
               result = await Jd.find()
               for (let i = 0; i < values.length; i++) {
