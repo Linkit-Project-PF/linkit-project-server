@@ -46,27 +46,57 @@ async function saveCredentials (client: { credentials: { refresh_token: any } })
   await fs.writeFile(TOKEN_PATH, payload, 'utf-8')
 }
 
-export async function listMajors (auth: any): Promise<any> {
+export async function getCalculatorTable (auth: any): Promise<any> {
   const sheets = google.sheets({ version: 'v4', auth })
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: '1AxT5RFTEqyOsGYAAzaA5cGNblAEZxOPWhorVDt84qGU',
-    range: 'exampleSheet!A2:J'
+    range: 'exampleSheet!H3:T'
   })
   const rows = res.data.values
   if (!rows || rows.length === 0) {
     console.log('No data found.')
     return []
   }
-  return rows.map((row) => ({
-    pricing_client: row[0],
-    position: row[1],
-    tier_technologie: row[2],
-    english_level: row[3],
-    entry_level: row[4],
-    semi_Senior: row[5],
-    senior1: row[6],
-    senior2: row[7],
-    senior_advanced: row[8],
-    manager_lead: row[9]
+  const calculatorTable = rows.map((row) => ({
+    position: row[0],
+    tier_technologie: row[1],
+    english_level: row[2],
+    entry_level_min: row[3],
+    entry_level_max: row[4],
+    semi_Senior_min: row[5],
+    semi_Senior_max: row[6],
+    senior_min: row[7],
+    senior_max: row[8],
+    senior_advanced_min: row[9],
+    senior_advanced_max: row[10],
+    manager_lead_min: row[11],
+    manager_lead_max: row[12]
   }))
+  return calculatorTable
+}
+
+export async function getTiers (auth: any): Promise<any> {
+  const sheets = google.sheets({ version: 'v4', auth })
+  const res = await sheets.spreadsheets.values.get({
+    spreadsheetId: '1AxT5RFTEqyOsGYAAzaA5cGNblAEZxOPWhorVDt84qGU',
+    range: 'exampleSheet!A3:D'
+  })
+  const rows = res.data.values
+  if (!rows || rows.length === 0) {
+    console.log('No data found.')
+    return []
+  }
+  const techTier1 = rows.map((row) => (
+    row[0]
+  ))
+  const frameworksTier1 = rows.map((row) => (
+    row[1]
+  ))
+  const othersTier1 = rows.map((row) => (
+    row[2]
+  ))
+  const techTier2 = rows.map((row) => (
+    row[3]
+  ))
+  return { techTier1, frameworksTier1, othersTier1, techTier2 }
 }
