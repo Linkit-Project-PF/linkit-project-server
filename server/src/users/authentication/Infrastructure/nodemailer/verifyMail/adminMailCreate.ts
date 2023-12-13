@@ -215,7 +215,7 @@ export const adminMailCreate = (admin: AdminEntity): IMessage => {
   `
   return {
     to: {
-      name: admin.name,
+      name: admin.firstName + ' ' + admin.lastName,
       email: admin.email
     },
     from: {

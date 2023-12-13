@@ -6,7 +6,8 @@ export interface postulations {
 export interface UserEntity {
   airTableId?: string | null
   image?: string
-  name: string
+  firstName: string
+  lastName: string
   email: string
   country?: string | null
   linkedin?: string | null
