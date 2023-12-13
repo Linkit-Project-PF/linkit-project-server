@@ -1,6 +1,7 @@
 export interface AdminEntity {
   image?: string
-  name: string
+  firstName: string
+  lastName: string
   email: string
   country?: string | null
   password?: string | null

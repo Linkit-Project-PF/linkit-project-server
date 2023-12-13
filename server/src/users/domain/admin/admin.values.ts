@@ -2,7 +2,8 @@ import { type AdminEntity } from './admin.entity'
 
 export class AdminValue implements AdminEntity {
   image?: string
-  name: string
+  firstName: string
+  lastName: string
   email: string
   country?: string | null
   password?: string | null
@@ -12,7 +13,8 @@ export class AdminValue implements AdminEntity {
 
   constructor (admin: AdminEntity) {
     this.image = admin.image ?? 'https://api.dicebear.com/7.x/avataaars-neutral/svg?seed=Callie'
-    this.name = admin.name
+    this.firstName = admin.firstName
+    this.lastName = admin.lastName
     this.email = admin.email
     this.country = admin.country ?? undefined
     this.password = admin.password ?? undefined

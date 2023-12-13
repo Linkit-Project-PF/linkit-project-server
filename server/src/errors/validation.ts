@@ -34,9 +34,8 @@ export const validateIfJdCodeExists = async (code: string): Promise<void> => {
 }
 
 export const ValidateUserRegister = (user: UserEntity | AdminEntity): void => {
-  if (!user.name) returnUserError('El nombre es requerido')
+  if (!user.firstName || !user.lastName) returnUserError('El nombre es requerido')
   if (!user.email) returnUserError('El email es requerido')
-  if (!user.password) returnUserError('La contraseña es requerida')
   if (!user.role) returnUserError('El rol es requerido')
   if (!user.country) returnUserError('El país es requerido')
 }
@@ -48,7 +47,7 @@ export const ValidateUserLogin = (email: string, password: string): void => {
 }
 
 export const ValidateUserUpdate = (user: UserEntity): void => {
-  if (!user.name) returnUserError('El nombre es requerido')
+  if (!user.firstName || !user.lastName) returnUserError('El nombre es requerido')
   if (!user.email) returnUserError('El email es requerido')
   if (!user.role) returnUserError('El rol es requerido')
   if (!user.country) returnUserError('El país es requerido')

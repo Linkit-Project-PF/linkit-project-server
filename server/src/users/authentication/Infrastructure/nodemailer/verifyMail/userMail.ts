@@ -215,7 +215,7 @@ export const userMailCreate = (user: UserEntity): IMessage => {
   `
   return {
     to: {
-      name: user.name,
+      name: user.firstName + ' ' + user.lastName,
       email: user.email
     },
     from: {
