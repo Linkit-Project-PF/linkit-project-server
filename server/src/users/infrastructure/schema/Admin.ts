@@ -6,11 +6,13 @@ const adminSchema = new Schema({
     required: false,
     default: ''
   },
-  name: {
+  firstName: {
     type: String,
     required: true,
-    minlength: 3,
-    maxlength: 50
+  },
+  lastName: {
+    type: String,
+    required: true,
   },
   email: {
     type: String,
@@ -19,8 +21,8 @@ const adminSchema = new Schema({
   },
   country: {
     type: String,
-    required: true,
-    minlength: 2
+    required: false,
+    default: ''
   },
   role: {
     type: String,
