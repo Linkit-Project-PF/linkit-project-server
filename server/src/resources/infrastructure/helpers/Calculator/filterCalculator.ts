@@ -27,7 +27,7 @@ async function tierSelector (technologies: string[], frameworks: string[], other
 export async function filterCalculator (
   position: string,
   englishLevel: string,
-  // seniority: string
+  seniority: string,
   technologies: string[],
   frameworks: string[],
   others: string[]
@@ -38,13 +38,44 @@ export async function filterCalculator (
     const tierUser: string = await tierSelector(technologies, frameworks, others)
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
 
-    const row = data.filter((obj: { position: string, englishLevel: string, tier: string }) =>
+    const row = data.filter((obj: { position: string, englishLevel: string, tier: string, seniority: string }) =>
       obj.position === position &&
       obj.englishLevel === englishLevel &&
       obj.tier === tierUser)
-    // obj.seniority === seniority)
 
-    return row
+    if (seniority === 'Junior') {
+      const response = {
+        min: row[0]?.entry_level_min,
+        max: row[0]?.entry_level_max
+      }
+
+      return response
+    } else if (seniority === 'Semi-senior') {
+      const response = {
+        min: row[0]?.semi_Senior_min,
+        max: row[0]?.semi_Senior_max
+      }
+
+      return response
+    } else if (seniority === 'Senior') {
+      const response = {
+        min: row[0]?.senior_min,
+        max: row[0]?.senior_max
+      }
+      return response
+    } else if (seniority === 'Senior advance') {
+      const response = {
+        min: row[0]?.senior_advanced_min,
+        max: row[0]?.senior_advanced_max
+      }
+      return response
+    } else {
+      const response = {
+        min: row[0]?.manager_lead_min,
+        max: row[0]?.manager_lead_max
+      }
+      return response
+    }
   } catch (error) {
     console.error(error)
   }
