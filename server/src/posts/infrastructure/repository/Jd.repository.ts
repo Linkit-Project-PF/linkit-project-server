@@ -40,7 +40,6 @@ export class MongoJdRepository implements JdRepository {
               jd.users.forEach(user => {
                 if (user.user.toString() === value) exists = true
               })
-              console.log(exists)
               return exists
             })
           } else {

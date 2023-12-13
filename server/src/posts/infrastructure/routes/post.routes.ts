@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { MongoPostRepository } from '../repository/Post.repository'
 import { PostUseCase } from '../../aplication/postUseCase'
 import { PostController } from '../controller/post.controller'
-import { authValidator } from '../../../users/infrastructure/helpers/routeValidator'
+import { authValidator } from '../../../validators'
 
 const postRoute = Router()
 

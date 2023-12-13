@@ -45,7 +45,7 @@ export class AuthMongoRepository implements AuthRepository {
       return entityCreated
     } catch (error) {
       // TODO Check If validation errors fit here
-      throw new Error(`Error de registro: ${(error as Error).message}`)
+      throw new Error(`Register Error: ${(error as Error).message}`)
     }
   }
 
@@ -63,7 +63,7 @@ export class AuthMongoRepository implements AuthRepository {
       } else throw Error('Provide a valid role for login')
       throw Error(`${role} not found, please be sure you are using the right login for your role`)
     } catch (error) {
-      throw new Error(`Error de Inicio de sesión: ${(error as Error).message}`)
+      throw new Error(`Login Error: ${(error as Error).message}`)
     }
   }
 

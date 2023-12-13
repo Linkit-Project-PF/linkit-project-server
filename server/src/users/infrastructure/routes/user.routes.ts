@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { UserUseCase } from '../../aplication/userUseCase'
 import { UserControllers } from '../controllers/user.controllers'
 import { MongoUserRepository } from '../repository/User.repository'
-import { authValidator } from '../helpers/routeValidator'
+import { authValidator } from '../../../validators'
 import { MailNodeMailerProvider } from '../../authentication/Infrastructure/nodemailer/nodeMailer'
 
 const userRoute = Router()

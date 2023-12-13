@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { AdminUseCase } from '../../aplication/adminUseCase'
 import { AdminControllers } from '../controllers/admin.controllers'
 import { MongoAdminRepository } from '../repository/Admin.repository'
-import { authValidator } from '../helpers/routeValidator'
+import { authValidator } from '../../../validators'
 import { MailNodeMailerProvider } from '../../authentication/Infrastructure/nodemailer/nodeMailer'
 
 const adminRoute = Router()

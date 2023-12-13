@@ -8,3 +8,10 @@ export const authValidator = (req: Request, res: Response, next: NextFunction): 
   (req as any).userId = userId
   next()
 }
+
+export const langValidator = (req: Request, res: Response, next: NextFunction): void => {
+  const lang = req.headers['accept-language']
+  if (lang) (req as any).lang = lang
+  else (req as any).lang = 'en'
+  next()
+}
