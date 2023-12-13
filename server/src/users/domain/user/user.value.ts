@@ -3,7 +3,8 @@ import { type postulations, type UserEntity } from './user.entity'
 export class UserValue implements UserEntity {
   airTableId?: string | null
   image?: string
-  name: string
+  firstName: string
+  lastName: string
   email: string
   country?: string | null
   linkedin?: string | null
@@ -19,8 +20,8 @@ export class UserValue implements UserEntity {
   constructor (user: UserEntity) {
     this.airTableId = user.airTableId ?? undefined
     this.image = user.image ?? 'https://api.dicebear.com/7.x/avataaars-neutral/svg?seed=Callie'
-    this.name = user.name
-    this.password = user.password ?? undefined
+    this.firstName = user.firstName
+    this.lastName = user.lastName
     this.email = user.email
     this.country = user.country ?? undefined
     this.role = user.role ?? 'user'
@@ -30,5 +31,6 @@ export class UserValue implements UserEntity {
     this.technologies = user.technologies ?? []
     this.active = user.active ?? true
     this.postulations = user.postulations ?? []
+    this.password = user.password ?? undefined
   }
 }

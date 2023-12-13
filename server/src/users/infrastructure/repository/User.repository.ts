@@ -19,8 +19,8 @@ export class MongoUserRepository implements UserRepository {
       const mongoUser = await User.create(user)
       const mongoID = String(mongoUser._id)
       const airtableUser = await base('UsersInfo').create({
-        Nombre: user.name.split(' ')[0],
-        Apellido: user.name.split(' ')[1],
+        Nombre: user.firstName,
+        Apellido: user.lastName,
         Email: user.email,
         Rol: user.role,
         WebID: mongoID
