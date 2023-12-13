@@ -59,8 +59,8 @@ export async function getCalculatorTable (auth: any): Promise<any> {
   }
   const calculatorTable = rows.map((row) => ({
     position: row[0],
-    tier_technologie: row[1],
-    english_level: row[2],
+    tier: row[1],
+    englishLevel: row[2],
     entry_level_min: row[3],
     entry_level_max: row[4],
     semi_Senior_min: row[5],
@@ -86,16 +86,16 @@ export async function getTiers (auth: any): Promise<any> {
     console.log('No data found.')
     return []
   }
-  const techTier1 = rows.map((row) => (
+  const techTier1: string[] = rows.map((row) => (
     row[0]
   ))
-  const frameworksTier1 = rows.map((row) => (
+  const frameworksTier1: string[] = rows.map((row) => (
     row[1]
   ))
-  const othersTier1 = rows.map((row) => (
+  const othersTier1: string[] = rows.map((row) => (
     row[2]
   ))
-  const techTier2 = rows.map((row) => (
+  const techTier2: string[] = rows.map((row) => (
     row[3]
   ))
   return { techTier1, frameworksTier1, othersTier1, techTier2 }
