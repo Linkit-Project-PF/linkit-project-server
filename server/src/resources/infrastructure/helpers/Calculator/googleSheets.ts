@@ -79,24 +79,31 @@ export async function getTiers (auth: any): Promise<any> {
   const sheets = google.sheets({ version: 'v4', auth })
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: '1AxT5RFTEqyOsGYAAzaA5cGNblAEZxOPWhorVDt84qGU',
-    range: 'exampleSheet!A3:D'
+    range: 'exampleSheet!A3:H'
   })
   const rows = res.data.values
   if (!rows || rows.length === 0) {
     console.log('No data found.')
     return []
   }
-  const techTier1: string[] = rows.map((row) => (
-    row[0]
-  ))
-  const frameworksTier1: string[] = rows.map((row) => (
-    row[1]
-  ))
-  const othersTier1: string[] = rows.map((row) => (
-    row[2]
-  ))
-  const techTier2: string[] = rows.map((row) => (
-    row[3]
-  ))
-  return { techTier1, frameworksTier1, othersTier1, techTier2 }
+  const techTier1: string[] = rows.map((row) => row[0])
+  const frameworksTier1: string[] = rows.map((row) => row[1])
+  const othersTier1: string[] = rows.map((row) => row[2])
+  const techTier2: string[] = rows.map((row) => row[3])
+  const allPositions: string[] = rows.map((row) => row[7])
+
+  // Eliminar elementos duplicados
+  const uniqueTechTier1 = [...new Set(techTier1)]
+  const uniqueFrameworksTier1 = [...new Set(frameworksTier1)]
+  const uniqueOthersTier1 = [...new Set(othersTier1)]
+  const uniqueTechTier2 = [...new Set(techTier2)]
+  const uniquePositions = [...new Set(allPositions)]
+
+  return {
+    techTier1: uniqueTechTier1,
+    frameworksTier1: uniqueFrameworksTier1,
+    othersTier1: uniqueOthersTier1,
+    techTier2: uniqueTechTier2,
+    allPositions: uniquePositions
+  }
 }
