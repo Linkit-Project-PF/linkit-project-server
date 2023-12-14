@@ -1,7 +1,7 @@
 import { type UserEntity } from '../../domain/user/user.entity'
 import { type UserRepository } from '../../domain/user/user.reposiroty'
-import { validateIfEmailExists } from '../../../errors/validation'
-import { ValidationError } from '../../../errors/errors'
+import { ValidateUserRegister, validateIfEmailExists } from '../../../errors/validation'
+import { ServerError, UncatchedError } from '../../../errors/errors'
 import { userMailCreate } from '../../authentication/Infrastructure/nodemailer/verifyMail/userMail'
 import { type MailNodeMailerProvider } from '../../authentication/Infrastructure/nodemailer/nodeMailer'
 import User from '../schema/User'
@@ -16,6 +16,7 @@ export class MongoUserRepository implements UserRepository {
   async createUser (user: UserEntity): Promise<UserEntity> {
     try {
       await validateIfEmailExists(user.email)
+      ValidateUserRegister(user)
       const mongoUser = await User.create(user)
       const mongoID = String(mongoUser._id)
       const airtableUser = await base('UsersInfo').create({
@@ -29,7 +30,8 @@ export class MongoUserRepository implements UserRepository {
       const userCreated = await User.findByIdAndUpdate(mongoID, { airTableId: airtableUser.getId() }, { new: true })
       return userCreated as UserEntity
     } catch (error: any) {
-      throw new ValidationError(`Error on register: ${(error as Error).message}`)
+      if (error instanceof ServerError) throw error
+      else throw new UncatchedError(error.message, 'register user', 'registrar usuario')
     }
   }
 
@@ -41,8 +43,9 @@ export class MongoUserRepository implements UserRepository {
         { $set: { active: false } }, { new: true }
       )
       return resultado as UserEntity
-    } catch (error) {
-      throw new ValidationError(`Error on delete: ${(error as Error).message}`)
+    } catch (error: any) {
+      if (error instanceof ServerError) throw error
+      else throw new UncatchedError(error.message, 'deleting user', 'eliminar usuario')
     }
   }
 
@@ -56,17 +59,18 @@ export class MongoUserRepository implements UserRepository {
         else if (filter === 'id') {
           objectIDValidator(value as string, 'user to search', 'usuario buscado')
           result = await User.findById(value)
-          if (!result) throw Error('No user found under that ID')
+          if (!result) throw new ServerError('No user found under that ID', 'No hay un usuario con ese ID', 404)
         } else if (validIncludeFilters.includes(filter as string)) {
           result = (await User.find()).filter(user => (user as any)[filter as string].includes(value))
         } else if (validSingleParams.includes(filter as string)) result = await User.find({ [filter as string]: value })
-        else throw Error('Not a valid parameter')
+        else throw new ServerError('Not a valid parameter', 'Parametro de busqueda no valido', 406)
       } else {
         result = CombinedFilters(filter as string[], value as string[], validSingleParams, validIncludeFilters, 'user')
       }
       return result as UserEntity[]
-    } catch (error) {
-      throw new ValidationError(`Error searching: ${(error as Error).message}`)
+    } catch (error: any) {
+      if (error instanceof ServerError) throw error
+      else throw new UncatchedError(error.message, 'searching user', 'buscar usuario')
     }
   }
 
@@ -74,11 +78,12 @@ export class MongoUserRepository implements UserRepository {
     try {
       objectIDValidator(id, 'user to edit', 'usuario a editar')
       const invalidEdit = ['_id', 'role', 'airTableId', 'postulations', 'registeredDate']
-      Object.keys(info).forEach(key => { if (invalidEdit.includes(key)) throw Error('ID/airtableID/role/date or postulations cannot be changed through this route') })
-      const editedUser = await User.findByIdAndUpdate(id, info, { new: true })
+      Object.keys(info).forEach(key => { if (invalidEdit.includes(key)) throw new ServerError('ID/airtableID/role/date or postulations cannot be changed through this route', 'Ningun ID, rol, fecha o postulaciones puede editarse por aqui', 403) })
+      const editedUser = await User.findByIdAndUpdate(id, info, { new: true }) //! Check what happens if no user here
       return editedUser as UserEntity
-    } catch (error) {
-      throw new ValidationError(`Error when editing user: ${(error as Error).message}`)
+    } catch (error: any) {
+      if (error instanceof ServerError) throw error
+      else throw new UncatchedError(error.message, 'editing user', 'editar usuario')
     }
   }
 
@@ -88,10 +93,11 @@ export class MongoUserRepository implements UserRepository {
       const result = await User.findByIdAndUpdate(
         id,
         { role: 'admin' }, { new: true }
-      )
+      ) //! Check what happens if no user here
       return result as UserEntity
-    } catch (error) {
-      throw new ValidationError(`Error trying to edit user role: ${(error as Error).message}`)
+    } catch (error: any) {
+      if (error instanceof ServerError) throw error
+      else throw new UncatchedError(error.message, 'editing user', 'editar usuario')
     }
   }
 
@@ -124,8 +130,9 @@ export class MongoUserRepository implements UserRepository {
       } else throw Error('Not a valid operation')
       const replacedUser = await User.findOneAndReplace({ _id: userID }, user, { new: true })
       return replacedUser as UserEntity
-    } catch (error) {
-      throw Error(`Error relating jd to user: ${(error as Error).message}`)
+    } catch (error: any) {
+      if (error instanceof ServerError) throw error
+      else throw new UncatchedError(error.message, 'relating user', 'relacionar usuario')
     }
   }
 }
