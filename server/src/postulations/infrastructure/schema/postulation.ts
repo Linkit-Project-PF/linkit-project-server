@@ -1,88 +1,52 @@
 import { Schema, model } from 'mongoose'
 
 const postulationSchema = new Schema({
-  name: {
+  reason: {
     type: String,
-    required: true,
-    minlength: 3,
-    maxlength: 100
+    required: true
   },
-  lastname: {
+  availability: {
     type: String,
     required: true,
-    minlength: 3,
-    maxlength: 100
-  },
-  cv: {
-    type: String,
-    required: true,
-    minlength: 10
-  },
-  email: {
-    type: String,
-    required: true,
-    minlength: 3,
-    maxlength: 100
-  },
-  linkedin: {
-    type: String,
-    required: true,
-    minlength: 3,
-    maxlength: 100
-  },
-  country: {
-    type: String,
-    required: true,
-    minlength: 3,
-    maxlength: 100
-  },
-  englishlevel: {
-    type: String,
-    required: true,
-    minlength: 3,
-    maxlength: 100
+    enum: ['now', 'one-month', 'negotiate']
   },
   salary: {
     type: Number,
     required: true,
-    minlength: 3,
-    maxlength: 7
+    validate: {
+      validator: function (value: number) {
+        return value > 0 && value < 1000000
+      },
+      message: 'Not valid number for salary expectation'
+    }
   },
-  searchreasons: {
-    type: String,
-    required: true,
-    minlength: 3,
-    maxlength: 100
-  },
-  noticeperiod: {
-    type: String,
-    required: true,
-    minlength: 3,
-    maxlength: 100
-  },
-  techstack: {
+  techStack: {
     type: Array,
     required: true,
-    minlength: 3,
-    maxlength: 100
+    default: []
+  },
+  stack: {
+    type: Array,
+    required: true,
+    default: []
   },
   recruiter: {
     type: String,
-    required: true,
-    minlength: 3,
-    maxlength: 100
+    required: true
   },
-  rol: {
-    type: String,
-    required: true,
-    minlength: 3,
-    maxlength: 100
+  jd: {
+    type: Schema.Types.ObjectId,
+    ref: 'Jd',
+    required: true
   },
-  code: {
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  status: {
     type: String,
-    required: true,
-    minlength: 3,
-    maxlength: 100
+    required: true
   }
 })
-export default model('Postulations', postulationSchema)
+export default model('Postulation', postulationSchema)

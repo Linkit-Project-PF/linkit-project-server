@@ -1,16 +1,10 @@
 export interface PostulationEntity {
-  name: string
-  lastname: string
-  cv: string
-  email: string
-  linkedin: string
-  country: string
-  elghislevel: string
+  reason: string
+  availability: string
   salary: number
-  searchreasons: string
-  noticeperiod: string
-  techstack: string[]
+  techStack: string[]
+  stack: string[]
   recruiter: string
-  rol: string
-  code: string
+  jd: string[]
+  user: string[]
 }
