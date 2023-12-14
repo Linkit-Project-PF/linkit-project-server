@@ -36,7 +36,7 @@ export class MongoCompanyRepository implements CompanyRepository {
       const validParams = ['name', 'email', 'active', 'jds']
       if (filter === 'all') result = await Company.find()
       else if (filter === 'id') {
-        objectIDValidator(value, 'company id to search')
+        objectIDValidator(value, 'company id to search', 'empresa a buscar')
         result = await Company.findById(value)
         if (!result) throw Error('No company found under that id')
       } else if (validParams.includes(filter)) result = await Company.find({ [filter]: value })
@@ -49,7 +49,7 @@ export class MongoCompanyRepository implements CompanyRepository {
 
   async editCompany (id: string, info: any): Promise<CompanyEntity> {
     try {
-      objectIDValidator(id, 'company to edit')
+      objectIDValidator(id, 'company to edit', 'empresa a editar')
       const invalidEdit = ['_id', 'role', 'airTableId', 'jds', 'registeredDate']
       Object.keys(info).forEach(key => { if (invalidEdit.includes(key)) throw Error('ID/airtableID/role/date or jds cannot be changed through this route') })
       const editedCompany = await Company.findByIdAndUpdate(id, info, { new: true })
@@ -61,7 +61,7 @@ export class MongoCompanyRepository implements CompanyRepository {
 
   async deleteCompany (id: string): Promise<CompanyEntity> {
     try {
-      objectIDValidator(id, 'company to delete')
+      objectIDValidator(id, 'company to delete', 'empresa a eliminar')
       const resultado = await Company.findByIdAndUpdate(
         id,
         { active: false }, { new: true }
@@ -75,8 +75,8 @@ export class MongoCompanyRepository implements CompanyRepository {
   async relateJd (jdID: string, companyID: string, operation: string): Promise<CompanyEntity> {
     try {
       if (!jdID || !companyID || !operation) throw Error('Missing parameters: jd, company and operation is needed')
-      objectIDValidator(jdID, 'company in relation')
-      objectIDValidator(companyID, 'jd to relate')
+      objectIDValidator(jdID, 'company in relation', 'empresa a relacionar')
+      objectIDValidator(companyID, 'jd to relate', 'vacante a relacionar')
       if (operation === 'create') {
         const company = await Company.findById(companyID)
         if (!company) throw Error('Company does not exist')

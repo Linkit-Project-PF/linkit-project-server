@@ -13,8 +13,8 @@ export class ReviewController {
       const review = await this.reviewUseCase.createReview(req.body)
       if (typeof review === 'string') return res.status(409).json(review)
       return res.status(201).json(review)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 
@@ -24,8 +24,8 @@ export class ReviewController {
       if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
       const review = await getReviewValidator(req.query, this.reviewUseCase)
       return res.status(200).json(review)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 
@@ -35,8 +35,8 @@ export class ReviewController {
       if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
       const review = await this.reviewUseCase.editReview(req.params._id, req.body)
       return res.status(200).json(review)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 
@@ -47,8 +47,8 @@ export class ReviewController {
       const { id } = req.params
       await this.reviewUseCase.deleteReview(id)
       return res.status(200).json('Publicación eliminada')
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 }

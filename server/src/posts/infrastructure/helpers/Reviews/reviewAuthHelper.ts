@@ -9,7 +9,7 @@ interface authResponse {
 export default async function reviewAuth (id: string): Promise<authResponse> {
   try {
     const response: authResponse = { value: '', code: 0 }
-    objectIDValidator(id, 'logged admin')
+    objectIDValidator(id, 'logged admin', 'administrador activo')
     const adminUser = await Admin.findById(id)
     if (!adminUser?.active) {
       response.value = 'Unauthorized, admin permissions required'

@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { MongoJdRepository } from '../repository/Jd.repository'
 import { JdUseCase } from '../../aplication/jdUseCase'
 import { JdController } from '../controller/jd.controller'
-import { authValidator } from '../../../validators'
+import { authValidator } from '../../../middlewares'
 
 const jdRoute = Router()
 

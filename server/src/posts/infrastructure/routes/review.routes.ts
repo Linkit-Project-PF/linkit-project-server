@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { MongoReviewRepository } from '../repository/Review.repository'
 import { ReviewUseCase } from '../../aplication/reviewUseCase'
 import { ReviewController } from '../controller/review.controller'
-import { authValidator } from '../../../validators'
+import { authValidator } from '../../../middlewares'
 
 const reviewRoute = Router()
 

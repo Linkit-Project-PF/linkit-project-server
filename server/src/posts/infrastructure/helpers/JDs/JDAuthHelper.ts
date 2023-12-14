@@ -11,7 +11,7 @@ interface authResponse {
 export default async function jdAuth (id: string, method: string): Promise<authResponse> {
   try {
     const response: authResponse = { value: '', code: 0 }
-    objectIDValidator(id, 'logged admin')
+    objectIDValidator(id, 'logged admin', 'usuario activo')
     const adminUser = await Admin.findById(id)
     if (!adminUser || !adminUser?.active) {
       if (method === 'find') {

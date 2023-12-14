@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { CompanyUseCase } from '../../aplication/companyUseCase'
 import { CompanyControllers } from '../controllers/company.controller'
 import { MongoCompanyRepository } from '../repository/Company.repository'
-import { authValidator } from '../../../validators'
+import { authValidator } from '../../../middlewares'
 import { MailNodeMailerProvider } from '../../authentication/Infrastructure/nodemailer/nodeMailer'
 
 const companyRoute = Router()

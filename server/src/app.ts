@@ -10,7 +10,7 @@ import companyRoute from './users/infrastructure/routes/company.routes'
 import authRoute from './users/authentication/Infrastructure/auth.routes'
 import reviewRoute from './posts/infrastructure/routes/review.routes'
 import resourcesRoute from './resources/infrastructure/routes/resources.routes'
-import { langValidator } from './validators'
+import { langValidator } from './middlewares'
 
 const app = express()
 app.use(cors(

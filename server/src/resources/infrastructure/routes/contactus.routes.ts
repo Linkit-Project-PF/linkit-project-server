@@ -1,5 +1,7 @@
 import { Router } from 'express'
 import base from '../../../db/airtable'
+import { type translatedResponse } from '../../../interfaces'
+import { UncatchedError, type customError } from '../../../errors/errors'
 
 const contactUsRoute = Router()
 
@@ -19,9 +21,11 @@ contactUsRoute.post('/', async (req, res): Promise<any> => {
         }
       }
     ])
-    res.status(200).send('Contacto creado correctamente')
+    const response: translatedResponse = { en: 'Your information has been sent successfully', es: 'Tu informacion ha sido enviada con exito' }
+    res.status(200).send(response[(req as any).lang as keyof translatedResponse])
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    const newError = new UncatchedError(error.message, 'create a contact request', 'crear una peticion de contacto')
+    res.status(500).json(newError[(req as any).lang as keyof customError])
   }
 })
 

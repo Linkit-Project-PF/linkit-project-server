@@ -35,7 +35,7 @@ export class MongoUserRepository implements UserRepository {
 
   async deleteUser (id: string): Promise<UserEntity | string> {
     try {
-      objectIDValidator(id, 'user to delete')
+      objectIDValidator(id, 'user to delete', 'usuario a eliminar')
       const resultado = await User.findByIdAndUpdate(
         id,
         { $set: { active: false } }, { new: true }
@@ -54,7 +54,7 @@ export class MongoUserRepository implements UserRepository {
       if (!combined) {
         if (filter === 'all') result = await User.find()
         else if (filter === 'id') {
-          objectIDValidator(value as string, 'user to search')
+          objectIDValidator(value as string, 'user to search', 'usuario buscado')
           result = await User.findById(value)
           if (!result) throw Error('No user found under that ID')
         } else if (validIncludeFilters.includes(filter as string)) {
@@ -72,7 +72,7 @@ export class MongoUserRepository implements UserRepository {
 
   async editUser (id: string, info: any): Promise<UserEntity> {
     try {
-      objectIDValidator(id, 'user to edit')
+      objectIDValidator(id, 'user to edit', 'usuario a editar')
       const invalidEdit = ['_id', 'role', 'airTableId', 'postulations', 'registeredDate']
       Object.keys(info).forEach(key => { if (invalidEdit.includes(key)) throw Error('ID/airtableID/role/date or postulations cannot be changed through this route') })
       const editedUser = await User.findByIdAndUpdate(id, info, { new: true })
@@ -84,7 +84,7 @@ export class MongoUserRepository implements UserRepository {
 
   async editRoleUser (id: string): Promise <UserEntity> {
     try {
-      objectIDValidator(id, 'user to edit')
+      objectIDValidator(id, 'user to edit', 'usuario a editar')
       const result = await User.findByIdAndUpdate(
         id,
         { role: 'admin' }, { new: true }
@@ -98,8 +98,8 @@ export class MongoUserRepository implements UserRepository {
   async relateJd (userID: string, jdID: string, status: string, operation: string): Promise<UserEntity> {
     try {
       if (!status || !operation || !userID || !jdID) throw Error('Missing parameters: operation, user, jd and status needed')
-      objectIDValidator(userID, 'user to relate')
-      objectIDValidator(jdID, 'jd in relation')
+      objectIDValidator(userID, 'user to relate', 'usuario a relacionar')
+      objectIDValidator(jdID, 'jd in relation', 'vacante a relacionar')
       const jd = await Jd.findById(jdID, '_id')
       if (!jd) throw Error('Job Description does not exist')
       const user = await User.findById(userID)

@@ -1,5 +1,3 @@
-import { type UserEntity } from '../users/domain/user/user.entity'
-import { type AdminEntity } from '../users/domain/admin/admin.entity'
 import { type PostEntity } from '../posts/domain/post/post.entity'
 import { type JdEntity } from '../posts/domain/jd/jd.entity'
 import { type ReviewEntity } from '../posts/domain/review/review.entity'
@@ -7,8 +5,10 @@ import Admin from '../users/infrastructure/schema/Admin'
 import User from '../users/infrastructure/schema/User'
 import Company from '../users/infrastructure/schema/Company'
 import Review from '../posts/infrastructure/schema/Review'
-import { returnUserError, returnConectError, returnPostError } from './returnErrors'
+import { returnUserError, returnConectError } from './returnErrors'
 import Jd from '../posts/infrastructure/schema/Jd'
+import { ServerError } from './errors'
+import { type CustomType } from '../users/authentication/Infrastructure/authMongo.repository'
 
 //* USER ERRORS
 export const validateIfEmailExists = async (email: string): Promise<void> => {
@@ -16,28 +16,31 @@ export const validateIfEmailExists = async (email: string): Promise<void> => {
   const result2 = await Admin.find({ email })
   const result3 = await Company.find({ email })
   const result = [...result1, ...result2, ...result3]
-  if (result.length) throw Error('This email is already registered')
+  if (result.length) throw new ServerError('This email is already registered', 'El email ya esta registrado', 409)
 }
 
 export const ValidateReviewIfAlreadyonDB = async (name: string): Promise<void> => {
   const allReviews = await Review.find({}, 'name')
   allReviews.forEach(obj => {
-    if (obj.name === name) returnUserError('Esta empresa o usuario ya tiene una reseña')
+    if (obj.name === name) throw new ServerError('Company/user already has a review created', 'El usuario o empresa ya tiene una valoracion creada', 409)
   })
 }
 
 export const validateIfJdCodeExists = async (code: string): Promise<void> => {
   const allJds = await Jd.find({}, 'code')
   allJds.forEach(jd => {
-    if (jd.code === code) throw Error('There is JobDescription with that same code already created.')
+    if (jd.code === code) throw new ServerError('JD code is in use', 'El codigo para esa vacante ya existe', 409)
   })
 }
 
-export const ValidateUserRegister = (user: UserEntity | AdminEntity): void => {
-  if (!user.firstName || !user.lastName) returnUserError('El nombre es requerido')
-  if (!user.email) returnUserError('El email es requerido')
-  if (!user.role) returnUserError('El rol es requerido')
-  if (!user.country) returnUserError('El país es requerido')
+export const ValidateUserRegister = (entity: CustomType): void => {
+  if (entity.role === 'admin' || entity.role === 'user') {
+    // @ts-expect-error: Unique properties not being matched by TypeScript
+    if (!entity.firstName || !entity.lastName || !entity.email) throw new ServerError('Full name (first/last) and email are required to register', 'El nombre completo y el email son necesarios para el registro', 406)
+  } else {
+    // @ts-expect-error: Unique properties not being matched by TypeScript
+    if (!entity.companyName || !entity.email) throw new ServerError('Company name is required to register', 'El nombre de la empresa es requerido para elregistro', 406)
+  }
 }
 
 export const ValidateUserLogin = (email: string, password: string): void => {
@@ -46,53 +49,39 @@ export const ValidateUserLogin = (email: string, password: string): void => {
   if (!password) returnUserError('La contraseña es requerida')
 }
 
-export const ValidateUserUpdate = (user: UserEntity): void => {
-  if (!user.firstName || !user.lastName) returnUserError('El nombre es requerido')
-  if (!user.email) returnUserError('El email es requerido')
-  if (!user.role) returnUserError('El rol es requerido')
-  if (!user.country) returnUserError('El país es requerido')
-}
-
-export const ValidateId = (_id: string): void => {
-  if (_id === 'id super admin') returnUserError('Acción inválida, no se puede cambiar el rol del Administrador')
-}
-
 //* POST ERRORS
 
 export const ValidatePostCreate = (post: PostEntity): void => {
-  if (!post.title) returnPostError('El título es requerido')
-  if (!post.description) returnPostError('La descripción es requerida')
-  if (!post.type) returnPostError('El tipo de posteo es requerido')
+  const error: { en: string[], es: string[] } = { en: [], es: [] }
+  if (!post.title) error.en.push('title'); error.es.push('titulo')
+  if (!post.description) error.en.push('description'); error.es.push('descripcion')
+  if (!post.type) error.en.push('type'); error.es.push('tipo')
+  if (!post.category) error.en.push('category'); error.es.push('categoria')
+  if (error.en.length) throw new ServerError(`Missing properties to create a post: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear una publicacion: ${error.es.join(', ')}`, 406)
 }
 
 export const ValidateJdCreate = (jd: JdEntity): void => {
-  if (!jd.requirements) returnPostError('Requirements for JD creation are needed')
-  if (!jd.niceToHave) returnPostError('Nice to have for JD creation are needed')
-  if (!jd.benefits) returnPostError('Benefits for JD creation are needed')
-  if (!jd.stack) returnPostError('Tech Stack JD creation are needed')
+  const error: { en: string[], es: string[] } = { en: [], es: [] }
+  if (!jd.requirements) error.en.push('requirements'); error.es.push('requisitos')
+  if (!jd.niceToHave) error.en.push('niceToHave'); error.es.push('requisitos valorados')
+  if (!jd.benefits) error.en.push('benefits'); error.es.push('beneficios')
+  if (!jd.stack) error.en.push('stack'); error.es.push('tecnologias')
+  if (!jd.code) error.en.push('code'); error.es.push('codigo de vacante')
+  if (!jd.title) error.en.push('title'); error.es.push('titulo')
+  if (!jd.description) error.en.push('description'); error.es.push('descripcion')
+  if (!jd.type) error.en.push('type'); error.es.push('tipo')
+  if (!jd.location) error.en.push('location'); error.es.push('ubicacion')
+  if (!jd.modality) error.en.push('modality'); error.es.push('modalidad')
+  if (!jd.status) error.en.push('status'); error.es.push('estado')
+  if (error.en.length) throw new ServerError(`Missing properties to create a JD: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear una vacante: ${error.es.join(', ')}`, 406)
 }
 
 export const ValidateReviewCreate = (review: ReviewEntity): void => {
-  if (!review.name) returnPostError('El nombre de la empresa o usuario es requerido')
-  if (!review.rol) returnPostError('El rol es requerido')
-  if (!review.country) returnPostError('El país es requerido')
-  if (!review.detail)returnPostError('La reseña es requerida')
-}
-
-export const ValidatePostUpdate = (post: PostEntity): void => {
-  if (!post.title) returnPostError('El título es requerido')
-  if (!post.description) returnPostError('La descripción es requerida')
-  if (!post.type) returnPostError('El tipo de posteo es requerido')
-}
-
-export const ValidateJdUpdate = (jd: JdEntity): void => {
-  if (!jd.title) returnPostError('El título es requerido')
-  if (!jd.description) returnPostError('La descripción es requerida')
-  if (!jd.company)returnPostError('El nombre de la empresa es requerido')
-}
-
-export const ValidatePostFindByType = (type: string): void => {
-  if (!type) returnPostError('El tipo es requerido')
+  const error: { en: string[], es: string[] } = { en: [], es: [] }
+  if (!review.name) error.en.push('name'); error.es.push('nombre')
+  if (!review.role) error.en.push('role'); error.es.push('rol')
+  if (!review.detail) error.en.push('detail'); error.es.push('detalle')
+  if (error.en.length) throw new ServerError(`Missing properties to create a review: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear una valoracion: ${error.es.join(', ')}`, 406)
 }
 
 //* GENERAL ERRORS
