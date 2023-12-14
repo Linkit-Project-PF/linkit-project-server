@@ -10,6 +10,7 @@ import companyRoute from './users/infrastructure/routes/company.routes'
 import authRoute from './users/authentication/Infrastructure/auth.routes'
 import reviewRoute from './posts/infrastructure/routes/review.routes'
 import resourcesRoute from './resources/infrastructure/routes/resources.routes'
+import { langValidator } from './middlewares'
 
 const app = express()
 app.use(cors(
@@ -23,6 +24,8 @@ app.use(cors(
 app.use(express.json())
 
 const port = process.env.PORT ?? 3000
+
+app.use(langValidator)
 
 app.use('/resources', resourcesRoute)
 app.use('/admins', adminRoute)

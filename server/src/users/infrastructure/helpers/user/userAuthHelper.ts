@@ -12,8 +12,8 @@ interface authResponse {
 export default async function userAuth (id: string, method: string, editID?: string): Promise<authResponse> {
   try {
     const response: authResponse = { value: '', code: 0 }
-    objectIDValidator(id, 'logged user')
-    if (editID) objectIDValidator(editID, 'target user')
+    objectIDValidator(id, 'logged user', 'usuario activo')
+    if (editID) objectIDValidator(editID, 'target user', 'usuaro a editar')
     const adminUser = await Admin.findById(id)
     if (!adminUser) {
       if (method === 'find') {

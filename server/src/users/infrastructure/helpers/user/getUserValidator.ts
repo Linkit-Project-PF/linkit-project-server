@@ -1,3 +1,4 @@
+import { ServerError, UncatchedError } from '../../../../errors/errors'
 import { type UserUseCase } from '../../../aplication/userUseCase'
 import { type UserEntity } from '../../../domain/user/user.entity'
 
@@ -25,6 +26,7 @@ export default async function getUserValidator (query: UserQuery, userUseCase: U
     }
     return user
   } catch (error: any) {
-    throw Error(error)
+    if (error instanceof ServerError) throw error
+    else throw new UncatchedError(error.message, 'deleting user', 'eliminar usuario')
   }
 }

@@ -8,6 +8,7 @@ export class AdminControllers {
 
   public getController: RequestHandler = async (req, res) => {
     try {
+      console.log((req as any).lang)
       const authValidate = await adminAuth((req as any).userId, 'find')
       if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
       const admin = await getAdminValidator(req.query, this.adminUseCase)

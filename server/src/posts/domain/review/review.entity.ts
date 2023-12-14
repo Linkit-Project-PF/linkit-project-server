@@ -1,6 +1,6 @@
 export interface ReviewEntity {
   name: string
-  rol: string
+  role: string
   createdDate: Date
   image?: string | null
   country: string
