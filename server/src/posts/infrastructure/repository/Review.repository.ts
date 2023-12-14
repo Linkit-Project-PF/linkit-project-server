@@ -1,7 +1,7 @@
 import { type ReviewEntity } from '../../domain/review/review.entity'
 import { type ReviewRepository } from '../../domain/review/review.repository'
-import { ValidateReviewCreate, ValidateReviewIfAlreadyonDB } from '../../../errors/validation' //, ValidatePostFindByType, ValidatePostFindByTitle, ValidatePostDelete
-import { ValidationError } from '../../../errors/errors'
+import { ValidateReviewCreate, ValidateReviewIfAlreadyonDB } from '../../../errors/validation'
+import { ServerError, UncatchedError, ValidationError } from '../../../errors/errors'
 import Review from '../schema/Review'
 import { objectIDValidator } from '../../../users/infrastructure/helpers/validateObjectID'
 
@@ -9,6 +9,7 @@ export class MongoReviewRepository implements ReviewRepository {
   async createReview (review: ReviewEntity): Promise<ReviewEntity | string> {
     try {
       const { name } = review
+      // TODO Refactor this code so all validations are done in a single function
       await ValidateReviewIfAlreadyonDB(name)
       ValidateReviewCreate(review)
       let reviewExists = false
@@ -21,13 +22,14 @@ export class MongoReviewRepository implements ReviewRepository {
         return reviewCreated as ReviewEntity
       } else throw Error('Ya existe otro review de este tipo con este título')
     } catch (error: any) {
-      throw new ValidationError(`Error creating review: ${(error as Error).message}`)
+      if (error instanceof ServerError) throw error
+      else throw new UncatchedError(error.message, 'searching JD', 'buscar vacante')
     }
   }
 
   async deleteReview (id: string): Promise<string> {
     try {
-      objectIDValidator(id, 'review to delete')
+      objectIDValidator(id, 'review to delete', 'valoracion a eliminar')
       await Review.updateOne(
         { id },
         { $set: { archived: true } }
@@ -54,7 +56,7 @@ export class MongoReviewRepository implements ReviewRepository {
 
   async editReview (_id: string, review: any): Promise<ReviewEntity | string> {
     try {
-      objectIDValidator(_id, 'review to edit')
+      objectIDValidator(_id, 'review to edit', 'valoracion a editar')
       const invalidEdit = ['_id', 'createdDate']
       Object.keys(review).forEach(key => { if (invalidEdit.includes(key)) throw Error('ID/date cannot be changed') })
       const editedReview = await Review.findByIdAndUpdate(_id, review, { new: true })

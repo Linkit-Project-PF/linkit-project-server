@@ -8,8 +8,8 @@ export class AuthControllers {
     try {
       const result = await this.authUseCase.login(String(req.query.email), String(req.query.password), String(req.query.role))
       return res.status(200).json(result)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 
@@ -17,8 +17,8 @@ export class AuthControllers {
     try {
       const result = await this.authUseCase.register(req.body)
       return res.status(200).json(result)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 
@@ -26,8 +26,8 @@ export class AuthControllers {
     try {
       await this.authUseCase.verify(String(req.query.id), String(req.query.role))
       res.redirect('https://link-it-project.vercel.app')
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 }

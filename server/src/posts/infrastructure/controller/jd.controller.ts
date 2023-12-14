@@ -11,10 +11,9 @@ export class JdController {
       const authValidate = await jdAuth((req as any).userId, 'create')
       if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
       const jd = await this.jdUseCase.createJD(req.body)
-      if (typeof jd === 'string') return res.status(409).json(jd)
       return res.status(201).json(jd)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 
@@ -24,8 +23,8 @@ export class JdController {
       if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
       const post = await getJDValidator(req.query, this.jdUseCase)
       return res.status(200).json(post)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 
@@ -35,8 +34,8 @@ export class JdController {
       if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
       const editedJd = await this.jdUseCase.editJD(req.params._id, req.body)
       return res.status(200).json(editedJd)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 
@@ -47,8 +46,8 @@ export class JdController {
       const { id } = req.params
       const result = await this.jdUseCase.deleteJD(id)
       return res.status(200).json(result)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 
@@ -57,8 +56,8 @@ export class JdController {
       const { jd, user, status, operation } = req.body
       const result = await this.jdUseCase.relateUser(jd, user, status, operation)
       return res.status(200).json(result)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 }

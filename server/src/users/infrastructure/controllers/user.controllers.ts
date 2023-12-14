@@ -12,8 +12,8 @@ export class UserControllers {
       if (response.code) return res.status(response.code).json(response.value)
       const user = await getUserValidator(req.query, this.userUseCase)
       return res.status(200).json(user)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 
@@ -23,8 +23,8 @@ export class UserControllers {
       if (response.code) return res.status(response.code).json(response.value)
       const user = await this.userUseCase.createUser(req.body)
       return res.status(201).json(user)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 
@@ -34,8 +34,8 @@ export class UserControllers {
       if (response.code) return res.status(response.code).json(response.value)
       const user = await this.userUseCase.editUser(req.params.id, req.body)
       return res.status(200).json(user)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 
@@ -45,8 +45,8 @@ export class UserControllers {
       if (response.code) return res.status(response.code).json(response.value)
       const user = await this.userUseCase.deleteUser(req.params.id)
       return res.status(200).json(user)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 
@@ -55,8 +55,8 @@ export class UserControllers {
       const { user, jd, status, operation } = req.body
       const response = await this.userUseCase.relateJd(user, jd, status, operation)
       return res.status(200).json(response)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 }

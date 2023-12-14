@@ -7,7 +7,7 @@ const reviewSchema = new Schema({
     minminlength: 1,
     maxlength: 50
   },
-  rol: {
+  role: {
     type: String,
     required: true,
     enum: ['company', 'user']

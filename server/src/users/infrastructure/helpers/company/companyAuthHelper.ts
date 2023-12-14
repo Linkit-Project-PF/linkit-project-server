@@ -11,8 +11,8 @@ interface authResponse {
 export default async function companyAuth (id: string, method: string, editID?: string): Promise<authResponse> {
   try {
     const response: authResponse = { value: '', code: 0 }
-    objectIDValidator(id, 'logged company')
-    if (editID) objectIDValidator(editID, 'target company')
+    objectIDValidator(id, 'logged company', 'empresa activa')
+    if (editID) objectIDValidator(editID, 'target company', 'empresa a editar')
     const adminUser = await Admin.findById(id)
     if (!adminUser) {
       if (method === 'find') {
