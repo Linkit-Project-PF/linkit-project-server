@@ -1,3 +1,4 @@
+import { ServerError, UncatchedError } from '../../../../errors/errors'
 import { type JdUseCase } from '../../../aplication/jdUseCase'
 import { type JdEntity } from '../../../domain/jd/jd.entity'
 
@@ -32,6 +33,7 @@ export default async function getJDValidator (query: JDQuery, jdUseCase: JdUseCa
     }
     return jd
   } catch (error: any) {
-    throw Error(error)
+    if (error instanceof ServerError) throw error
+    else throw new UncatchedError(error.message, 'searching user', 'buscar usuario')
   }
 }

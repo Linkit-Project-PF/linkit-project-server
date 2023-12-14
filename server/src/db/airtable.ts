@@ -1,6 +1,5 @@
 import 'dotenv/config'
 import Airtable from 'airtable'
-console.log(process.env.API_KEY)
 const base = new Airtable({ apiKey: process.env.API_KEY }).base(
   process.env.AIRTABLE_BASE ?? ''
 )

@@ -27,6 +27,6 @@ export default async function getUserValidator (query: UserQuery, userUseCase: U
     return user
   } catch (error: any) {
     if (error instanceof ServerError) throw error
-    else throw new UncatchedError(error.message, 'deleting user', 'eliminar usuario')
+    else throw new UncatchedError(error.message, 'searching user', 'buscar usuario')
   }
 }
