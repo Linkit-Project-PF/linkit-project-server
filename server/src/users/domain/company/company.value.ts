@@ -1,3 +1,4 @@
+import { type Types } from 'mongoose'
 import { type CompanyEntity } from './company.entity'
 
 export class CompanyValue implements CompanyEntity {
@@ -11,7 +12,7 @@ export class CompanyValue implements CompanyEntity {
   role: string
   interested?: string | null
   active?: boolean | null
-  jds: string[]
+  jds: Types.ObjectId[]
   registeredDate: Date
   password?: string | null
 
