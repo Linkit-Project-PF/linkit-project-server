@@ -17,7 +17,7 @@ googleRoute.get('/dataTable', async (_req, res) => {
 })
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-googleRoute.get('/filter', async (_req, res) => {
+googleRoute.post('/filter', async (_req, res) => {
   try {
     const { position, englishLevel, seniority } = _req.query
     const { technologies, frameworks, others } = _req.body
