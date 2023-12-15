@@ -30,7 +30,7 @@ export class MongoAdminRepository implements AdminRepository {
       const validParams = ['name', 'email', 'active']
       if (filter === 'all') result = await Admin.find()
       else if (filter === 'id') {
-        objectIDValidator(value, 'admin to search')
+        objectIDValidator(value, 'admin to search', 'admin buscado')
         result = await Admin.findById(value)
         if (!result) throw Error('No admins found under that id')
       } else if (validParams.includes(filter)) result = await Admin.find({ [filter]: value })
@@ -43,7 +43,7 @@ export class MongoAdminRepository implements AdminRepository {
 
   async editAdmin (_id: string, info: any): Promise<AdminEntity> {
     try {
-      objectIDValidator(_id, 'admin to edit')
+      objectIDValidator(_id, 'admin to edit', 'admin a editar')
       const invalidEdit = ['_id', 'role', 'createdDate']
       Object.keys(info).forEach(key => { if (invalidEdit.includes(key)) throw Error('ID/role/date cannot be changed') })
       const editAdmin = await Admin.findByIdAndUpdate(_id, info, { new: true })
@@ -55,7 +55,7 @@ export class MongoAdminRepository implements AdminRepository {
 
   async deleteAdmin (_id: string): Promise<AdminEntity> {
     try {
-      objectIDValidator(_id, 'admin to delete')
+      objectIDValidator(_id, 'admin to delete', 'admin a eliminar')
       const result = await Admin.findByIdAndUpdate(_id, { active: false }, { new: true })
       return result as AdminEntity
     } catch (error) {

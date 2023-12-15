@@ -1,3 +1,4 @@
+import { ServerError, UncatchedError } from '../../../../errors/errors'
 import { type AdminEntity } from '../../../domain/admin/admin.entity'
 import Admin from '../../schema/Admin'
 import { objectIDValidator } from '../validateObjectID'
@@ -10,8 +11,8 @@ interface authResponse {
 export default async function adminAuth (id: string, method: string, editID?: string): Promise<authResponse> {
   try {
     const response: authResponse = { value: '', code: 0 }
-    objectIDValidator(id, 'logged admin')
-    if (editID) objectIDValidator(editID, 'target admin')
+    objectIDValidator(id, 'logged admin', 'administrador activo')
+    if (editID) objectIDValidator(editID, 'target admin', 'administrador a editar')
     const adminUser = await Admin.findById(id)
     if (!adminUser) {
       response.value = 'Unauthorized, admin permissions required'
@@ -37,6 +38,7 @@ export default async function adminAuth (id: string, method: string, editID?: st
     }
     return response
   } catch (error: any) {
-    throw Error('Auth Error: ' + error)
+    if (error instanceof ServerError) throw error
+    else throw new UncatchedError(error.message, 'validating authorization', 'validar autorizacion')
   }
 }

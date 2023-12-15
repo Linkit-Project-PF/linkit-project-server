@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { authorize, getCalculatorTable, getTiers } from '../helpers/Calculator/googleSheets'
 import { filterCalculator } from '../helpers/Calculator/filterCalculator'
+import { UncatchedError, type customError } from '../../../errors/errors'
 
 const googleRoute = Router()
 
@@ -10,9 +11,9 @@ googleRoute.get('/dataTable', async (_req, res) => {
     const auth = await authorize()
     const data = await getCalculatorTable(auth)
     res.json(data)
-  } catch (error) {
-    console.error(error)
-    res.status(500).json({ error: 'Internal Server Error' })
+  } catch (error: any) {
+    const newError = new UncatchedError(error.message, 'obtain googleSheet data', 'traer informacion de googleSheets')
+    res.status(500).json(newError[(_req as any).lang as keyof customError])
   }
 })
 
@@ -30,9 +31,9 @@ googleRoute.post('/filter', async (_req, res) => {
       others as string[]
     )
     res.json(data)
-  } catch (error) {
-    console.error(error)
-    res.status(500).json({ error: 'Internal Server Error' })
+  } catch (error: any) {
+    const newError = new UncatchedError(error.message, 'obtain googleSheet filter', 'traer filtros de googleSheet')
+    res.status(500).json(newError[(_req as any).lang as keyof customError])
   }
 })
 
@@ -43,9 +44,9 @@ googleRoute.get('/DinamicTitles', async (_req, res) => {
     const data = await getTiers(auth)
 
     res.json(data)
-  } catch (error) {
-    console.error(error)
-    res.status(500).json({ error: 'Internal Server Error' })
+  } catch (error: any) {
+    const newError = new UncatchedError(error.message, 'obtain googleSheet dynamicTitles', 'traer titulos dinamicos de googleSheet')
+    res.status(500).json(newError[(_req as any).lang as keyof customError])
   }
 })
 

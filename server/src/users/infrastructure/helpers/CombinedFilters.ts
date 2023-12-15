@@ -1,3 +1,4 @@
+import { ServerError } from '../../../errors/errors'
 import { type JdEntity } from '../../../posts/domain/jd/jd.entity'
 import Jd from '../../../posts/infrastructure/schema/Jd'
 import { type UserEntity } from '../../domain/user/user.entity'
@@ -23,6 +24,6 @@ export default async function CombinedFilters (filters: string[], values: string
     if (type === 'user') return result as UserEntity[]
     else return result as JdEntity[]
   } catch (error: any) {
-    throw Error('Error combining filters: ' + error.message)
+    throw new ServerError('Error combining filters', 'Error combinando filtros', 400)
   }
 }

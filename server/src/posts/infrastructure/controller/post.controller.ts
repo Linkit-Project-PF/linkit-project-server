@@ -13,8 +13,8 @@ export class PostController {
       const post = await this.postUseCase.createPost(req.body)
       if (typeof post === 'string') return res.status(409).json(post)
       return res.status(201).json(post)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 
@@ -24,8 +24,8 @@ export class PostController {
       if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
       const post = await getPostValidator(req.query, this.postUseCase)
       return res.status(200).json(post)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 
@@ -35,8 +35,8 @@ export class PostController {
       if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
       const post = await this.postUseCase.editPost(req.params._id, req.body)
       return res.status(200).json(post)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 
@@ -47,8 +47,8 @@ export class PostController {
       const { id } = req.params
       await this.postUseCase.deletePost(id)
       return res.status(200).json('Publicación eliminada')
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 }

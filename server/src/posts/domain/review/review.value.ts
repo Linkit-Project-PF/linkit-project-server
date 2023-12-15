@@ -2,7 +2,7 @@ import { type ReviewEntity } from './review.entity'
 
 export class ReviewValue implements ReviewEntity {
   name: string
-  rol: string
+  role: string
   createdDate: Date
   image?: string | null
   country: string
@@ -11,7 +11,7 @@ export class ReviewValue implements ReviewEntity {
 
   constructor (review: ReviewEntity) {
     this.name = review.name
-    this.rol = review.rol
+    this.role = review.role
     this.createdDate = review.createdDate
     this.image = review.image ?? undefined
     this.country = review.country

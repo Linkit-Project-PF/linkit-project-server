@@ -10,6 +10,8 @@ import companyRoute from './users/infrastructure/routes/company.routes'
 import authRoute from './users/authentication/Infrastructure/auth.routes'
 import reviewRoute from './posts/infrastructure/routes/review.routes'
 import resourcesRoute from './resources/infrastructure/routes/resources.routes'
+import { langValidator } from './middlewares'
+import postulationRoute from './postulations/infrastructure/routes/postulation.route'
 
 const app = express()
 app.use(cors(
@@ -24,6 +26,8 @@ app.use(express.json())
 
 const port = process.env.PORT ?? 3000
 
+app.use(langValidator)
+
 app.use('/resources', resourcesRoute)
 app.use('/admins', adminRoute)
 app.use('/companies', companyRoute)
@@ -32,6 +36,7 @@ app.use('/posts', postRoute)
 app.use('/jds', jdRoute)
 app.use('/auth', authRoute)
 app.use('/reviews', reviewRoute)
+app.use('/postulations', postulationRoute)
 
 mongoDBConnect().then(() => {
   app.listen(port, () => {
