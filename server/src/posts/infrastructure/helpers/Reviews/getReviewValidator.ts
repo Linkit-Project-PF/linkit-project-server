@@ -1,3 +1,4 @@
+import { ServerError } from '../../../../errors/errors'
 import { type ReviewUseCase } from '../../../aplication/reviewUseCase'
 import { type ReviewEntity } from '../../../domain/review/review.entity'
 
@@ -22,6 +23,6 @@ export default async function getReviewtValidator (query: ReviewQuery, reviewUse
     }
     return review as ReviewEntity[]
   } catch (error: any) {
-    throw Error(error)
+    throw new ServerError('searching review with filters', 'buscar la valoracion con filtros', 400)
   }
 }

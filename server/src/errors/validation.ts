@@ -5,7 +5,6 @@ import Admin from '../users/infrastructure/schema/Admin'
 import User from '../users/infrastructure/schema/User'
 import Company from '../users/infrastructure/schema/Company'
 import Review from '../posts/infrastructure/schema/Review'
-import { returnUserError, returnConectError } from './returnErrors'
 import Jd from '../posts/infrastructure/schema/Jd'
 import { ServerError, UncatchedError } from './errors'
 import { type CustomType } from '../users/authentication/Infrastructure/authMongo.repository'
@@ -13,7 +12,7 @@ import { type PostulationEntity } from '../postulations/domain/postulation.entit
 import { objectIDValidator } from '../users/infrastructure/helpers/validateObjectID'
 import { type UserEntity } from '../users/domain/user/user.entity'
 import Postulation from '../postulations/infrastructure/schema/Postulation'
-import mongoose from 'mongoose'
+import mongoose, { type Types } from 'mongoose'
 
 //* USER ERRORS
 export const validateIfEmailExists = async (email: string): Promise<void> => {
@@ -31,13 +30,6 @@ export const ValidateReviewIfAlreadyonDB = async (name: string): Promise<void> =
   })
 }
 
-export const validateIfJdCodeExists = async (code: string): Promise<void> => {
-  const allJds = await Jd.find({}, 'code')
-  allJds.forEach(jd => {
-    if (jd.code === code) throw new ServerError('JD code is in use', 'El codigo para esa vacante ya existe', 409)
-  })
-}
-
 export const ValidateUserRegister = (entity: CustomType): void => {
   if (entity.role === 'admin' || entity.role === 'user') {
     // @ts-expect-error: Unique properties not being matched by TypeScript
@@ -48,13 +40,7 @@ export const ValidateUserRegister = (entity: CustomType): void => {
   }
 }
 
-export const ValidateUserLogin = (email: string, password: string): void => {
-  if (email === 'undefined' || password === 'undefined') returnUserError('Credenciales requeridas')
-  if (!email) returnUserError('El email es requerido')
-  if (!password) returnUserError('La contraseña es requerida')
-}
-
-//* POST ERRORS
+//* POST VALIDATOR
 
 export const ValidatePostCreate = (post: PostEntity): void => {
   const error: { en: string[], es: string[] } = { en: [], es: [] }
@@ -65,7 +51,15 @@ export const ValidatePostCreate = (post: PostEntity): void => {
   if (error.en.length) throw new ServerError(`Missing properties to create a post: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear una publicacion: ${error.es.join(', ')}`, 406)
 }
 
-export const ValidateJdCreate = (jd: JdEntity): void => {
+//* JD VALIDATORS
+const validateIfJdCodeExists = async (code: string): Promise<void> => {
+  const allJds = await Jd.find({}, 'code')
+  allJds.forEach(jd => {
+    if (jd.code === code) throw new ServerError('JD code is in use', 'El codigo para esa vacante ya existe', 409)
+  })
+}
+
+const ValidateJdCreate = (jd: JdEntity): void => {
   const error: { en: string[], es: string[] } = { en: [], es: [] }
   if (!jd.requirements) { error.en.push('requirements'); error.es.push('requisitos') }
   if (!jd.niceToHave) { error.en.push('niceToHave'); error.es.push('requisitos valorados') }
@@ -82,6 +76,27 @@ export const ValidateJdCreate = (jd: JdEntity): void => {
   if (error.en.length) throw new ServerError(`Missing properties to create a JD: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear una vacante: ${error.es.join(', ')}`, 406)
 }
 
+async function validateCompany (id: Types.ObjectId): Promise<void> {
+  if (!id) throw new ServerError('Company ID is needed to create a JD', 'El ID de la empresa asociada es necesario para crear una vacante', 406)
+  objectIDValidator(id.toString(), 'company to relate to JD', 'Empresa a relacionar a vacante')
+  let exists = false
+  const companies = await Company.find({}, '_id')
+  companies.forEach(comp => { if (comp._id === id) exists = true })
+  if (!exists) throw new ServerError('Company not found', 'No se encontro una empresa con ese ID en el registro', 404)
+}
+
+export async function validateJD (jobDescription: JdEntity): Promise<void> {
+  try {
+    ValidateJdCreate(jobDescription)
+    await validateIfJdCodeExists(jobDescription.code)
+    await validateCompany(jobDescription.company)
+    await validateRecruiter(jobDescription.recruiter)
+  } catch (error: any) {
+    if (error instanceof ServerError) throw error
+    else throw new UncatchedError(error.message, 'creating JD', 'crear vacante')
+  }
+}
+
 export const ValidateReviewCreate = (review: ReviewEntity): void => {
   const error: { en: string[], es: string[] } = { en: [], es: [] }
   if (!review.name) { error.en.push('name'); error.es.push('nombre') }
@@ -90,22 +105,15 @@ export const ValidateReviewCreate = (review: ReviewEntity): void => {
   if (error.en.length) throw new ServerError(`Missing properties to create a review: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear una valoracion: ${error.es.join(', ')}`, 406)
 }
 
-export const validateRecruiter = async (name: string): Promise<void> => {
-  const admin = await Admin.findOne({ firstName: name })
-  if (!admin) throw new ServerError('No recruiter under that name', 'No se encontro un reclutador por ese nombre', 404)
-}
-
-// //* SERVER ERRORS
-
-export const ValidateConnection = (connection: any): void => {
-  if (!connection) returnConectError('Connection error')
-}
-
-export const ValidateInternalServerError = (data: any): void => {
-  if (!data) returnConectError('Internal server error')
+export const validateRecruiter = async (ids: Types.ObjectId[]): Promise<void> => {
+  for (let i = 0; i < ids.length; i++) {
+    const admin = await Admin.findById(ids[i])
+    if (!admin) throw new ServerError('No recruiter under that name', 'No se encontro un reclutador por ese nombre', 404)
+  }
 }
 
 //* POSTULATION VALIDATORS
+
 function validateParams (postulation: PostulationEntity): void {
   const error: { en: string[], es: string[] } = { en: [], es: [] }
   if (!postulation.reason) { error.en.push('reason'); error.es.push('razon de postulacion') }

@@ -2,6 +2,7 @@ import Admin from '../../../../users/infrastructure/schema/Admin'
 import { objectIDValidator } from '../../../../users/infrastructure/helpers/validateObjectID'
 import Jd from '../../schema/Jd'
 import { type JdEntity } from '../../../domain/jd/jd.entity'
+import { ServerError, UncatchedError } from '../../../../errors/errors'
 
 interface authResponse {
   value: string | JdEntity[]
@@ -25,6 +26,7 @@ export default async function jdAuth (id: string, method: string): Promise<authR
     }
     return response
   } catch (error: any) {
-    throw Error('Auth Error: ' + error.message)
+    if (error instanceof ServerError) throw error
+    else throw new UncatchedError(error.message, 'authenticating', 'autenticar')
   }
 }

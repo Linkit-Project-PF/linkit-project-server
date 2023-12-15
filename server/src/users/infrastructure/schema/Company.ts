@@ -55,8 +55,9 @@ const companySchema = new Schema({
     default: true
   },
   jds: {
-    type: Array,
-    required: true
+    type: [Schema.Types.ObjectId],
+    required: true,
+    ref: 'Jd'
   },
   registeredDate: {
     type: Date,

@@ -1,23 +1,20 @@
 import { type JdEntity } from '../../domain/jd/jd.entity'
 import { type JdRepository } from '../../domain/jd/jd.repository'
 import Jd from '../schema/Jd'
-import { ValidateJdCreate, validateIfJdCodeExists, validateRecruiter } from '../../../errors/validation'
+import { validateJD } from '../../../errors/validation'
 import { ServerError, UncatchedError } from '../../../errors/errors'
 import CombinedFilters from '../../../users/infrastructure/helpers/CombinedFilters'
 import { objectIDValidator } from '../../../users/infrastructure/helpers/validateObjectID'
-import validateCompany from '../helpers/JDs/validateCompany'
+import RelateJD from '../helpers/JDs/relateJD'
+import deletionTrigger from '../helpers/JDs/deletionTrigger'
 
 export class MongoJdRepository implements JdRepository {
   async createJD (jd: JdEntity): Promise<JdEntity> {
     try {
-      // TODO Refactor this code so only a single validation function does the title, existing code and prop validation
-      await validateCompany(jd.company)
-      await validateIfJdCodeExists(jd.code)
-      ValidateJdCreate(jd)
-      await validateRecruiter(jd.recruiter)
-      //!
+      await validateJD(jd)
       jd.stack = jd.stack.map(stack => stack.toLowerCase())
       const jdCreated = await Jd.create(jd)
+      await RelateJD(jdCreated._id, jd.company.toString(), 'create')
       return jdCreated as JdEntity
     } catch (error: any) {
       if (error instanceof ServerError) throw error
@@ -36,12 +33,12 @@ export class MongoJdRepository implements JdRepository {
           result = await Jd.findById(value)
         } else if (filter === 'stack') {
           const values = (value as string).split(',').map(value => value.trim().toLowerCase())
+          result = await Jd.find({ stack: { $in: [value[0]] } })
           if (values.length > 1) {
-            result = await Jd.find()
-            for (let i = 0; i < values.length; i++) {
-              result = result.filter((jd: JdEntity) => jd.stack.includes(values[i]))
+            for (let i = 1; i < values.length; i++) {
+              result = (result).filter((jd: JdEntity) => jd.stack.includes(values[i]))
             }
-          } else { result = (await Jd.find()).filter(jd => jd.stack.includes(value)) }
+          }
         } else if (validSingleParams.includes(filter as string)) {
           result = await Jd.find({ [filter as string]: value })
         } else throw new ServerError('Not a valid parameter', 'No es un parametro de filtrado valido', 406)
@@ -58,8 +55,8 @@ export class MongoJdRepository implements JdRepository {
   async editJD (_id: string, jd: any): Promise<JdEntity> {
     try {
       objectIDValidator(_id, 'jd to edit', 'vacante a editar')
-      const invalidEdit = ['_id', 'users', 'createdDate']
-      Object.keys(jd).forEach(key => { if (invalidEdit.includes(key)) throw new ServerError('ID/users/date are forbidden on this route', 'ID/usuarios y fecha no se permiten cambiar en esta ruta', 403) })
+      const invalidEdit = ['_id', 'users', 'createdDate', 'company']
+      Object.keys(jd).forEach(key => { if (invalidEdit.includes(key)) throw new ServerError('ID/users/date/company cannot be edited', 'ID/usuarios/fecha y empresa no pueden ser editados', 403) })
       const editedJd = await Jd.findByIdAndUpdate(_id, jd, { new: true })
       if (editedJd) return editedJd as JdEntity
       else throw new ServerError('JobDescription not found', 'Vacante no encontrada', 404)
@@ -69,11 +66,17 @@ export class MongoJdRepository implements JdRepository {
     }
   }
 
-  async deleteJD (_id: string): Promise<JdEntity[]> {
+  async deleteJD (_id: string, total?: string): Promise<JdEntity[]> {
     try {
       objectIDValidator(_id, 'jd to delete', 'vacante a eliminar')
-      const result = await Jd.findByIdAndUpdate(_id, { archived: true })
-      if (!result) throw new ServerError('JD does not exist under that ID', 'No existen vacantes con ese ID', 404)
+      const JD = await Jd.findById(_id)
+      if (!JD) throw new ServerError('JD does not exist under that ID', 'No existen vacantes con ese ID', 404)
+      if (!total || total === 'false') {
+        await Jd.findByIdAndUpdate(_id, { archived: !JD.archived })
+      } else if (total === 'true') {
+        await deletionTrigger(JD)
+        await Jd.findByIdAndDelete(_id)
+      }
       //* This is set like this as Front-End requirements.
       const allJds = await Jd.find()
       return allJds as JdEntity[]
