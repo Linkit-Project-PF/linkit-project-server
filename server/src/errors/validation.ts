@@ -124,7 +124,7 @@ async function validateExisting (postulation: PostulationEntity): Promise<void> 
   const jdID = new mongoose.Types.ObjectId(postulation.jd)
   const allPostulations = await Postulation.find({ jd: { $in: [jdID] } })
   let existing = false
-  allPostulations.forEach(post => {
+  allPostulations.forEach((post: any) => {
     if (post.user.toString() === postulation.user) existing = true
   })
   if (existing) throw new ServerError('User has a postulation already for this JD', 'El usuario ya tiene una postulacion para esta vacante', 409)

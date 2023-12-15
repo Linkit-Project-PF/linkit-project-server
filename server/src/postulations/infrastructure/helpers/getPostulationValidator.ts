@@ -15,7 +15,7 @@ export default async function getPostulationValidator (query: PostulationQuery, 
     if (filters.length) {
       postulation = await postUseCase.findPostulation(filters[0], values[0])
     } else {
-      postulation = await postUseCase.findPostulation('', 'all')
+      postulation = await postUseCase.findPostulation('all', '')
     }
     return postulation
   } catch (error: any) {
