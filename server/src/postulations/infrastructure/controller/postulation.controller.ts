@@ -1,6 +1,7 @@
 import { type RequestHandler } from 'express'
 import { type PostulationUseCase } from '../../aplication/postulationUseCase'
 import adminAuth from '../../../users/infrastructure/helpers/admin/adminAuthHelper'
+import getPostulationValidator from '../helpers/getPostulationValidator'
 
 export class PostulationController {
   constructor (private readonly postulationUseCase: PostulationUseCase) { }
@@ -9,10 +10,9 @@ export class PostulationController {
     try {
       const authValidate = await adminAuth((req as any).userId, 'find')
       if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
-      const postulations = await this.postulationUseCase.findPostulation()
+      const postulations = await getPostulationValidator(req.query, this.postulationUseCase)
       return res.status(200).json(postulations)
     } catch (error: any) {
-      console.log(error)
       return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
