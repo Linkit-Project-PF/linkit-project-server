@@ -33,7 +33,7 @@ export class MongoJdRepository implements JdRepository {
           result = await Jd.findById(value)
         } else if (filter === 'stack') {
           const values = (value as string).split(',').map(value => value.trim().toLowerCase())
-          result = await Jd.find({ stack: { $in: [value[0]] } })
+          result = await Jd.find({ stack: { $in: [values[0]] } })
           if (values.length > 1) {
             for (let i = 1; i < values.length; i++) {
               result = (result).filter((jd: JdEntity) => jd.stack.includes(values[i]))

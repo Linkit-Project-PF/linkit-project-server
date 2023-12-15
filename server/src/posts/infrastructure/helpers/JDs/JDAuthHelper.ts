@@ -3,16 +3,17 @@ import { objectIDValidator } from '../../../../users/infrastructure/helpers/vali
 import Jd from '../../schema/Jd'
 import { type JdEntity } from '../../../domain/jd/jd.entity'
 import { ServerError, UncatchedError } from '../../../../errors/errors'
+import { type Types } from 'mongoose'
 
 interface authResponse {
   value: string | JdEntity[]
   code: number
 }
 
-export default async function jdAuth (id: string, method: string): Promise<authResponse> {
+export default async function jdAuth (id: Types.ObjectId, method: string): Promise<authResponse> {
   try {
     const response: authResponse = { value: '', code: 0 }
-    objectIDValidator(id, 'logged admin', 'usuario activo')
+    objectIDValidator(id.toString(), 'logged admin', 'usuario activo')
     const adminUser = await Admin.findById(id)
     if (!adminUser || !adminUser?.active) {
       if (method === 'find') {
