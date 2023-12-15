@@ -1,4 +1,4 @@
-import { type usersPosted, type JdEntity } from './jd.entity'
+import { type JdEntity } from './jd.entity'
 
 export class JdValue implements JdEntity {
   code: string
@@ -14,10 +14,11 @@ export class JdValue implements JdEntity {
   requirements: string[]
   niceToHave: string[]
   benefits: string[]
+  recruiter: string
   archived: boolean
   company: string
   status: string
-  users: usersPosted[]
+  users: string[]
   createdDate: Date
 
   constructor (jd: JdEntity) {
@@ -35,6 +36,7 @@ export class JdValue implements JdEntity {
     this.requirements = jd.requirements
     this.niceToHave = jd.niceToHave
     this.benefits = jd.benefits
+    this.recruiter = jd.recruiter
     this.archived = jd.archived
     this.company = jd.company
     this.status = jd.status

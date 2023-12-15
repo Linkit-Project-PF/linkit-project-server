@@ -30,10 +30,6 @@ const postulationSchema = new Schema({
     required: true,
     default: []
   },
-  recruiter: {
-    type: String,
-    required: true
-  },
   jd: {
     type: Schema.Types.ObjectId,
     ref: 'Jd',

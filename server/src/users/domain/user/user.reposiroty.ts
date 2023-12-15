@@ -5,5 +5,4 @@ export interface UserRepository {
   createUser: (user: UserEntity) => Promise<UserEntity | string>
   deleteUser: (id: string) => Promise<UserEntity | string>
   editUser: (id: string, user: UserEntity) => Promise<UserEntity | string>
-  relateJd: (userID: string, jdID: string, status: string, operation: string) => Promise<UserEntity>
 }

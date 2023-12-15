@@ -3,7 +3,7 @@ import { type PostulationUseCase } from '../../aplication/postulationUseCase'
 import adminAuth from '../../../users/infrastructure/helpers/admin/adminAuthHelper'
 
 export class PostulationController {
-  constructor(private readonly postulationUseCase: PostulationUseCase) { }
+  constructor (private readonly postulationUseCase: PostulationUseCase) { }
 
   public getController: RequestHandler = async (req, res) => {
     try {

@@ -67,6 +67,10 @@ const jdSchema = new Schema({
     type: Array,
     required: true
   },
+  recruiter: {
+    type: String,
+    required: true
+  },
   archived: {
     type: Boolean,
     required: true,

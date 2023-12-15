@@ -1,12 +1,11 @@
 import { type JdEntity } from '../../domain/jd/jd.entity'
 import { type JdRepository } from '../../domain/jd/jd.repository'
 import Jd from '../schema/Jd'
-import { ValidateJdCreate, validateIfJdCodeExists } from '../../../errors/validation'
+import { ValidateJdCreate, validateIfJdCodeExists, validateRecruiter } from '../../../errors/validation'
 import { ServerError, UncatchedError } from '../../../errors/errors'
 import CombinedFilters from '../../../users/infrastructure/helpers/CombinedFilters'
 import { objectIDValidator } from '../../../users/infrastructure/helpers/validateObjectID'
 import validateCompany from '../helpers/JDs/validateCompany'
-import User from '../../../users/infrastructure/schema/User'
 
 export class MongoJdRepository implements JdRepository {
   async createJD (jd: JdEntity): Promise<JdEntity> {
@@ -15,6 +14,8 @@ export class MongoJdRepository implements JdRepository {
       await validateCompany(jd.company)
       await validateIfJdCodeExists(jd.code)
       ValidateJdCreate(jd)
+      await validateRecruiter(jd.recruiter)
+      //!
       jd.stack = jd.stack.map(stack => stack.toLowerCase())
       const jdCreated = await Jd.create(jd)
       return jdCreated as JdEntity
@@ -28,37 +29,24 @@ export class MongoJdRepository implements JdRepository {
     try {
       let result
       const validSingleParams = ['title', 'location', 'type', 'modality', 'archived', 'company', 'code', 'status']
-      const validIncludeFilters = ['stack', 'users']
       if (!combined) {
         if (filter === 'all') result = await Jd.find()
         else if (filter === 'id') {
           objectIDValidator(value as string, 'Jd to find', 'vacante buscada')
           result = await Jd.findById(value)
-        } else if (validIncludeFilters.includes(filter as string)) {
-          if (filter === 'users') {
-            result = await Jd.find({})
-            result = result.filter((jd: JdEntity) => {
-              let exists = false
-              jd.users.forEach(user => {
-                if (user.user.toString() === value) exists = true
-              })
-              return exists
-            })
-          } else {
-            const values = (value as string).split(',').map(value => value.trim().toLowerCase())
-            if (values.length > 1) {
-              result = await Jd.find()
-              for (let i = 0; i < values.length; i++) {
-                console.log(values[i])
-                result = result.filter((jd: JdEntity) => (jd as any)[filter as string].includes(values[i]))
-              }
-            } else { result = (await Jd.find()).filter(jd => (jd as any)[filter as string].includes(value)) }
-          }
+        } else if (filter === 'stack') {
+          const values = (value as string).split(',').map(value => value.trim().toLowerCase())
+          if (values.length > 1) {
+            result = await Jd.find()
+            for (let i = 0; i < values.length; i++) {
+              result = result.filter((jd: JdEntity) => jd.stack.includes(values[i]))
+            }
+          } else { result = (await Jd.find()).filter(jd => jd.stack.includes(value)) }
         } else if (validSingleParams.includes(filter as string)) {
           result = await Jd.find({ [filter as string]: value })
         } else throw new ServerError('Not a valid parameter', 'No es un parametro de filtrado valido', 406)
       } else {
-        result = CombinedFilters(filter as string[], value as string[], validSingleParams, validIncludeFilters, 'jd')
+        result = CombinedFilters(filter as string[], value as string[], validSingleParams, ['stack'], 'jd')
       }
       return result as JdEntity[]
     } catch (error: any) {
@@ -92,41 +80,6 @@ export class MongoJdRepository implements JdRepository {
     } catch (error: any) {
       if (error instanceof ServerError) throw error
       else throw new UncatchedError(error.message, 'deleting JD', 'eliminar vacante')
-    }
-  }
-
-  async relateUser (jdID: string, userid: string, operation: string): Promise<JdEntity> {
-    try {
-      if (!status || !operation || !jdID || !userid) throw new ServerError('Missing parameters: operation, jd, user and status needed', 'Faltan datos: Operacion, vacante y usario son obligatorios', 406)
-      objectIDValidator(jdID, 'jd in relation', 'vacante a relacionar')
-      objectIDValidator(userid, 'user to relate', 'usuario a relacionar')
-      const jd = await Jd.findById(jdID)
-      if (!jd) throw new ServerError('Job Description does not exist', 'No existe la vacante a relacionar', 404)
-      const user = await User.findById(userid, '_id')
-      if (!user) throw new ServerError('User does not exist', 'No existe el usuario a relacionar', 404)
-      if (operation === 'create') {
-        jd.users.forEach(obj => { if (obj.user === userid) throw new ServerError('User already related to this JD', 'La vacante ya tiene a este usuario relacionado', 409) })
-        const objectToAdd = { user: user._id, status }
-        jd.users.push(objectToAdd)
-      } else if (operation === 'edit') {
-        let existing = false
-        let index
-        jd.users.forEach((obj, idx) => { if (String(obj.user) === userid) { existing = true; index = idx } })
-        if (!existing || typeof index === 'undefined') throw new ServerError('User is not related to this JD', 'El usuario no esta relacionado con la vacante', 409)
-        if (status === jd.users[index].status) throw new ServerError('Status is the same as the previous one', 'El estado a cambiar es el mismo que tenia antes', 409)
-        jd.users[index].status = status
-      } else if (operation === 'delete') {
-        let existing = false
-        let index
-        jd.users.forEach((obj, idx) => { if (String(obj.user) === userid) { existing = true; index = idx } })
-        if (!existing || typeof index === 'undefined') throw new ServerError('User is not related to this JD', 'El usuario no esta relacionado a esta vacante', 406)
-        jd.users.splice(index, 1)
-      } else throw new ServerError('Not a valid operation', 'Operacion no valida', 406)
-      const replacedJD = await Jd.findOneAndReplace({ _id: jdID }, jd, { new: true })
-      return replacedJD as JdEntity
-    } catch (error: any) {
-      if (error instanceof ServerError) throw error
-      else throw new UncatchedError(error.message, 'relating JD', 'relacionar vacante')
     }
   }
 }

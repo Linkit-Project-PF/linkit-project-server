@@ -1,8 +1,3 @@
-export interface usersPosted {
-  user: string
-  status: string
-}
-
 export interface JdEntity {
   code: string
   title: string
@@ -17,9 +12,10 @@ export interface JdEntity {
   requirements: string[]
   niceToHave: string[]
   benefits: string[]
+  recruiter: string
   archived: boolean
   company: string
   status: string
-  users: usersPosted[]
+  users: string[]
   createdDate: Date
 }
