@@ -58,35 +58,35 @@ export const ValidateUserLogin = (email: string, password: string): void => {
 
 export const ValidatePostCreate = (post: PostEntity): void => {
   const error: { en: string[], es: string[] } = { en: [], es: [] }
-  if (!post.title) error.en.push('title'); error.es.push('titulo')
-  if (!post.description) error.en.push('description'); error.es.push('descripcion')
-  if (!post.type) error.en.push('type'); error.es.push('tipo')
-  if (!post.category) error.en.push('category'); error.es.push('categoria')
+  if (!post.title) { error.en.push('title'); error.es.push('titulo') }
+  if (!post.description) { error.en.push('description'); error.es.push('descripcion') }
+  if (!post.type) { error.en.push('type'); error.es.push('tipo') }
+  if (!post.category) { error.en.push('category'); error.es.push('categoria') }
   if (error.en.length) throw new ServerError(`Missing properties to create a post: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear una publicacion: ${error.es.join(', ')}`, 406)
 }
 
 export const ValidateJdCreate = (jd: JdEntity): void => {
   const error: { en: string[], es: string[] } = { en: [], es: [] }
-  if (!jd.requirements) error.en.push('requirements'); error.es.push('requisitos')
-  if (!jd.niceToHave) error.en.push('niceToHave'); error.es.push('requisitos valorados')
-  if (!jd.benefits) error.en.push('benefits'); error.es.push('beneficios')
-  if (!jd.stack) error.en.push('stack'); error.es.push('tecnologias')
-  if (!jd.code) error.en.push('code'); error.es.push('codigo de vacante')
-  if (!jd.title) error.en.push('title'); error.es.push('titulo')
-  if (!jd.description) error.en.push('description'); error.es.push('descripcion')
-  if (!jd.type) error.en.push('type'); error.es.push('tipo')
-  if (!jd.location) error.en.push('location'); error.es.push('ubicacion')
-  if (!jd.modality) error.en.push('modality'); error.es.push('modalidad')
-  if (!jd.status) error.en.push('status'); error.es.push('estado')
-  if (!jd.recruiter) error.en.push('recruiter'); error.es.push('reclutador')
+  if (!jd.requirements) { error.en.push('requirements'); error.es.push('requisitos') }
+  if (!jd.niceToHave) { error.en.push('niceToHave'); error.es.push('requisitos valorados') }
+  if (!jd.benefits) { error.en.push('benefits'); error.es.push('beneficios') }
+  if (!jd.stack) { error.en.push('stack'); error.es.push('tecnologias') }
+  if (!jd.code) { error.en.push('code'); error.es.push('codigo de vacante') }
+  if (!jd.title) { error.en.push('title'); error.es.push('titulo') }
+  if (!jd.description) { error.en.push('description'); error.es.push('descripcion') }
+  if (!jd.type) { error.en.push('type'); error.es.push('tipo') }
+  if (!jd.location) { error.en.push('location'); error.es.push('ubicacion') }
+  if (!jd.modality) { error.en.push('modality'); error.es.push('modalidad') }
+  if (!jd.status) { error.en.push('status'); error.es.push('estado') }
+  if (!jd.recruiter) { error.en.push('recruiter'); error.es.push('reclutador') }
   if (error.en.length) throw new ServerError(`Missing properties to create a JD: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear una vacante: ${error.es.join(', ')}`, 406)
 }
 
 export const ValidateReviewCreate = (review: ReviewEntity): void => {
   const error: { en: string[], es: string[] } = { en: [], es: [] }
-  if (!review.name) error.en.push('name'); error.es.push('nombre')
-  if (!review.role) error.en.push('role'); error.es.push('rol')
-  if (!review.detail) error.en.push('detail'); error.es.push('detalle')
+  if (!review.name) { error.en.push('name'); error.es.push('nombre') }
+  if (!review.role) { error.en.push('role'); error.es.push('rol') }
+  if (!review.detail) { error.en.push('detail'); error.es.push('detalle') }
   if (error.en.length) throw new ServerError(`Missing properties to create a review: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear una valoracion: ${error.es.join(', ')}`, 406)
 }
 
@@ -108,15 +108,15 @@ export const ValidateInternalServerError = (data: any): void => {
 //* POSTULATION VALIDATORS
 function validateParams (postulation: PostulationEntity): void {
   const error: { en: string[], es: string[] } = { en: [], es: [] }
-  if (!postulation.reason) error.en.push('reason'); error.es.push('razon de postulacion')
-  if (!postulation.availability) error.en.push('availability'); error.es.push('disponibilidad')
-  if (!postulation.salary) error.en.push('salary'); error.es.push('salario esperado')
-  if (!postulation.techStack) error.en.push('tech stack'); error.es.push('Tecnologias generales')
-  if (!postulation.stack) error.en.push('stack'); error.es.push('Tecnologias especificas')
-  if (!postulation.recruiter) error.en.push('recruiter'); error.es.push('reclutador')
-  if (!postulation.jd) error.en.push('jd'); error.es.push('vacante')
-  if (!postulation.user) error.en.push('user'); error.es.push('usuario')
-  if (!postulation.status) error.en.push('status'); error.es.push('estado')
+  if (!postulation.reason) { error.en.push('reason'); error.es.push('razon de postulacion') }
+  if (!postulation.availability) { error.en.push('availability'); error.es.push('disponibilidad') }
+  if (!postulation.salary) { error.en.push('salary'); error.es.push('salario esperado') }
+  if (!postulation.techStack) { error.en.push('tech stack'); error.es.push('Tecnologias generales') }
+  if (!postulation.stack) { error.en.push('stack'); error.es.push('Tecnologias especificas') }
+  if (!postulation.recruiter) { error.en.push('recruiter'); error.es.push('reclutador') }
+  if (!postulation.jd) { error.en.push('jd'); error.es.push('vacante') }
+  if (!postulation.user) { error.en.push('user'); error.es.push('usuario') }
+  if (!postulation.status) { error.en.push('status'); error.es.push('estado') }
   if (error.en.length) throw new ServerError(`Missing properties to create a postulation: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear una postulacion: ${error.es.join(', ')}`, 406)
 }
 
