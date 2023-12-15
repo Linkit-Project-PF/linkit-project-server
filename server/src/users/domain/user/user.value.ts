@@ -1,4 +1,4 @@
-import { type postulations, type UserEntity } from './user.entity'
+import { type UserEntity } from './user.entity'
 
 export class UserValue implements UserEntity {
   airTableId?: string | null
@@ -13,7 +13,7 @@ export class UserValue implements UserEntity {
   role: string
   technologies?: string[]
   active?: boolean | null
-  postulations?: postulations[]
+  postulations: string[]
   registeredDate: Date
   password?: string | null
 
@@ -30,7 +30,7 @@ export class UserValue implements UserEntity {
     this.registeredDate = user.registeredDate
     this.technologies = user.technologies ?? []
     this.active = user.active ?? true
-    this.postulations = user.postulations ?? []
+    this.postulations = user.postulations
     this.password = user.password ?? undefined
   }
 }

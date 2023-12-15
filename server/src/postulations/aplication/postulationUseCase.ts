@@ -3,7 +3,7 @@ import { PostulationValue } from '../domain/postulation.value'
 import { type PostulationRepository } from '../domain/postulation.repository'
 
 export class PostulationUseCase {
-  constructor(private readonly postulationRepo: PostulationRepository) { }
+  constructor (private readonly postulationRepo: PostulationRepository) { }
 
   public findPostulation = async (): Promise<PostulationEntity | PostulationEntity[]> => {
     const postulation = await this.postulationRepo.findPostulation()

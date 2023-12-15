@@ -14,5 +14,7 @@ postulationRoute.use(authValidator)
 
 postulationRoute.get('/find', postulationController.getController)
 postulationRoute.post('/create', postulationController.postController)
+postulationRoute.put('/update/:id', postulationController.editController)
+postulationRoute.delete('/delete/:id', postulationController.deleteController)
 
 export default postulationRoute

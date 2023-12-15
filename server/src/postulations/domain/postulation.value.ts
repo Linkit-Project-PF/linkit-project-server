@@ -7,8 +7,9 @@ export class PostulationValue implements PostulationEntity {
   techStack: string[]
   stack: string[]
   recruiter: string
-  jd: string[]
-  user: string[]
+  jd: string
+  user: string
+  status: string
 
   constructor (postulation: PostulationEntity) {
     this.reason = postulation.reason
@@ -19,5 +20,6 @@ export class PostulationValue implements PostulationEntity {
     this.recruiter = postulation.recruiter
     this.jd = postulation.jd
     this.user = postulation.user
+    this.status = postulation.status
   }
 }

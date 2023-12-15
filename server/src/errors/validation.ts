@@ -7,8 +7,13 @@ import Company from '../users/infrastructure/schema/Company'
 import Review from '../posts/infrastructure/schema/Review'
 import { returnUserError, returnConectError } from './returnErrors'
 import Jd from '../posts/infrastructure/schema/Jd'
-import { ServerError } from './errors'
+import { ServerError, UncatchedError } from './errors'
 import { type CustomType } from '../users/authentication/Infrastructure/authMongo.repository'
+import { type PostulationEntity } from '../postulations/domain/postulation.entity'
+import { objectIDValidator } from '../users/infrastructure/helpers/validateObjectID'
+import { type UserEntity } from '../users/domain/user/user.entity'
+import Postulation from '../postulations/infrastructure/schema/Postulation'
+import mongoose from 'mongoose'
 
 //* USER ERRORS
 export const validateIfEmailExists = async (email: string): Promise<void> => {
@@ -73,6 +78,7 @@ export const ValidateJdCreate = (jd: JdEntity): void => {
   if (!jd.location) error.en.push('location'); error.es.push('ubicacion')
   if (!jd.modality) error.en.push('modality'); error.es.push('modalidad')
   if (!jd.status) error.en.push('status'); error.es.push('estado')
+  if (!jd.recruiter) error.en.push('recruiter'); error.es.push('reclutador')
   if (error.en.length) throw new ServerError(`Missing properties to create a JD: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear una vacante: ${error.es.join(', ')}`, 406)
 }
 
@@ -84,19 +90,10 @@ export const ValidateReviewCreate = (review: ReviewEntity): void => {
   if (error.en.length) throw new ServerError(`Missing properties to create a review: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear una valoracion: ${error.es.join(', ')}`, 406)
 }
 
-//* GENERAL ERRORS
-
-// export const ValidateNotFound = (data: any): void => {
-//   if (!data) throw new NotFoundError('Not found')
-// }
-
-// export const ValidateUnauthorized = (data: any): void => {
-//   if (!data) throw new UnauthorizedError('Unauthorized')
-// }
-
-// export const ValidateServiceUnavailable = (data: any): void => {
-//   if (!data) throw new ServiceUnavailableError('Service unavailable')
-// }
+export const validateRecruiter = async (name: string): Promise<void> => {
+  const admin = await Admin.findOne({ firstName: name })
+  if (!admin) throw new ServerError('No recruiter under that name', 'No se encontro un reclutador por ese nombre', 404)
+}
 
 // //* SERVER ERRORS
 
@@ -106,4 +103,59 @@ export const ValidateConnection = (connection: any): void => {
 
 export const ValidateInternalServerError = (data: any): void => {
   if (!data) returnConectError('Internal server error')
+}
+
+//* POSTULATION VALIDATORS
+function validateParams (postulation: PostulationEntity): void {
+  const error: { en: string[], es: string[] } = { en: [], es: [] }
+  if (!postulation.reason) error.en.push('reason'); error.es.push('razon de postulacion')
+  if (!postulation.availability) error.en.push('availability'); error.es.push('disponibilidad')
+  if (!postulation.salary) error.en.push('salary'); error.es.push('salario esperado')
+  if (!postulation.techStack) error.en.push('tech stack'); error.es.push('Tecnologias generales')
+  if (!postulation.stack) error.en.push('stack'); error.es.push('Tecnologias especificas')
+  if (!postulation.recruiter) error.en.push('recruiter'); error.es.push('reclutador')
+  if (!postulation.jd) error.en.push('jd'); error.es.push('vacante')
+  if (!postulation.user) error.en.push('user'); error.es.push('usuario')
+  if (!postulation.status) error.en.push('status'); error.es.push('estado')
+  if (error.en.length) throw new ServerError(`Missing properties to create a postulation: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear una postulacion: ${error.es.join(', ')}`, 406)
+}
+
+async function validateExisting (postulation: PostulationEntity): Promise<void> {
+  const jdID = new mongoose.Types.ObjectId(postulation.jd)
+  const allPostulations = await Postulation.find({ jd: { $in: [jdID] } })
+  let existing = false
+  allPostulations.forEach(post => {
+    if (post.user.toString() === postulation.user) existing = true
+  })
+  if (existing) throw new ServerError('User has a postulation already for this JD', 'El usuario ya tiene una postulacion para esta vacante', 409)
+}
+
+async function validateRelations (postulation: PostulationEntity): Promise<void> {
+  try {
+    const jdId = postulation.jd
+    const userId = postulation.user
+    const adminName = postulation.recruiter
+    objectIDValidator(jdId, 'jd to relate', 'vacante a relacionar')
+    objectIDValidator(userId, 'user to relate', 'usuario a relacionar')
+    const adminMatch = await Admin.findOne({ firstName: adminName })
+    if (!adminMatch) throw new ServerError('No recruiter found under that name', 'No existe un reclutador con ese nombre', 404) //! RELATE HERE WITH ADMINS TOO
+    const userMatch = await User.findById(userId) as UserEntity
+    if (!userMatch) throw new ServerError('No user found with that ID', 'No se encontro un usuario bajo ese ID', 404)
+    const jdMatch = await Jd.findById(jdId) as JdEntity
+    if (!jdMatch) throw new ServerError('No JD found under that ID', 'No se encontro una vacante bajo ese ID', 404)
+  } catch (error: any) {
+    if (error instanceof ServerError) throw error
+    else throw new UncatchedError(error.message, 'creating postulation', 'crear postulacion')
+  }
+}
+
+export const validatePostulation = async (postulation: PostulationEntity): Promise<void> => {
+  try {
+    validateParams(postulation)
+    await validateRelations(postulation)
+    await validateExisting(postulation)
+  } catch (error: any) {
+    if (error instanceof ServerError) throw error
+    else throw new UncatchedError(error.message, 'creating postulation', 'crear postulacion')
+  }
 }

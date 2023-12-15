@@ -16,6 +16,5 @@ jdRoute.post('/create', jdController.postController)
 jdRoute.get('/find', jdController.getController)
 jdRoute.put('/update/:_id', jdController.putController)
 jdRoute.delete('/delete/:id', jdController.deleteController)
-jdRoute.put('/userRelation', jdController.relationController)
 
 export default jdRoute
