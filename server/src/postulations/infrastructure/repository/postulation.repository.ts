@@ -31,6 +31,13 @@ export class MongoPostulationRepository implements PostulationRepository {
         return result
       } else if (filter === 'all') {
         result = await Postulation.find({})
+      } else if (filter === 'jd') {
+        objectIDValidator(value, 'postulation jd', 'vacante en postulacion')
+        const jdID = new mongoose.Types.ObjectId(value)
+        result = await Postulation.find({ jd: { $in: [jdID] } }).populate('user')
+      } else if (filter === 'id') {
+        objectIDValidator(value, 'postulation id', 'ID de postulacion')
+        result = await Postulation.findById(value) as PostulationEntity
       } else throw new ServerError('Invalid filter', 'Filtro invalido', 403)
       return result
     } catch (error: any) {
