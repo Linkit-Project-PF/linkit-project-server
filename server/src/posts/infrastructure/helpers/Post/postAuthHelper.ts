@@ -1,5 +1,6 @@
 import Admin from '../../../../users/infrastructure/schema/Admin'
 import { objectIDValidator } from '../../../../users/infrastructure/helpers/validateObjectID'
+import { ServerError, UncatchedError } from '../../../../errors/errors'
 
 interface authResponse {
   value: string
@@ -17,6 +18,7 @@ export default async function postAuth (id: string): Promise<authResponse> {
     }
     return response
   } catch (error: any) {
-    throw Error('Auth Error: ' + error.message)
+    if (error instanceof ServerError) throw error
+    else throw new UncatchedError(error.message, 'authenticating', 'autenticar')
   }
 }

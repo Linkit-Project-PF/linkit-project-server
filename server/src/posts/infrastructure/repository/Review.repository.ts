@@ -1,7 +1,7 @@
 import { type ReviewEntity } from '../../domain/review/review.entity'
 import { type ReviewRepository } from '../../domain/review/review.repository'
 import { ValidateReviewCreate, ValidateReviewIfAlreadyonDB } from '../../../errors/validation'
-import { ServerError, UncatchedError, ValidationError } from '../../../errors/errors'
+import { ServerError, UncatchedError } from '../../../errors/errors'
 import Review from '../schema/Review'
 import { objectIDValidator } from '../../../users/infrastructure/helpers/validateObjectID'
 
@@ -20,10 +20,10 @@ export class MongoReviewRepository implements ReviewRepository {
       if (!reviewExists) {
         const reviewCreated = await Review.create(review)
         return reviewCreated as ReviewEntity
-      } else throw Error('Ya existe otro review de este tipo con este título')
+      } else throw new ServerError('There is already a review with this title and type', 'Ya existe otro review de este tipo con este título', 409)
     } catch (error: any) {
       if (error instanceof ServerError) throw error
-      else throw new UncatchedError(error.message, 'searching JD', 'buscar vacante')
+      else throw new UncatchedError(error.message, 'creating review', 'crear una valoracion')
     }
   }
 
@@ -35,8 +35,9 @@ export class MongoReviewRepository implements ReviewRepository {
         { $set: { archived: true } }
       )
       return 'Review deleted'
-    } catch (error) {
-      throw Error('Error deleting review: ' + (error as Error).message)
+    } catch (error: any) {
+      if (error instanceof ServerError) throw error
+      else throw new UncatchedError(error.message, 'deleting review', 'eliminar valoracion')
     }
   }
 
@@ -49,8 +50,9 @@ export class MongoReviewRepository implements ReviewRepository {
       else if (validFilters.includes(filter)) result = await Review.find({ [filter]: value })
       else throw Error('Not a valid parameter')
       return result as ReviewEntity[]
-    } catch (error) {
-      throw new ValidationError(`Error searching review: ${(error as Error).message}`)
+    } catch (error: any) {
+      if (error instanceof ServerError) throw error
+      else throw new UncatchedError(error.message, 'searching review', 'buscar valoracion')
     }
   }
 
@@ -58,12 +60,13 @@ export class MongoReviewRepository implements ReviewRepository {
     try {
       objectIDValidator(_id, 'review to edit', 'valoracion a editar')
       const invalidEdit = ['_id', 'createdDate']
-      Object.keys(review).forEach(key => { if (invalidEdit.includes(key)) throw Error('ID/date cannot be changed') })
+      Object.keys(review).forEach(key => { if (invalidEdit.includes(key)) throw new ServerError('ID/date cannot be changed', 'ID/fecha no pueden ser editados', 403) })
       const editedReview = await Review.findByIdAndUpdate(_id, review, { new: true })
       if (editedReview) return editedReview as ReviewEntity
-      else throw Error('Review not found')
-    } catch (error) {
-      throw new ValidationError(`Error editing review: ${(error as Error).message}`)
+      else throw new ServerError('Review not found', 'Valoracion no encontrada', 404)
+    } catch (error: any) {
+      if (error instanceof ServerError) throw error
+      else throw new UncatchedError(error.message, 'creating review', 'buscar valoracion')
     }
   }
 }
