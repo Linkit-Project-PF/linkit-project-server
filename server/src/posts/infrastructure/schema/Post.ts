@@ -45,6 +45,10 @@ const postSchema = new Schema({
     type: Boolean,
     required: true,
     default: false
+  },
+  createdBy: {
+    type: String,
+    required: true
   }
 })
 

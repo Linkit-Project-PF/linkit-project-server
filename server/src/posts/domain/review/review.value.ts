@@ -8,6 +8,7 @@ export class ReviewValue implements ReviewEntity {
   country: string
   detail: string
   archived?: boolean | null
+  createdBy: string
 
   constructor (review: ReviewEntity) {
     this.name = review.name
@@ -17,5 +18,6 @@ export class ReviewValue implements ReviewEntity {
     this.country = review.country
     this.detail = review.detail
     this.archived = review.archived ?? false
+    this.createdBy = review.createdBy
   }
 }

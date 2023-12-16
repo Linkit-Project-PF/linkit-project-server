@@ -12,7 +12,7 @@ export class MongoPostulationRepository implements PostulationRepository {
     try {
       await validatePostulation(postulation)
       const postulationCreated = await Postulation.create(postulation)
-      await relatePostulation(postulationCreated._id.toString(), postulation.user, postulation.jd)
+      await relatePostulation(postulationCreated._id, postulation.user, postulation.jd)
       return postulationCreated as unknown as PostulationEntity
     } catch (error: any) {
       if (error instanceof ServerError) throw error
