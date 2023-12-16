@@ -6,4 +6,5 @@ export interface ReviewEntity {
   country: string
   detail: string
   archived?: boolean | null
+  createdBy: string
 }

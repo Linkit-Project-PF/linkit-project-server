@@ -4,8 +4,7 @@ const reviewSchema = new Schema({
   name: {
     type: String,
     required: true,
-    minminlength: 1,
-    maxlength: 50
+    minminlength: 1
   },
   role: {
     type: String,
@@ -36,6 +35,10 @@ const reviewSchema = new Schema({
     type: Boolean,
     required: true,
     default: false
+  },
+  createdBy: {
+    type: String,
+    required: true
   }
 })
 

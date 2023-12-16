@@ -13,6 +13,7 @@ import { objectIDValidator } from '../users/infrastructure/helpers/validateObjec
 import { type UserEntity } from '../users/domain/user/user.entity'
 import Postulation from '../postulations/infrastructure/schema/Postulation'
 import mongoose, { type Types } from 'mongoose'
+import Post from '../posts/infrastructure/schema/Post'
 
 //* USER ERRORS
 export const validateIfEmailExists = async (email: string): Promise<void> => {
@@ -21,13 +22,6 @@ export const validateIfEmailExists = async (email: string): Promise<void> => {
   const result3 = await Company.find({ email })
   const result = [...result1, ...result2, ...result3]
   if (result.length) throw new ServerError('This email is already registered', 'El email ya esta registrado', 409)
-}
-
-export const ValidateReviewIfAlreadyonDB = async (name: string): Promise<void> => {
-  const allReviews = await Review.find({}, 'name')
-  allReviews.forEach(obj => {
-    if (obj.name === name) throw new ServerError('Company/user already has a review created', 'El usuario o empresa ya tiene una valoracion creada', 409)
-  })
 }
 
 export const ValidateUserRegister = (entity: CustomType): void => {
@@ -40,18 +34,56 @@ export const ValidateUserRegister = (entity: CustomType): void => {
   }
 }
 
+//* REVIEW VALIDATOR
+
+const ValidateReviewCreate = (review: ReviewEntity): void => {
+  const error: { en: string[], es: string[] } = { en: [], es: [] }
+  if (!review.name) { error.en.push('name'); error.es.push('nombre') }
+  if (!review.role) { error.en.push('role'); error.es.push('rol') }
+  if (!review.detail) { error.en.push('detail'); error.es.push('detalle') }
+  if (!review.createdBy) { error.en.push('createdBy'); error.es.push('creado por') }
+  if (error.en.length) throw new ServerError(`Missing properties to create a review: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear una valoracion: ${error.es.join(', ')}`, 406)
+}
+
+const ValidateReviewIfAlreadyonDB = async (name: string): Promise<void> => {
+  const allReviews = await Review.find({}, 'name')
+  allReviews.forEach(obj => {
+    if (obj.name === name) throw new ServerError('Company/user already has a review created', 'El usuario o empresa ya tiene una valoracion creada', 409)
+  })
+}
+
+export async function validateReview (review: ReviewEntity): Promise<void> {
+  ValidateReviewCreate(review)
+  await ValidateReviewIfAlreadyonDB(review.name)
+}
+
 //* POST VALIDATOR
 
-export const ValidatePostCreate = (post: PostEntity): void => {
+const ValidatePostCreate = (post: PostEntity): void => {
   const error: { en: string[], es: string[] } = { en: [], es: [] }
   if (!post.title) { error.en.push('title'); error.es.push('titulo') }
   if (!post.description) { error.en.push('description'); error.es.push('descripcion') }
   if (!post.type) { error.en.push('type'); error.es.push('tipo') }
   if (!post.category) { error.en.push('category'); error.es.push('categoria') }
+  if (!post.createdBy) { error.en.push('createdBy'); error.es.push('creado por') }
   if (error.en.length) throw new ServerError(`Missing properties to create a post: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear una publicacion: ${error.es.join(', ')}`, 406)
 }
 
+async function validateIfPostExists (post: PostEntity): Promise<void> {
+  let postExists = false
+  const allPosts = await Post.find({}, 'title type')
+  allPosts.forEach(pub => {
+    if (pub.title === post.title && pub.type === post.type) postExists = true
+  })
+  if (postExists) throw new ServerError('Post title already exists', 'El titulo de esta publicacion ya existe', 409)
+}
+
+export async function validatePost (post: PostEntity): Promise<void> {
+  ValidatePostCreate(post)
+  await validateIfPostExists(post)
+}
 //* JD VALIDATORS
+
 const validateIfJdCodeExists = async (code: string): Promise<void> => {
   const allJds = await Jd.find({}, 'code')
   allJds.forEach(jd => {
@@ -97,14 +129,6 @@ export async function validateJD (jobDescription: JdEntity): Promise<void> {
   }
 }
 
-export const ValidateReviewCreate = (review: ReviewEntity): void => {
-  const error: { en: string[], es: string[] } = { en: [], es: [] }
-  if (!review.name) { error.en.push('name'); error.es.push('nombre') }
-  if (!review.role) { error.en.push('role'); error.es.push('rol') }
-  if (!review.detail) { error.en.push('detail'); error.es.push('detalle') }
-  if (error.en.length) throw new ServerError(`Missing properties to create a review: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear una valoracion: ${error.es.join(', ')}`, 406)
-}
-
 export const validateRecruiter = async (ids: Types.ObjectId[]): Promise<void> => {
   for (let i = 0; i < ids.length; i++) {
     const admin = await Admin.findById(ids[i])
@@ -130,7 +154,7 @@ function validateParams (postulation: PostulationEntity): void {
 
 async function validateExisting (postulation: PostulationEntity): Promise<void> {
   const jdID = new mongoose.Types.ObjectId(postulation.jd)
-  const allPostulations = await Postulation.find({ jd: { $in: [jdID] } })
+  const allPostulations = await Postulation.find({ jd: { $in: [jdID] } }) //! Whats this error
   let existing = false
   allPostulations.forEach((post: any) => {
     if (post.user.toString() === postulation.user) existing = true
