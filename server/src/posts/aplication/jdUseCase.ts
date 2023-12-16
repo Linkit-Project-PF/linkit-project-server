@@ -21,8 +21,8 @@ export class JdUseCase {
     return EditedJd
   }
 
-  public deleteJD = async (id: string): Promise<JdEntity[] | string> => {
-    const answer = await this.JdRepository.deleteJD(id)
+  public deleteJD = async (id: string, total?: string): Promise<JdEntity[] | string> => {
+    const answer = await this.JdRepository.deleteJD(id, total)
     return answer
   }
 }

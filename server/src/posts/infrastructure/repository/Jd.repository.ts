@@ -31,6 +31,7 @@ export class MongoJdRepository implements JdRepository {
         else if (filter === 'id') {
           objectIDValidator(value as string, 'Jd to find', 'vacante buscada')
           result = await Jd.findById(value)
+          if (!result) throw new ServerError('No JD found under that ID', 'No se encontro una vacante con ese ID', 404)
         } else if (filter === 'stack') {
           const values = (value as string).split(',').map(value => value.trim().toLowerCase())
           result = await Jd.find({ stack: { $in: [values[0]] } })

@@ -113,7 +113,7 @@ async function validateCompany (id: Types.ObjectId): Promise<void> {
   objectIDValidator(id.toString(), 'company to relate to JD', 'Empresa a relacionar a vacante')
   let exists = false
   const companies = await Company.find({}, '_id')
-  companies.forEach(comp => { if (comp._id === id) exists = true })
+  companies.forEach(comp => { if (comp._id.toString() === id.toString()) exists = true })
   if (!exists) throw new ServerError('Company not found', 'No se encontro una empresa con ese ID en el registro', 404)
 }
 
@@ -130,6 +130,8 @@ export async function validateJD (jobDescription: JdEntity): Promise<void> {
 }
 
 export const validateRecruiter = async (ids: Types.ObjectId[]): Promise<void> => {
+  if (typeof ids === 'string') throw new ServerError('Recruiter must be an array', 'Los reclutadores deben estar en un array', 406)
+  ids.forEach(id => objectIDValidator(id.toString(), 'one of the recruiter', 'uno de los reclutadores'))
   for (let i = 0; i < ids.length; i++) {
     const admin = await Admin.findById(ids[i])
     if (!admin) throw new ServerError('No recruiter under that name', 'No se encontro un reclutador por ese nombre', 404)

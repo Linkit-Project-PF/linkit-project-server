@@ -44,7 +44,7 @@ export class JdController {
       const authValidate = await jdAuth((req as any).userId, 'delete')
       if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
       const { id } = req.params
-      const result = await this.jdUseCase.deleteJD(id)
+      const result = await this.jdUseCase.deleteJD(id, req.query.total as string)
       return res.status(200).json(result)
     } catch (error: any) {
       return res.status(error.code).json(error[(req as any).lang as keyof Error])
