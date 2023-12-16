@@ -1,6 +1,5 @@
 import { type AdminEntity } from '../../domain/admin/admin.entity'
 import { type AdminRepository } from '../../domain/admin/admin.repository'
-import { ValidationError } from '../../../errors/errors'
 import { adminMailCreate } from '../../authentication/Infrastructure/nodemailer/verifyMail/adminMailCreate'
 import { type MailNodeMailerProvider } from '../../authentication/Infrastructure/nodemailer/nodeMailer'
 import { validateIfEmailExists } from '../../../errors/validation'
@@ -20,7 +19,7 @@ export class MongoAdminRepository implements AdminRepository {
       await this.mailNodeMailerProvider.sendEmail(adminMailCreate(admin))
       return adminCreated as AdminEntity
     } catch (error) {
-      throw new ValidationError(`Error on register: ${(error as Error).message}`)
+      throw new Error(`Error on register: ${(error as Error).message}`)
     }
   }
 
@@ -37,7 +36,7 @@ export class MongoAdminRepository implements AdminRepository {
       else throw Error('Not a valid parameter')
       return result as AdminEntity
     } catch (error) {
-      throw new ValidationError(`Error on search: ${(error as Error).message}`)
+      throw new Error(`Error on search: ${(error as Error).message}`)
     }
   }
 
@@ -49,7 +48,7 @@ export class MongoAdminRepository implements AdminRepository {
       const editAdmin = await Admin.findByIdAndUpdate(_id, info, { new: true })
       return editAdmin as AdminEntity
     } catch (error: any) {
-      throw new ValidationError(`Error on edit: ${(error as Error).message}`)
+      throw new Error(`Error on edit: ${(error as Error).message}`)
     }
   }
 
@@ -59,7 +58,7 @@ export class MongoAdminRepository implements AdminRepository {
       const result = await Admin.findByIdAndUpdate(_id, { active: false }, { new: true })
       return result as AdminEntity
     } catch (error) {
-      throw new ValidationError(`Error on delete: ${(error as Error).message}`)
+      throw new Error(`Error on delete: ${(error as Error).message}`)
     }
   }
 }

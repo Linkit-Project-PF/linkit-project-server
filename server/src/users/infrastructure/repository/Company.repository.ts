@@ -1,6 +1,5 @@
 import { type CompanyEntity } from '../../domain/company/company.entity'
 import { type CompanyRepository } from '../../domain/company/company.repository'
-import { ValidationError } from '../../../errors/errors'
 import Company from '../schema/Company'
 import { companyMailCreate } from '../../authentication/Infrastructure/nodemailer/verifyMail/companyMail'
 import base from '../../../db/airtable'
@@ -26,7 +25,7 @@ export class MongoCompanyRepository implements CompanyRepository {
       const companyCreated = await Company.findByIdAndUpdate(mongoID, { airTableId: airtableCompany.getId() }, { new: true })
       return companyCreated as CompanyEntity
     } catch (error) {
-      throw new ValidationError(`Error on register: ${(error as Error).message}`)
+      throw new Error(`Error on register: ${(error as Error).message}`)
     }
   }
 
@@ -43,7 +42,7 @@ export class MongoCompanyRepository implements CompanyRepository {
       else throw Error('Not a valid parameter')
       return result as CompanyEntity
     } catch (error) {
-      throw new ValidationError(`Error on search: ${(error as Error).message}`)
+      throw new Error(`Error on search: ${(error as Error).message}`)
     }
   }
 
@@ -55,7 +54,7 @@ export class MongoCompanyRepository implements CompanyRepository {
       const editedCompany = await Company.findByIdAndUpdate(id, info, { new: true })
       return editedCompany as CompanyEntity
     } catch (error) {
-      throw new ValidationError(`Error editing: ${(error as Error).message}`)
+      throw new Error(`Error editing: ${(error as Error).message}`)
     }
   }
 
@@ -68,7 +67,7 @@ export class MongoCompanyRepository implements CompanyRepository {
       )
       return resultado as CompanyEntity
     } catch (error) {
-      throw new ValidationError(`Error on delete: ${(error as Error).message}`)
+      throw new Error(`Error on delete: ${(error as Error).message}`)
     }
   }
 

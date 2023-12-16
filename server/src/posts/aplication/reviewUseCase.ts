@@ -25,8 +25,8 @@ export class ReviewUseCase {
   }
 
   public deleteReview = async (
-    id: string): Promise<string | string> => {
-    const deleted = await this.ReviewRepository.deleteReview(id)
+    id: string, total?: string): Promise<string | string> => {
+    const deleted = await this.ReviewRepository.deleteReview(id, total)
     return deleted
   }
 }

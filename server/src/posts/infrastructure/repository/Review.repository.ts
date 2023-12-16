@@ -22,8 +22,11 @@ export class MongoReviewRepository implements ReviewRepository {
       let result
       const validFilters = ['name', 'rol', 'archived', 'country']
       if (filter === 'all') result = await Review.find()
-      else if (filter === 'id') result = await Review.findById(value)
-      else if (validFilters.includes(filter)) result = await Review.find({ [filter]: value })
+      else if (filter === 'id') {
+        objectIDValidator(value, 'searched review', 'valoracion buscada')
+        result = await Review.findById(value)
+        if (!result) throw new ServerError('No review found under that ID', 'No se encontro valoracion con ese ID', 404)
+      } else if (validFilters.includes(filter)) result = await Review.find({ [filter]: value })
       else throw new ServerError('Not a valid parameter', 'Parametro de busqueda invalido', 406)
       return result as ReviewEntity[]
     } catch (error: any) {

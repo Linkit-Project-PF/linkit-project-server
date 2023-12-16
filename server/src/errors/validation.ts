@@ -156,7 +156,7 @@ function validateParams (postulation: PostulationEntity): void {
 
 async function validateExisting (postulation: PostulationEntity): Promise<void> {
   const jdID = new mongoose.Types.ObjectId(postulation.jd)
-  const allPostulations = await Postulation.find({ jd: { $in: [jdID] } }) //! Whats this error
+  const allPostulations = await Postulation.find({ jd: { $in: [jdID] } })
   let existing = false
   allPostulations.forEach((post: any) => {
     if (post.user.toString() === postulation.user) existing = true

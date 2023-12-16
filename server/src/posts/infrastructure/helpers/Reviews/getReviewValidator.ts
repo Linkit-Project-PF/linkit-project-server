@@ -1,4 +1,4 @@
-import { ServerError } from '../../../../errors/errors'
+import { ServerError, UncatchedError } from '../../../../errors/errors'
 import { type ReviewUseCase } from '../../../aplication/reviewUseCase'
 import { type ReviewEntity } from '../../../domain/review/review.entity'
 
@@ -23,6 +23,7 @@ export default async function getReviewtValidator (query: ReviewQuery, reviewUse
     }
     return review as ReviewEntity[]
   } catch (error: any) {
-    throw new ServerError('searching review with filters', 'buscar la valoracion con filtros', 400)
+    if (error instanceof ServerError) throw error
+    else throw new UncatchedError(error.message, 'searching review', 'buscar valoracion')
   }
 }

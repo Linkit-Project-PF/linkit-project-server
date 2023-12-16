@@ -22,8 +22,11 @@ export class MongoPostRepository implements PostRepository {
       let result
       const validFilters = ['title', 'type', 'archived', 'category']
       if (filter === 'all') result = await Post.find()
-      else if (filter === 'id') result = await Post.findById(value)
-      else if (validFilters.includes(filter)) result = await Post.find({ [filter]: value })
+      else if (filter === 'id') {
+        objectIDValidator(value, 'searched post', 'publicacion buscada')
+        result = await Post.findById(value)
+        if (!result) throw new ServerError('No post found under that ID', 'No se encontro un post con ese ID', 404)
+      } else if (validFilters.includes(filter)) result = await Post.find({ [filter]: value })
       else throw new ServerError('Not a valid parameter', 'Parametro invalido', 406)
       return result as PostEntity[]
     } catch (error: any) {
