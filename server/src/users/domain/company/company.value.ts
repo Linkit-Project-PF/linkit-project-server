@@ -14,13 +14,11 @@ export class CompanyValue implements CompanyEntity {
   active?: boolean | null
   jds: Types.ObjectId[]
   registeredDate: Date
-  password?: string | null
 
   constructor (company: CompanyEntity) {
     this.airTableId = company.airTableId ?? undefined
     this.image = company.image ?? undefined
     this.companyName = company.companyName
-    this.password = company.password ?? undefined
     this.email = company.email
     this.country = company.country ?? undefined
     this.role = company.role ?? 'company'

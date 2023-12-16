@@ -1,3 +1,13 @@
+import { type Types } from 'mongoose'
+
+export interface permissions {
+  find: string[]
+  create: string[]
+  update: string[]
+  delete: string[]
+  special: string[]
+}
+
 export interface AdminEntity {
   image?: string
   firstName: string
@@ -8,4 +18,6 @@ export interface AdminEntity {
   role?: string | null
   active?: boolean | null
   createdDate: Date
+  recruiterOf: Types.ObjectId[]
+  permissions: permissions
 }

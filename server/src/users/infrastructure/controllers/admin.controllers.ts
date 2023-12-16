@@ -43,7 +43,7 @@ export class AdminControllers {
     try {
       const authValidate = await adminAuth((req as any).userId, 'delete', req.params.id)
       if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
-      const admin = await this.adminUseCase.deleteAdmin(req.params.id)
+      const admin = await this.adminUseCase.deleteAdmin(req.params.id, req.query.total as string)
       return res.status(200).json(admin)
     } catch (error) {
       return res.status(400).json((error as Error).message)

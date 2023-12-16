@@ -1,3 +1,4 @@
+import { ServerError, UncatchedError } from '../../../../errors/errors'
 import { type CompanyUseCase } from '../../../aplication/companyUseCase'
 import { type CompanyEntity } from '../../../domain/company/company.entity'
 
@@ -20,6 +21,7 @@ export default async function getCompanyValidator (query: CompanyQuery, userUseC
     }
     return user
   } catch (error: any) {
-    throw Error(error)
+    if (error instanceof ServerError) throw error
+    else throw new UncatchedError(error.message, 'searching company', 'buscar empresa')
   }
 }

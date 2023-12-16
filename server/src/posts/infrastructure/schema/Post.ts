@@ -12,7 +12,7 @@ const postSchema = new Schema({
     minlength: 3
   },
   headers: {
-    type: Array,
+    type: [String],
     required: true
   },
   createdDate: {

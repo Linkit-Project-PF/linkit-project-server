@@ -21,8 +21,8 @@ export class UserUseCase {
     return editUser
   }
 
-  public deleteUser = async (id: string): Promise<UserEntity | string> => {
-    const deleteUser = await this.userRepository.deleteUser(id)
+  public deleteUser = async (id: string, total?: string): Promise<UserEntity | string> => {
+    const deleteUser = await this.userRepository.deleteUser(id, total)
     return deleteUser
   }
 }

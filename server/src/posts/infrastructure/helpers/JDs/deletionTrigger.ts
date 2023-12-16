@@ -3,7 +3,7 @@ import Postulation from '../../../../postulations/infrastructure/schema/Postulat
 import { type JdEntity } from '../../../domain/jd/jd.entity'
 import RelateJD from './relateJD'
 
-export default async function deletionTrigger (jd: JdEntity): Promise<void> {
+export default async function totalDeletionTrigger (jd: JdEntity): Promise<void> {
   try {
     await RelateJD((jd as any)._id, jd.company.toString(), 'delete')
     for (let i = 0; jd.users.length; i++) {

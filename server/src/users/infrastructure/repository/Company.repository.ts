@@ -5,14 +5,15 @@ import { companyMailCreate } from '../../authentication/Infrastructure/nodemaile
 import base from '../../../db/airtable'
 import { type MailNodeMailerProvider } from '../../authentication/Infrastructure/nodemailer/nodeMailer'
 import { objectIDValidator } from '../helpers/validateObjectID'
-import { validateIfEmailExists } from '../../../errors/validation'
-import Jd from '../../../posts/infrastructure/schema/Jd'
+import { validateCompanyCreation } from '../../../errors/validation'
+import { ServerError, UncatchedError } from '../../../errors/errors'
+import { MongoJdRepository } from '../../../posts/infrastructure/repository/Jd.repository'
 
 export class MongoCompanyRepository implements CompanyRepository {
   constructor (private readonly mailNodeMailerProvider: MailNodeMailerProvider) {}
   async createCompany (company: CompanyEntity): Promise<CompanyEntity> {
     try {
-      await validateIfEmailExists(company.email)
+      await validateCompanyCreation(company)
       const mongoCompany = await Company.create(company)
       const mongoID = String(mongoCompany._id)
       const airtableCompany = await base('UsersInfo').create({
@@ -24,25 +25,30 @@ export class MongoCompanyRepository implements CompanyRepository {
       await this.mailNodeMailerProvider.sendEmail(companyMailCreate(company))
       const companyCreated = await Company.findByIdAndUpdate(mongoID, { airTableId: airtableCompany.getId() }, { new: true })
       return companyCreated as CompanyEntity
-    } catch (error) {
-      throw new Error(`Error on register: ${(error as Error).message}`)
+    } catch (error: any) {
+      if (error instanceof ServerError) throw error
+      else throw new UncatchedError(error.message, 'creating company', 'crear empresa')
     }
   }
 
   async findCompany (value: string, filter: string): Promise<CompanyEntity | CompanyEntity[]> {
     try {
       let result
-      const validParams = ['name', 'email', 'active', 'jds']
+      const validSingleParams = ['name', 'email', 'active']
+      const validIncludeParams = ['jds']
       if (filter === 'all') result = await Company.find()
       else if (filter === 'id') {
         objectIDValidator(value, 'company id to search', 'empresa a buscar')
         result = await Company.findById(value)
-        if (!result) throw Error('No company found under that id')
-      } else if (validParams.includes(filter)) result = await Company.find({ [filter]: value })
-      else throw Error('Not a valid parameter')
+        if (!result) throw new ServerError('No company found under that id', 'No se encontro empresa con ese ID', 404)
+      } else if (validSingleParams.includes(filter)) result = await Company.find({ [filter]: value })
+      else if (validIncludeParams.includes(filter)) {
+        result = await Company.find({ [filter]: { $in: [value] } })
+      } else throw new ServerError('Not a valid parameter', 'Parametro invalido', 406)
       return result as CompanyEntity
-    } catch (error) {
-      throw new Error(`Error on search: ${(error as Error).message}`)
+    } catch (error: any) {
+      if (error instanceof ServerError) throw error
+      else throw new UncatchedError(error.message, 'searching company', 'buscar empresa')
     }
   }
 
@@ -50,43 +56,45 @@ export class MongoCompanyRepository implements CompanyRepository {
     try {
       objectIDValidator(id, 'company to edit', 'empresa a editar')
       const invalidEdit = ['_id', 'role', 'airTableId', 'jds', 'registeredDate']
-      Object.keys(info).forEach(key => { if (invalidEdit.includes(key)) throw Error('ID/airtableID/role/date or jds cannot be changed through this route') })
+      Object.keys(info).forEach(key => {
+        if (invalidEdit.includes(key)) {
+          throw new ServerError('ID/airtableID/role/date or jds cannot be changed through this route',
+            'ID/ID de airtable/rol/fecha o vacantes no son editables o no se pueden editar por esta ruta', 403)
+        }
+      })
       const editedCompany = await Company.findByIdAndUpdate(id, info, { new: true })
+      if (!editedCompany) throw new ServerError('No company found under that ID', 'No se encontro empresa con ese ID', 404)
       return editedCompany as CompanyEntity
-    } catch (error) {
-      throw new Error(`Error editing: ${(error as Error).message}`)
+    } catch (error: any) {
+      if (error instanceof ServerError) throw error
+      else throw new UncatchedError(error.message, 'editing company', 'editar empresa')
     }
   }
 
-  async deleteCompany (id: string): Promise<CompanyEntity> {
+  async deleteCompany (id: string, total?: string): Promise<CompanyEntity | string> {
     try {
       objectIDValidator(id, 'company to delete', 'empresa a eliminar')
-      const resultado = await Company.findByIdAndUpdate(
-        id,
-        { active: false }, { new: true }
-      )
-      return resultado as CompanyEntity
-    } catch (error) {
-      throw new Error(`Error on delete: ${(error as Error).message}`)
-    }
-  }
-
-  async relateJd (jdID: string, companyID: string, operation: string): Promise<CompanyEntity> {
-    try {
-      if (!jdID || !companyID || !operation) throw Error('Missing parameters: jd, company and operation is needed')
-      objectIDValidator(jdID, 'company in relation', 'empresa a relacionar')
-      objectIDValidator(companyID, 'jd to relate', 'vacante a relacionar')
-      if (operation === 'create') {
-        const company = await Company.findById(companyID)
-        if (!company) throw Error('Company does not exist')
-        const jd = await Jd.findById(jdID, '_id')
-        if (!jd) throw Error('Job Description does not exist')
-        company.jds.push(jd._id)
-        const replacedCompany = await Company.findOneAndReplace({ _id: companyID }, company, { new: true })
-        return replacedCompany as CompanyEntity
-      } else throw Error('Not a valid operation')
-    } catch (error) {
-      throw Error(`Error relating jd to company: ${(error as Error).message}`)
+      const company = await Company.findById(id)
+      if (!company) throw new ServerError('No company found with that ID', 'No se encontro empresa con ese ID', 404)
+      else {
+        if (!total || total === 'false') {
+          const resultado = await Company.findByIdAndUpdate(
+            id,
+            { active: !company.active }, { new: true }
+          )
+          return resultado as CompanyEntity
+        } else if (total === 'true') {
+          // TODO Modularize with trigger here
+          const provider = new MongoJdRepository()
+          for (let i = 0; i < company.jds.length; i++) {
+            await provider.deleteJD(company.jds[i].toString(), 'true')
+          }
+        }
+        return 'Company deleted completely, plus JDS related, plus postulations related to each JD'
+      }
+    } catch (error: any) {
+      if (error instanceof ServerError) throw error
+      else throw new UncatchedError(error.message, 'delting company', 'eliminar empresa')
     }
   }
 }

@@ -7,16 +7,18 @@ import Company from '../users/infrastructure/schema/Company'
 import Review from '../posts/infrastructure/schema/Review'
 import Jd from '../posts/infrastructure/schema/Jd'
 import { ServerError, UncatchedError } from './errors'
-import { type CustomType } from '../users/authentication/Infrastructure/authMongo.repository'
 import { type PostulationEntity } from '../postulations/domain/postulation.entity'
 import { objectIDValidator } from '../users/infrastructure/helpers/validateObjectID'
 import { type UserEntity } from '../users/domain/user/user.entity'
 import Postulation from '../postulations/infrastructure/schema/Postulation'
 import mongoose, { type Types } from 'mongoose'
 import Post from '../posts/infrastructure/schema/Post'
+import { type AdminEntity } from '../users/domain/admin/admin.entity'
+import { type CompanyEntity } from '../users/domain/company/company.entity'
 
-//* USER ERRORS
-export const validateIfEmailExists = async (email: string): Promise<void> => {
+//* GENERAL USER / AUTH VALIDATORS
+
+const validateIfEmailExists = async (email: string): Promise<void> => {
   const result1 = await User.find({ email })
   const result2 = await Admin.find({ email })
   const result3 = await Company.find({ email })
@@ -24,14 +26,46 @@ export const validateIfEmailExists = async (email: string): Promise<void> => {
   if (result.length) throw new ServerError('This email is already registered', 'El email ya esta registrado', 409)
 }
 
-export const ValidateUserRegister = (entity: CustomType): void => {
-  if (entity.role === 'admin' || entity.role === 'user') {
-    // @ts-expect-error: Unique properties not being matched by TypeScript
-    if (!entity.firstName || !entity.lastName || !entity.email) throw new ServerError('Full name (first/last) and email are required to register', 'El nombre completo y el email son necesarios para el registro', 406)
-  } else {
-    // @ts-expect-error: Unique properties not being matched by TypeScript
-    if (!entity.companyName || !entity.email) throw new ServerError('Company name is required to register', 'El nombre de la empresa es requerido para elregistro', 406)
-  }
+const validateUserCreation = (user: UserEntity): void => {
+  const error: { en: string[], es: string[] } = { en: [], es: [] }
+  if (!user.firstName) { error.en.push('first name'); error.es.push('nombre') }
+  if (!user.lastName) { error.en.push('last name'); error.es.push('apellido') }
+  if (!user.email) { error.en.push('email'); error.es.push('correo electronico') }
+  if (error.en.length) throw new ServerError(`Missing properties to create an user: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear un usuario: ${error.es.join(', ')}`, 406)
+}
+
+export async function validateUser (user: UserEntity): Promise<void> {
+  validateUserCreation(user)
+  await validateIfEmailExists(user.email)
+}
+
+//* COMPANY VALIDATIONS
+
+const companyValidator = (company: CompanyEntity): void => {
+  const error: { en: string[], es: string[] } = { en: [], es: [] }
+  if (!company.companyName) { error.en.push('Company name'); error.es.push('Nombre de la empresa') }
+  if (!company.email) { error.en.push('email'); error.es.push('correo electronico') }
+  if (error.en.length) throw new ServerError(`Missing properties to create a company: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear una empresa: ${error.es.join(', ')}`, 406)
+}
+
+export async function validateCompanyCreation (company: CompanyEntity): Promise<void> {
+  companyValidator(company)
+  await validateIfEmailExists(company.email)
+}
+
+//* ADMIN VALIDATIONS
+
+const adminCreateValidator = (admin: AdminEntity): void => {
+  const error: { en: string[], es: string[] } = { en: [], es: [] }
+  if (!admin.firstName) { error.en.push('first name'); error.es.push('nombre') }
+  if (!admin.lastName) { error.en.push('last name'); error.es.push('apellido') }
+  if (!admin.email) { error.en.push('email'); error.es.push('correo electronico') }
+  if (error.en.length) throw new ServerError(`Missing properties to create an admin: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear un administrador: ${error.es.join(', ')}`, 406)
+}
+
+export async function validateAdmin (admin: AdminEntity): Promise<void> {
+  adminCreateValidator(admin)
+  await validateIfEmailExists(admin.email)
 }
 
 //* REVIEW VALIDATOR

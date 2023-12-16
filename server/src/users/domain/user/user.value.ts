@@ -1,3 +1,4 @@
+import { type Types } from 'mongoose'
 import { type UserEntity } from './user.entity'
 
 export class UserValue implements UserEntity {
@@ -12,10 +13,9 @@ export class UserValue implements UserEntity {
   englishLevel?: string | null
   role: string
   technologies?: string[]
-  active?: boolean | null
-  postulations: string[]
+  active: boolean
+  postulations: Types.ObjectId[]
   registeredDate: Date
-  password?: string | null
 
   constructor (user: UserEntity) {
     this.airTableId = user.airTableId ?? undefined
@@ -29,8 +29,7 @@ export class UserValue implements UserEntity {
     this.cv = user.cv ?? undefined
     this.registeredDate = user.registeredDate
     this.technologies = user.technologies ?? []
-    this.active = user.active ?? true
+    this.active = user.active
     this.postulations = user.postulations
-    this.password = user.password ?? undefined
   }
 }

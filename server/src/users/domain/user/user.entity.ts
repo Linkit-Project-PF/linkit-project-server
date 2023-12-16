@@ -1,3 +1,5 @@
+import { type Types } from 'mongoose'
+
 export interface UserEntity {
   airTableId?: string | null
   image?: string
@@ -10,8 +12,7 @@ export interface UserEntity {
   englishLevel?: string | null
   role: string
   technologies?: string[]
-  active?: boolean | null
-  postulations: string[]
+  active: boolean
+  postulations: Types.ObjectId[]
   registeredDate: Date
-  password?: string | null
 }

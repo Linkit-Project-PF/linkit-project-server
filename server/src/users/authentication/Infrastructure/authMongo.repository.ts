@@ -18,10 +18,9 @@ import { MongoCompanyRepository } from '../../infrastructure/repository/Company.
 import { MongoAdminRepository } from '../../infrastructure/repository/Admin.repository'
 import { objectIDValidator } from '../../infrastructure/helpers/validateObjectID'
 import { type MailNodeMailerProvider } from './nodemailer/nodeMailer'
-import { ValidateUserRegister, validateIfEmailExists } from '../../../errors/validation'
 import { ServerError, UncatchedError } from '../../../errors/errors'
 
-export type CustomType = UserEntity | CompanyEntity | AdminEntity
+type CustomType = UserEntity | CompanyEntity | AdminEntity
 
 export class AuthMongoRepository implements AuthRepository {
   constructor (private readonly mailNodeMailerProvider: MailNodeMailerProvider) {
@@ -30,8 +29,6 @@ export class AuthMongoRepository implements AuthRepository {
 
   async register (entity: CustomType): Promise<UserEntity | CompanyEntity | AdminEntity | string> {
     try {
-      await validateIfEmailExists(entity.email)
-      ValidateUserRegister(entity)
       await createUserWithEmailAndPassword(auth, String(entity.email), entity.password ? String(entity.password) : '')
       let entityCreated
       let provider

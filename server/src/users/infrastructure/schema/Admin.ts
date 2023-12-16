@@ -8,11 +8,11 @@ const adminSchema = new Schema({
   },
   firstName: {
     type: String,
-    required: true,
+    required: true
   },
   lastName: {
     type: String,
-    required: true,
+    required: true
   },
   email: {
     type: String,
@@ -37,6 +37,38 @@ const adminSchema = new Schema({
   createdDate: {
     type: Date,
     default: Date()
+  },
+  recruiterOf: {
+    type: [Schema.Types.ObjectId],
+    required: true,
+    ref: 'Jd'
+  },
+  permissions: {
+    find: {
+      type: [String],
+      required: false,
+      default: []
+    },
+    create: {
+      type: [String],
+      required: false,
+      default: []
+    },
+    update: {
+      type: [String],
+      required: false,
+      default: []
+    },
+    delete: {
+      type: [String],
+      required: false,
+      default: []
+    },
+    special: {
+      type: [String],
+      required: false,
+      default: []
+    }
   }
 })
 
