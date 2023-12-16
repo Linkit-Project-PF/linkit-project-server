@@ -10,6 +10,7 @@ export class PostulationValue implements PostulationEntity {
   jd: string
   user: string
   status: string
+  archived: boolean
 
   constructor (postulation: PostulationEntity) {
     this.reason = postulation.reason
@@ -21,5 +22,6 @@ export class PostulationValue implements PostulationEntity {
     this.jd = postulation.jd
     this.user = postulation.user
     this.status = postulation.status
+    this.archived = postulation.archived
   }
 }

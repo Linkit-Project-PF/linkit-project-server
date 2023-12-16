@@ -8,4 +8,5 @@ export interface PostulationEntity {
   jd: string
   user: string
   status: string
+  archived: boolean
 }

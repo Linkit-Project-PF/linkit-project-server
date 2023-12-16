@@ -49,9 +49,10 @@ export class MongoPostulationRepository implements PostulationRepository {
     }
   }
 
-  async removePostulation (_id: string): Promise<PostulationEntity> {
+  async removePostulation (_id: string, postulation: PostulationEntity): Promise<PostulationEntity> {
     try {
-      const postulation = await Postulation.findByIdAndDelete(_id)
+      if (!postulation.archived) await Postulation.findByIdAndDelete(_id)
+      else await Postulation.findByIdAndUpdate(_id, postulation, { new: true })
       return postulation as unknown as PostulationEntity
     } catch (error: any) {
       if (error instanceof ServerError) throw error
