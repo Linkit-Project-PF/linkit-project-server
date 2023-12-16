@@ -43,6 +43,11 @@ const postulationSchema = new Schema({
   status: {
     type: String,
     required: true
+  },
+  archived: {
+    type: Boolean,
+    requiered: true,
+    default: false
   }
 })
 export default model('Postulation', postulationSchema)

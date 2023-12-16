@@ -4,7 +4,7 @@ import getPostulationValidator from '../helpers/getPostulationValidator'
 import postulationAuth from '../helpers/postulationAuth'
 
 export class PostulationController {
-  constructor (private readonly postulationUseCase: PostulationUseCase) { }
+  constructor(private readonly postulationUseCase: PostulationUseCase) { }
 
   public getController: RequestHandler = async (req, res) => {
     try {
@@ -43,7 +43,7 @@ export class PostulationController {
     try {
       const authValidate = await postulationAuth((req as any).userId, req.params.id)
       if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
-      const postulation = await this.postulationUseCase.removePostulation(req.params.id)
+      const postulation = await this.postulationUseCase.removePostulation(req.params.id, req.body)
       return res.status(201).json(postulation)
     } catch (error: any) {
       return res.status(error.code).json(error[(req as any).lang as keyof Error])
