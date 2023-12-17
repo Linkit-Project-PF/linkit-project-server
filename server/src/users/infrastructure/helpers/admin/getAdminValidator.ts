@@ -1,3 +1,4 @@
+import { ServerError, UncatchedError } from '../../../../errors/errors'
 import { type AdminUseCase } from '../../../aplication/adminUseCase'
 import { type AdminEntity } from '../../../domain/admin/admin.entity'
 
@@ -20,6 +21,7 @@ export default async function getAdminValidator (query: AdminQuery, adminUseCase
     }
     return admin
   } catch (error: any) {
-    throw Error(error)
+    if (error instanceof ServerError) throw error
+    else throw new UncatchedError(error.message, 'searching admin', 'buscar administrador')
   }
 }

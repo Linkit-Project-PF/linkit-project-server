@@ -8,12 +8,12 @@ export default async function CombinedFilters (filters: string[], values: string
   try {
     const allFilters = [...validIncludeFilters, ...validSingleFilters]
     filters.forEach(filter => {
-      if (!allFilters.includes(filter)) throw Error('Not a valid filter')
+      if (!allFilters.includes(filter)) throw new ServerError('Not a valid filter', 'Filtro invalido', 406)
     })
     let result
     if (type === 'user') result = await User.find()
     else if (type === 'jd') result = await Jd.find()
-    else throw Error('Not a valid schema type')
+    else throw new ServerError('Not a valid schema type', 'Tipo de registro de informacion invalido', 406)
     for (let i = 0; i < filters.length; i++) {
       if (validIncludeFilters.includes(filters[i])) {
         result = result.filter(data => (data as any)[filters[i]].includes(values[i]))

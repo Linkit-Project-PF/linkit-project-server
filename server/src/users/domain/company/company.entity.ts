@@ -13,5 +13,4 @@ export interface CompanyEntity {
   active?: boolean | null
   jds: Types.ObjectId[]
   registeredDate: Date
-  password?: string | null
 }

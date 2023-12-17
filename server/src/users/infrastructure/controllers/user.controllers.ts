@@ -43,7 +43,7 @@ export class UserControllers {
     try {
       const response = await userAuth((req as any).userId, 'delete', req.params.id)
       if (response.code) return res.status(response.code).json(response.value)
-      const user = await this.userUseCase.deleteUser(req.params.id)
+      const user = await this.userUseCase.deleteUser(req.params.id, req.query.total as string)
       return res.status(200).json(user)
     } catch (error: any) {
       return res.status(error.code).json(error[(req as any).lang as keyof Error])

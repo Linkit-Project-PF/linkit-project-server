@@ -45,7 +45,7 @@ export class ReviewController {
       const authValidate = await reviewAuth((req as any).userId)
       if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
       const { id } = req.params
-      await this.reviewUseCase.deleteReview(id)
+      await this.reviewUseCase.deleteReview(id, req.query.total as string)
       return res.status(200).json('Publicación eliminada')
     } catch (error: any) {
       return res.status(error.code).json(error[(req as any).lang as keyof Error])

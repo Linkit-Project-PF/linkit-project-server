@@ -52,7 +52,7 @@ const userSchema = new Schema({
     enum: ['user']
   },
   technologies: {
-    type: Array,
+    type: [String],
     required: true
   },
   active: {
@@ -61,7 +61,8 @@ const userSchema = new Schema({
     default: true
   },
   postulations: {
-    type: Array,
+    type: [Schema.Types.ObjectId],
+    ref: 'Postulation',
     required: true
   },
   registeredDate: {

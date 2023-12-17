@@ -1,4 +1,4 @@
-import { ServerError } from '../../../../errors/errors'
+import { ServerError, UncatchedError } from '../../../../errors/errors'
 import { type PostUseCase } from '../../../aplication/postUseCase'
 import { type PostEntity } from '../../../domain/post/post.entity'
 
@@ -21,6 +21,7 @@ export default async function getPostValidator (query: PostQuery, postUseCase: P
     }
     return post as PostEntity[]
   } catch (error: any) {
-    throw new ServerError('searching post with filters', 'buscar el post con filtros', 400)
+    if (error instanceof ServerError) throw error
+    else throw new UncatchedError(error.message, 'searching post', 'buscar publicacion')
   }
 }

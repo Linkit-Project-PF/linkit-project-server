@@ -6,7 +6,7 @@ import { ServerError, UncatchedError } from '../../../errors/errors'
 import CombinedFilters from '../../../users/infrastructure/helpers/CombinedFilters'
 import { objectIDValidator } from '../../../users/infrastructure/helpers/validateObjectID'
 import RelateJD from '../helpers/JDs/relateJD'
-import deletionTrigger from '../helpers/JDs/deletionTrigger'
+import totalDeletionTrigger from '../helpers/JDs/deletionTrigger'
 
 export class MongoJdRepository implements JdRepository {
   async createJD (jd: JdEntity): Promise<JdEntity> {
@@ -75,7 +75,7 @@ export class MongoJdRepository implements JdRepository {
       if (!total || total === 'false') {
         await Jd.findByIdAndUpdate(_id, { archived: !JD.archived })
       } else if (total === 'true') {
-        await deletionTrigger(JD)
+        await totalDeletionTrigger(JD)
         await Jd.findByIdAndDelete(_id)
       }
       //* This is set like this as Front-End requirements.
