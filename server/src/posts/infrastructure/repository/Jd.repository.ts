@@ -5,7 +5,7 @@ import { validateJD } from '../../../errors/validation'
 import { ServerError, UncatchedError } from '../../../errors/errors'
 import CombinedFilters from '../../../users/infrastructure/helpers/CombinedFilters'
 import { objectIDValidator } from '../../../users/infrastructure/helpers/validateObjectID'
-import RelateJD from '../helpers/JDs/relateJD'
+import { RelateJD } from '../helpers/JDs/relateJD'
 import totalDeletionTrigger from '../helpers/JDs/deletionTrigger'
 
 export class MongoJdRepository implements JdRepository {
@@ -14,7 +14,7 @@ export class MongoJdRepository implements JdRepository {
       await validateJD(jd)
       jd.stack = jd.stack.map(stack => stack.toLowerCase())
       const jdCreated = await Jd.create(jd)
-      await RelateJD(jdCreated._id, jd.company.toString(), 'create')
+      await RelateJD(jdCreated, 'create')
       return jdCreated as JdEntity
     } catch (error: any) {
       if (error instanceof ServerError) throw error

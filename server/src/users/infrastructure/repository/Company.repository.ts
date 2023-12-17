@@ -55,11 +55,11 @@ export class MongoCompanyRepository implements CompanyRepository {
   async editCompany (id: string, info: any): Promise<CompanyEntity> {
     try {
       objectIDValidator(id, 'company to edit', 'empresa a editar')
-      const invalidEdit = ['_id', 'role', 'airTableId', 'jds', 'registeredDate']
+      const invalidEdit = ['_id', 'role', 'airTableId', 'jds', 'registeredDate', 'email']
       Object.keys(info).forEach(key => {
         if (invalidEdit.includes(key)) {
-          throw new ServerError('ID/airtableID/role/date or jds cannot be changed through this route',
-            'ID/ID de airtable/rol/fecha o vacantes no son editables o no se pueden editar por esta ruta', 403)
+          throw new ServerError('ID/airtableID/role/date/email or jds cannot be changed through this route',
+            'ID/ID de airtable/rol/fecha/email o vacantes no son editables o no se pueden editar por esta ruta', 403)
         }
       })
       const editedCompany = await Company.findByIdAndUpdate(id, info, { new: true })

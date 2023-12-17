@@ -3,7 +3,7 @@ import { PostulationValue } from '../domain/postulation.value'
 import { type PostulationRepository } from '../domain/postulation.repository'
 
 export class PostulationUseCase {
-  constructor(private readonly postulationRepo: PostulationRepository) { }
+  constructor (private readonly postulationRepo: PostulationRepository) { }
 
   public findPostulation = async (filter: string, value: string): Promise<PostulationEntity | PostulationEntity[]> => {
     const postulation = await this.postulationRepo.findPostulation(filter, value)
@@ -21,8 +21,8 @@ export class PostulationUseCase {
     return editedPostulation
   }
 
-  public removePostulation = async (id: string, postulation: PostulationEntity): Promise<PostulationEntity | string> => {
-    const deletedPostulation = await this.postulationRepo.removePostulation(id, postulation)
+  public deletePostulation = async (id: string): Promise<PostulationEntity | string> => {
+    const deletedPostulation = await this.postulationRepo.deletePostulation(id)
     return deletedPostulation
   }
 }

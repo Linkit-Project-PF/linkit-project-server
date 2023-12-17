@@ -1,12 +1,13 @@
+import { type Types } from 'mongoose'
+
 export interface PostulationEntity {
   reason: string
   availability: string
   salary: number
   techStack: string[]
   stack: string[]
-  recruiter: string
-  jd: string
-  user: string
+  jd: Types.ObjectId
+  user: Types.ObjectId
   status: string
-  archived: boolean
+  followUps: Types.ObjectId[]
 }

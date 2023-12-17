@@ -21,12 +21,12 @@ const postulationSchema = new Schema({
     }
   },
   techStack: {
-    type: Array,
+    type: [String],
     required: true,
     default: []
   },
   stack: {
-    type: Array,
+    type: [String],
     required: true,
     default: []
   },
@@ -44,10 +44,11 @@ const postulationSchema = new Schema({
     type: String,
     required: true
   },
-  archived: {
-    type: Boolean,
-    requiered: true,
-    default: false
+  followUps: {
+    type: [Schema.Types.ObjectId],
+    ref: 'Admin',
+    required: false,
+    default: []
   }
 })
 export default model('Postulation', postulationSchema)

@@ -22,8 +22,8 @@ const userSchema = new Schema({
   email: {
     type: String,
     required: true,
-    minlength: 3,
-    maxlength: 30
+    match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    message: 'Invalid email address format'
   },
   country: {
     type: String,
