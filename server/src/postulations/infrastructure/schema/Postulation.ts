@@ -47,8 +47,17 @@ const postulationSchema = new Schema({
   followUps: {
     type: [Schema.Types.ObjectId],
     ref: 'Admin',
-    required: false,
-    default: []
+    required: true
+  },
+  archived: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
+  createdDate: {
+    type: Date,
+    required: true,
+    default: Date()
   }
 })
 export default model('Postulation', postulationSchema)

@@ -12,8 +12,8 @@ export class CompanyControllers {
       if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
       const company = await getCompanyValidator(req.query, this.companyUseCase)
       return res.status(200).json(company)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 
@@ -23,8 +23,8 @@ export class CompanyControllers {
       if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
       const company = await this.companyUseCase.createCompany(req.body)
       return res.status(201).json(company)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 
@@ -34,8 +34,8 @@ export class CompanyControllers {
       if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
       const company = await this.companyUseCase.editCompany(req.params.id, req.body)
       return res.status(200).json(company)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 
@@ -45,8 +45,8 @@ export class CompanyControllers {
       if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
       const company = await this.companyUseCase.deleteCompany(req.params.id)
       return res.status(200).json(company)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 }

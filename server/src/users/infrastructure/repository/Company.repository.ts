@@ -84,11 +84,11 @@ export class MongoCompanyRepository implements CompanyRepository {
           )
           return resultado as CompanyEntity
         } else if (total === 'true') {
-          // TODO Modularize with trigger here
           const provider = new MongoJdRepository()
           for (let i = 0; i < company.jds.length; i++) {
             await provider.deleteJD(company.jds[i].toString(), 'true')
           }
+          await Company.findByIdAndDelete(id)
         }
         return 'Company deleted completely, plus JDS related, plus postulations related to each JD'
       }

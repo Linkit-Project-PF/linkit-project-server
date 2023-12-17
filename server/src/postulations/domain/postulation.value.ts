@@ -11,6 +11,8 @@ export class PostulationValue implements PostulationEntity {
   user: Types.ObjectId
   status: string
   followUps: Types.ObjectId[]
+  archived: boolean
+  createdDate: Date
 
   constructor (postulation: PostulationEntity) {
     this.reason = postulation.reason
@@ -22,5 +24,7 @@ export class PostulationValue implements PostulationEntity {
     this.user = postulation.user
     this.status = postulation.status
     this.followUps = postulation.followUps
+    this.archived = postulation.archived ?? false
+    this.createdDate = postulation.createdDate
   }
 }

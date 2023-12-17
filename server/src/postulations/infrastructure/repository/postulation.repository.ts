@@ -12,8 +12,8 @@ export class MongoPostulationRepository implements PostulationRepository {
     try {
       await validatePostulation(postulation)
       const postulationCreated = await Postulation.create(postulation)
-      await relatePostulation(postulationCreated._id, postulation.user.toString(), postulation.jd.toString())
-      return postulationCreated as unknown as PostulationEntity
+      await relatePostulation(postulationCreated, 'create')
+      return postulationCreated
     } catch (error: any) {
       if (error instanceof ServerError) throw error
       else throw new UncatchedError(error.message, 'creating postulation', 'crear postulacion')
@@ -47,18 +47,38 @@ export class MongoPostulationRepository implements PostulationRepository {
 
   async updatePostulation (_id: string, postulation: PostulationEntity): Promise<PostulationEntity> {
     try {
+      objectIDValidator(_id, 'postulation to edit', 'postulacion a editar')
+      const validParams = ['status', 'followUps']
+      Object.keys(postulation).forEach(param => {
+        if (!validParams.includes(param)) {
+          throw new ServerError(
+            'Invalid param, only status or followUps can be edited', 'Parametro invalido, solo el estado o los reclutadores pueden ser editados', 403
+          )
+        }
+      })
       const postulationFound = await Postulation.findByIdAndUpdate(_id, postulation, { new: true })
-      return postulationFound as unknown as PostulationEntity
+      if (!postulationFound) throw new ServerError('No postulation found under that ID', 'No se encontro postulacion con ese ID', 404)
+      return postulationFound
     } catch (error: any) {
       if (error instanceof ServerError) throw error
       else throw new UncatchedError(error.message, 'editing postulation', 'editar postulacion')
     }
   }
 
-  async deletePostulation (_id: string): Promise<PostulationEntity> {
+  async deletePostulation (_id: string, total?: string): Promise<PostulationEntity | string> {
     try {
-      const postulation = await Postulation.findByIdAndDelete(_id)
-      return postulation as unknown as PostulationEntity
+      objectIDValidator(_id, 'postulation to delete', 'postulacion a eliminar')
+      const postulation = await Postulation.findById(_id) as PostulationEntity
+      if (!postulation) throw new ServerError('No postulation found under that ID', 'No se encontro postulacion con ese ID', 404)
+      if (!total || total === 'false') {
+        console.log(postulation.archived)
+        const result = await Postulation.findByIdAndUpdate(_id, { archived: !postulation.archived }) as PostulationEntity
+        return result
+      } else if (total === 'true') {
+        await relatePostulation(postulation, 'delete')
+        await Postulation.findByIdAndDelete(_id)
+      }
+      return 'Postulation deleted successfully'
     } catch (error: any) {
       if (error instanceof ServerError) throw error
       else throw new UncatchedError(error.message, 'editing postulation', 'editar postulacion')

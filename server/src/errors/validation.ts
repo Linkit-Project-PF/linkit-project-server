@@ -128,6 +128,7 @@ const validateIfJdCodeExists = async (code: string): Promise<void> => {
 const ValidateJdCreate = (jd: JdEntity): void => {
   const error: { en: string[], es: string[] } = { en: [], es: [] }
   if (!jd.requirements) { error.en.push('requirements'); error.es.push('requisitos') }
+  if (!jd.company) { error.en.push('company'); error.es.push('empresa') }
   if (!jd.niceToHave) { error.en.push('niceToHave'); error.es.push('requisitos valorados') }
   if (!jd.benefits) { error.en.push('benefits'); error.es.push('beneficios') }
   if (!jd.stack) { error.en.push('stack'); error.es.push('tecnologias') }

@@ -12,8 +12,8 @@ export class AdminControllers {
       if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
       const admin = await getAdminValidator(req.query, this.adminUseCase)
       return res.status(200).json(admin)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 
@@ -23,8 +23,8 @@ export class AdminControllers {
       if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
       const admin = await this.adminUseCase.createAdmin(req.body)
       return res.status(201).json(admin)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 
@@ -34,8 +34,8 @@ export class AdminControllers {
       if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
       const admin = await this.adminUseCase.editAdmin(req.params.id, req.body)
       return res.status(200).json(admin)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 
@@ -45,8 +45,8 @@ export class AdminControllers {
       if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
       const admin = await this.adminUseCase.deleteAdmin(req.params.id, req.query.total as string)
       return res.status(200).json(admin)
-    } catch (error) {
-      return res.status(400).json((error as Error).message)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
 }
