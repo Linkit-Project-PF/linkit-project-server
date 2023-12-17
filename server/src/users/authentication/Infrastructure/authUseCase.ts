@@ -2,6 +2,7 @@ import { type UserEntity } from '../../domain/user/user.entity'
 import { type AdminEntity } from '../../domain/admin/admin.entity'
 import { type CompanyEntity } from '../../domain/company/company.entity'
 import { type AuthRepository } from './auth.repository'
+import { type CustomType } from './authMongo.repository'
 
 export class AuthUseCase {
   constructor (private readonly authRepository: AuthRepository) {}
@@ -11,7 +12,7 @@ export class AuthUseCase {
     return result
   }
 
-  public register = async (entity: UserEntity | CompanyEntity | AdminEntity): Promise<UserEntity | CompanyEntity | AdminEntity | string> => {
+  public register = async (entity: CustomType): Promise<UserEntity | CompanyEntity | AdminEntity | string> => {
     const result = await this.authRepository.register(entity)
     return result
   }

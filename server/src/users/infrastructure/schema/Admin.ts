@@ -17,7 +17,8 @@ const adminSchema = new Schema({
   email: {
     type: String,
     required: true,
-    minlength: 3
+    match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    message: 'Invalid email address format'
   },
   country: {
     type: String,

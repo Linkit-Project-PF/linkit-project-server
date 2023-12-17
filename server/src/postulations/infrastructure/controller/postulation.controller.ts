@@ -43,7 +43,7 @@ export class PostulationController {
     try {
       const authValidate = await postulationAuth((req as any).userId, req.params.id)
       if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
-      const postulation = await this.postulationUseCase.removePostulation(req.params.id)
+      const postulation = await this.postulationUseCase.deletePostulation(req.params.id)
       return res.status(201).json(postulation)
     } catch (error: any) {
       return res.status(error.code).json(error[(req as any).lang as keyof Error])

@@ -1,3 +1,4 @@
+import { type Types } from 'mongoose'
 import { type PostulationEntity } from './postulation.entity'
 
 export class PostulationValue implements PostulationEntity {
@@ -6,10 +7,10 @@ export class PostulationValue implements PostulationEntity {
   salary: number
   techStack: string[]
   stack: string[]
-  recruiter: string
-  jd: string
-  user: string
+  jd: Types.ObjectId
+  user: Types.ObjectId
   status: string
+  followUps: Types.ObjectId[]
 
   constructor (postulation: PostulationEntity) {
     this.reason = postulation.reason
@@ -17,9 +18,9 @@ export class PostulationValue implements PostulationEntity {
     this.salary = postulation.salary
     this.techStack = postulation.techStack
     this.stack = postulation.stack
-    this.recruiter = postulation.recruiter
     this.jd = postulation.jd
     this.user = postulation.user
     this.status = postulation.status
+    this.followUps = postulation.followUps
   }
 }

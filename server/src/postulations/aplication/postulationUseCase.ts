@@ -21,8 +21,8 @@ export class PostulationUseCase {
     return editedPostulation
   }
 
-  public removePostulation = async (id: string): Promise<PostulationEntity | string> => {
-    const deletedPostulation = await this.postulationRepo.removePostulation(id)
+  public deletePostulation = async (id: string): Promise<PostulationEntity | string> => {
+    const deletedPostulation = await this.postulationRepo.deletePostulation(id)
     return deletedPostulation
   }
 }

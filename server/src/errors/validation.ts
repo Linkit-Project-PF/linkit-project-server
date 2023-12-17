@@ -168,7 +168,7 @@ export const validateRecruiter = async (ids: Types.ObjectId[]): Promise<void> =>
   ids.forEach(id => objectIDValidator(id.toString(), 'one of the recruiter', 'uno de los reclutadores'))
   for (let i = 0; i < ids.length; i++) {
     const admin = await Admin.findById(ids[i])
-    if (!admin) throw new ServerError('No recruiter under that name', 'No se encontro un reclutador por ese nombre', 404)
+    if (!admin) throw new ServerError('One of the recruiters was not found', 'Alguno de los reclutadores no se encontro', 404)
   }
 }
 
@@ -181,7 +181,7 @@ function validateParams (postulation: PostulationEntity): void {
   if (!postulation.salary) { error.en.push('salary'); error.es.push('salario esperado') }
   if (!postulation.techStack) { error.en.push('tech stack'); error.es.push('Tecnologias generales') }
   if (!postulation.stack) { error.en.push('stack'); error.es.push('Tecnologias especificas') }
-  if (!postulation.recruiter) { error.en.push('recruiter'); error.es.push('reclutador') }
+  if (!postulation.followUps) { error.en.push('followUps'); error.es.push('reclutadores') }
   if (!postulation.jd) { error.en.push('jd'); error.es.push('vacante') }
   if (!postulation.user) { error.en.push('user'); error.es.push('usuario') }
   if (!postulation.status) { error.en.push('status'); error.es.push('estado') }
@@ -200,13 +200,11 @@ async function validateExisting (postulation: PostulationEntity): Promise<void> 
 
 async function validateRelations (postulation: PostulationEntity): Promise<void> {
   try {
-    const jdId = postulation.jd
-    const userId = postulation.user
-    const adminName = postulation.recruiter
+    const jdId = postulation.jd.toString()
+    const userId = postulation.user.toString()
+    await validateRecruiter(postulation.followUps)
     objectIDValidator(jdId, 'jd to relate', 'vacante a relacionar')
     objectIDValidator(userId, 'user to relate', 'usuario a relacionar')
-    const adminMatch = await Admin.findOne({ firstName: adminName })
-    if (!adminMatch) throw new ServerError('No recruiter found under that name', 'No existe un reclutador con ese nombre', 404) //! RELATE HERE WITH ADMINS TOO
     const userMatch = await User.findById(userId) as UserEntity
     if (!userMatch) throw new ServerError('No user found with that ID', 'No se encontro un usuario bajo ese ID', 404)
     const jdMatch = await Jd.findById(jdId) as JdEntity
