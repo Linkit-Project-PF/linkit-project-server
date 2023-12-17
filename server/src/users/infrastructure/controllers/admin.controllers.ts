@@ -49,4 +49,13 @@ export class AdminControllers {
       return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
+
+  public permissionsController: RequestHandler = async (req, res) => {
+    try {
+      const admin = await this.adminUseCase.editPermissions(req.params.id, req.body)
+      return res.status(200).json(admin)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
+    }
+  }
 }

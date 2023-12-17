@@ -2,7 +2,7 @@ import { type Types } from 'mongoose'
 import { type permissions, type AdminEntity } from './admin.entity'
 
 export class AdminValue implements AdminEntity {
-  image?: string
+  image?: string | null
   firstName: string
   lastName: string
   email: string

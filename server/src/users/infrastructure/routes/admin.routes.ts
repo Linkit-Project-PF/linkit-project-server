@@ -18,5 +18,6 @@ adminRoute.get('/find', adminController.getController)
 adminRoute.post('/create', adminController.postController)
 adminRoute.put('/update/:id', adminController.putController)
 adminRoute.delete('/delete/:id', adminController.deleteController)
+adminRoute.put('/permissions/:id', adminController.permissionsController)
 
 export default adminRoute

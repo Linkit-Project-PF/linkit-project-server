@@ -9,7 +9,7 @@ export interface permissions {
 }
 
 export interface AdminEntity {
-  image?: string
+  image?: string | null
   firstName: string
   lastName: string
   email: string
