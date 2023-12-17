@@ -5,11 +5,11 @@ import { RelateJD } from './relateJD'
 
 export default async function totalDeletionTrigger (jd: JdEntity): Promise<void> {
   try {
-    await RelateJD(jd, 'delete')
-    for (let i = 0; jd.users.length; i++) {
-      const provider = new MongoPostulationRepository()
+    const provider = new MongoPostulationRepository()
+    for (let i = 0; i < jd.users.length; i++) {
       await provider.deletePostulation(jd.users[i].toString(), 'true')
     }
+    await RelateJD(jd, 'delete')
   } catch (error: any) {
     if (error instanceof ServerError) throw error
     else throw new UncatchedError(error.message, 'deleting JD relations', 'eliminar relaciones de vacante')
