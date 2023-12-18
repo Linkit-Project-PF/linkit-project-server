@@ -28,7 +28,7 @@ export async function RelateJD (JD: JdEntity, operation: string): Promise<void> 
     } else throw new ServerError('Company not found', 'Empresa no encontrada', 404)
   } catch (error: any) {
     if (error instanceof ServerError) throw error
-    else throw new UncatchedError(error.message, 'Adding JD to company', 'adicionar vacante a empresa')
+    else throw new UncatchedError(error.message, 'Adding/Removing JD to company', 'adicionar/eliminar vacante a empresa')
   }
 }
 
@@ -44,7 +44,7 @@ export async function RelateRecruiters (JD: Types.ObjectId, recruiterIds: Types.
       } else if (operation === 'delete') {
         let index: number = -1
         recruiter.recruiterOf.forEach((jd, idx) => { if (jd.toString() === JD.toString()) index = idx })
-        if (index < 0) throw new ServerError('Unable to delete, JD is not related with this recruiter', 'No se puede eliminar, la JD no esta relacionada a este administrador', 404)
+        if (index < 0) throw new ServerError(`Unable to delete, JD is not related with recruiter ${recruiter._id.toString()}`, `No se puede eliminar, la JD no esta relacionada al administrador con ID ${recruiter._id.toString()}`, 404)
         recruiter.recruiterOf.splice(index, 1)
         await Admin.findOneAndReplace({ _id: recruiterIds[i] }, recruiter)
       } else throw new ServerError('Invalid operation relating recruiter', 'Operacion invalida al relacionar reclutador', 406)

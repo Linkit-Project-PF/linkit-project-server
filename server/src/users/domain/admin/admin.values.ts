@@ -2,7 +2,7 @@ import { type Types } from 'mongoose'
 import { type permissions, type AdminEntity } from './admin.entity'
 
 export class AdminValue implements AdminEntity {
-  image?: string
+  image?: string | null
   firstName: string
   lastName: string
   email: string
@@ -12,7 +12,7 @@ export class AdminValue implements AdminEntity {
   active?: boolean | null
   createdDate: Date
   recruiterOf: Types.ObjectId[]
-  permissions: permissions
+  permissions?: permissions | null
 
   constructor (admin: AdminEntity) {
     this.image = admin.image ?? 'https://api.dicebear.com/7.x/avataaars-neutral/svg?seed=Callie'

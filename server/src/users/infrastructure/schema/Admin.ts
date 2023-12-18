@@ -45,29 +45,29 @@ const adminSchema = new Schema({
     ref: 'Jd'
   },
   permissions: {
-    find: {
+    get: {
       type: [String],
-      required: false,
+      required: true,
       default: []
     },
     create: {
       type: [String],
-      required: false,
+      required: true,
       default: []
     },
     update: {
       type: [String],
-      required: false,
+      required: true,
       default: []
     },
     delete: {
       type: [String],
-      required: false,
+      required: true,
       default: []
     },
     special: {
       type: [String],
-      required: false,
+      required: true,
       default: []
     }
   }

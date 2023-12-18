@@ -1,4 +1,4 @@
-import { type AdminEntity } from '../domain/admin/admin.entity'
+import { type permissions, type AdminEntity } from '../domain/admin/admin.entity'
 import { AdminValue } from '../domain/admin/admin.values'
 import { type AdminRepository } from '../domain/admin/admin.repository'
 
@@ -24,5 +24,10 @@ export class AdminUseCase {
   public deleteAdmin = async (id: string, total?: string): Promise<AdminEntity | string> => {
     const deleteAdmin = await this.adminRepository.deleteAdmin(id, total)
     return deleteAdmin
+  }
+
+  public editPermissions = async (id: string, permissions: permissions): Promise<AdminEntity> => {
+    const permAdmin = await this.adminRepository.editPermissions(id, permissions)
+    return permAdmin
   }
 }

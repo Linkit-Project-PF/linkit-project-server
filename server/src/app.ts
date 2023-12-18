@@ -10,7 +10,7 @@ import companyRoute from './users/infrastructure/routes/company.routes'
 import authRoute from './users/authentication/Infrastructure/auth.routes'
 import reviewRoute from './posts/infrastructure/routes/review.routes'
 import resourcesRoute from './resources/infrastructure/routes/resources.routes'
-import { langValidator } from './middlewares'
+import { authValidator, langValidator } from './middlewares'
 import postulationRoute from './postulations/infrastructure/routes/postulation.route'
 
 const app = express()
@@ -27,8 +27,9 @@ app.use(express.json())
 const port = process.env.PORT ?? 3000
 
 app.use(langValidator)
-
 app.use('/resources', resourcesRoute)
+
+app.use(authValidator)
 app.use('/admins', adminRoute)
 app.use('/companies', companyRoute)
 app.use('/users', userRoute)

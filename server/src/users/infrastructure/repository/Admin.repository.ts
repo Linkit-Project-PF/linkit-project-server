@@ -1,4 +1,4 @@
-import { type AdminEntity } from '../../domain/admin/admin.entity'
+import { type permissions, type AdminEntity } from '../../domain/admin/admin.entity'
 import { type AdminRepository } from '../../domain/admin/admin.repository'
 import { adminMailCreate } from '../../authentication/Infrastructure/nodemailer/verifyMail/adminMailCreate'
 import { type MailNodeMailerProvider } from '../../authentication/Infrastructure/nodemailer/nodeMailer'
@@ -17,7 +17,7 @@ export class MongoAdminRepository implements AdminRepository {
       await validateAdmin(admin)
       const adminCreated = await Admin.create(admin)
       await this.mailNodeMailerProvider.sendEmail(adminMailCreate(admin))
-      return adminCreated as AdminEntity
+      return adminCreated
     } catch (error: any) {
       if (error instanceof ServerError) throw error
       else throw new UncatchedError(error.message, 'creating admin', 'crear administrador')
@@ -35,7 +35,7 @@ export class MongoAdminRepository implements AdminRepository {
         if (!result) throw new ServerError('No admin found under that id', 'No se encontro administrador bajo ese ID', 404)
       } else if (validParams.includes(filter)) result = await Admin.find({ [filter]: value })
       else throw new ServerError('Not a valid parameter', 'Parametro invalido', 406)
-      return result as AdminEntity
+      return result
     } catch (error: any) {
       if (error instanceof ServerError) throw error
       else throw new UncatchedError(error.message, 'searching admin', 'buscar administrador')
@@ -54,7 +54,7 @@ export class MongoAdminRepository implements AdminRepository {
       })
       const editAdmin = await Admin.findByIdAndUpdate(_id, info, { new: true })
       if (!editAdmin) throw new ServerError('No admin found under that ID', 'No se encuentra admin bajo ese ID', 404)
-      return editAdmin as AdminEntity
+      return editAdmin
     } catch (error: any) {
       if (error instanceof ServerError) throw error
       else throw new UncatchedError(error.message, 'editing admin', 'editar administrador')
@@ -77,6 +77,20 @@ export class MongoAdminRepository implements AdminRepository {
     } catch (error: any) {
       if (error instanceof ServerError) throw error
       else throw new UncatchedError(error.message, 'deleting admin', 'eliminar administrador')
+    }
+  }
+
+  async editPermissions (id: string, perm: permissions): Promise<AdminEntity> {
+    try {
+      objectIDValidator(id.toString(), 'admin to edit permissions', 'administrador a editar permisos')
+      const admin = await Admin.findById(id)
+      if (!admin) throw new ServerError('No admin found under that id', 'Administrador no encontrado bajo ese ID', 404)
+      admin.permissions = { ...admin.permissions, ...perm }
+      await Admin.findByIdAndUpdate(id, admin)
+      return admin
+    } catch (error: any) {
+      if (error instanceof ServerError) throw error
+      else throw new UncatchedError(error.message, 'editing admin permissions', 'editar permisos de administrador')
     }
   }
 }

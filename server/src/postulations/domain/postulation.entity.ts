@@ -10,4 +10,6 @@ export interface PostulationEntity {
   user: Types.ObjectId
   status: string
   followUps: Types.ObjectId[]
+  archived: boolean
+  createdDate: Date
 }
