@@ -5,5 +5,5 @@ export interface AdminRepository {
   createAdmin: (admin: AdminEntity) => Promise<AdminEntity>
   editAdmin: (id: string, admin: AdminEntity) => Promise<AdminEntity>
   deleteAdmin: (id: string, total?: string) => Promise<AdminEntity | string>
-  editPermissions: (id: string, permissions: Partial<permissions>) => Promise<AdminEntity>
+  editPermissions: (id: string, permissions: permissions) => Promise<AdminEntity>
 }

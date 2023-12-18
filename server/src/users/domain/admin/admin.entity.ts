@@ -1,7 +1,7 @@
 import { type Types } from 'mongoose'
 
 export interface permissions {
-  find: string[]
+  get: string[]
   create: string[]
   update: string[]
   delete: string[]
@@ -19,5 +19,5 @@ export interface AdminEntity {
   active?: boolean | null
   createdDate: Date
   recruiterOf: Types.ObjectId[]
-  permissions: permissions
+  permissions?: permissions | null
 }

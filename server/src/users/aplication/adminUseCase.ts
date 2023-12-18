@@ -26,7 +26,7 @@ export class AdminUseCase {
     return deleteAdmin
   }
 
-  public editPermissions = async (id: string, permissions: Partial<permissions>): Promise<AdminEntity> => {
+  public editPermissions = async (id: string, permissions: permissions): Promise<AdminEntity> => {
     const permAdmin = await this.adminRepository.editPermissions(id, permissions)
     return permAdmin
   }

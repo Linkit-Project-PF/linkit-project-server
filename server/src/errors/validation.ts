@@ -13,7 +13,7 @@ import { type UserEntity } from '../users/domain/user/user.entity'
 import Postulation from '../postulations/infrastructure/schema/Postulation'
 import mongoose, { type Types } from 'mongoose'
 import Post from '../posts/infrastructure/schema/Post'
-import { type AdminEntity } from '../users/domain/admin/admin.entity'
+import { type permissions, type AdminEntity } from '../users/domain/admin/admin.entity'
 import { type CompanyEntity } from '../users/domain/company/company.entity'
 
 //* GENERAL USER / AUTH VALIDATORS
@@ -224,5 +224,23 @@ export const validatePostulation = async (postulation: PostulationEntity): Promi
   } catch (error: any) {
     if (error instanceof ServerError) throw error
     else throw new UncatchedError(error.message, 'creating postulation', 'crear postulacion')
+  }
+}
+
+//* PERMISSIONS VALIDATOR
+
+export async function permValidator (id: string, method: string, entity: string): Promise<void> {
+  try {
+    objectIDValidator(id, 'active admin', 'administrador activo')
+    const admin = await Admin.findById(id)
+    if (!admin) throw new ServerError('No admin found under that ID', 'No se encontro administrador bajo ese ID', 404)
+    const validMethods = ['get', 'create', 'update', 'delete', 'special']
+    if (!validMethods.includes(method)) throw new ServerError('Invalid permission', 'Permiso invalido', 406)
+    const validEntities = ['users', 'admins', 'companies', 'posts', 'jds', 'reviews', 'postulations', 'permissions', 'totalDelete']
+    if (!validEntities.includes(entity)) throw new ServerError('Invalid value for permission', 'Valor invalido para permiso', 406)
+    if (!(admin.permissions as permissions)[method as keyof permissions].includes(entity)) throw new ServerError('You do not have the permission for this action', 'No tienes los permisos para hacer esta accion', 401)
+  } catch (error: any) {
+    if (error instanceof ServerError) throw error
+    else throw new UncatchedError(error.message, 'validating permissions', 'validar permisos')
   }
 }

@@ -12,7 +12,7 @@ export class AdminValue implements AdminEntity {
   active?: boolean | null
   createdDate: Date
   recruiterOf: Types.ObjectId[]
-  permissions: permissions
+  permissions?: permissions | null
 
   constructor (admin: AdminEntity) {
     this.image = admin.image ?? 'https://api.dicebear.com/7.x/avataaars-neutral/svg?seed=Callie'

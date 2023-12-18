@@ -80,11 +80,13 @@ export class MongoAdminRepository implements AdminRepository {
     }
   }
 
-  async editPermissions (id: string, perm: Partial<permissions>): Promise<AdminEntity> {
+  async editPermissions (id: string, perm: permissions): Promise<AdminEntity> {
     try {
       objectIDValidator(id.toString(), 'admin to edit permissions', 'administrador a editar permisos')
       const admin = await Admin.findById(id)
       if (!admin) throw new ServerError('No admin found under that id', 'Administrador no encontrado bajo ese ID', 404)
+      admin.permissions = { ...admin.permissions, ...perm }
+      await Admin.findByIdAndUpdate(id, admin)
       return admin
     } catch (error: any) {
       if (error instanceof ServerError) throw error
