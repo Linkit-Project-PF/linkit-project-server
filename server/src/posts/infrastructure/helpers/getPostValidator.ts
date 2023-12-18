@@ -1,6 +1,6 @@
-import { ServerError, UncatchedError } from '../../../../errors/errors'
-import { type PostUseCase } from '../../../aplication/postUseCase'
-import { type PostEntity } from '../../../domain/post/post.entity'
+import { ServerError, UncatchedError } from '../../../errors/errors'
+import { type PostUseCase } from '../../aplication/postUseCase'
+import { type PostEntity } from '../../domain/post/post.entity'
 
 interface PostQuery {
   id?: string

@@ -1,6 +1,6 @@
-import { ServerError, UncatchedError } from '../../../../errors/errors'
-import { type CompanyUseCase } from '../../../aplication/companyUseCase'
-import { type CompanyEntity } from '../../../domain/company/company.entity'
+import { ServerError, UncatchedError } from '../../../errors/errors'
+import { type CompanyUseCase } from '../../aplication/companyUseCase'
+import { type CompanyEntity } from '../../domain/company/company.entity'
 
 interface CompanyQuery {
   id?: string

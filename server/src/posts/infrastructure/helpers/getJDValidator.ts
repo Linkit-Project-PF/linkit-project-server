@@ -1,6 +1,6 @@
-import { ServerError, UncatchedError } from '../../../../errors/errors'
-import { type JdUseCase } from '../../../aplication/jdUseCase'
-import { type JdEntity } from '../../../domain/jd/jd.entity'
+import { ServerError, UncatchedError } from '../../../errors/errors'
+import { type JdUseCase } from '../../aplication/jdUseCase'
+import { type JdEntity } from '../../domain/jd/jd.entity'
 
 interface JDQuery {
   airTableId?: string

@@ -1,6 +1,6 @@
 import { type RequestHandler } from 'express'
 import { type CompanyUseCase } from '../../aplication/companyUseCase'
-import getCompanyValidator from '../helpers/company/getCompanyValidator'
+import getCompanyValidator from '../helpers/getCompanyValidator'
 import { permValidator } from '../../../errors/validation'
 
 export class CompanyControllers {
@@ -28,7 +28,7 @@ export class CompanyControllers {
 
   public putController: RequestHandler = async (req, res) => {
     try {
-      await permValidator((req as any).userId, 'edit', 'companies')
+      await permValidator((req as any).userId, 'update', 'companies')
       const company = await this.companyUseCase.editCompany(req.params.id, req.body)
       return res.status(200).json(company)
     } catch (error: any) {

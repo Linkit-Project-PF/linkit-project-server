@@ -1,6 +1,6 @@
 import { type RequestHandler } from 'express'
 import { type UserUseCase } from '../../aplication/userUseCase'
-import getUserValidator from '../helpers/user/getUserValidator'
+import getUserValidator from '../helpers/getUserValidator'
 import { permValidator } from '../../../errors/validation'
 
 export class UserControllers {
@@ -28,7 +28,7 @@ export class UserControllers {
 
   public putController: RequestHandler = async (req, res) => {
     try {
-      await permValidator((req as any).userId, 'edit', 'users')
+      await permValidator((req as any).userId, 'update', 'users')
       const user = await this.userUseCase.editUser(req.params.id, req.body)
       return res.status(200).json(user)
     } catch (error: any) {

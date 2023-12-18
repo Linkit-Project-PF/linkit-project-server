@@ -1,9 +1,9 @@
 import { type Types } from 'mongoose'
-import Company from '../../../../users/infrastructure/schema/Company'
-import { ServerError, UncatchedError } from '../../../../errors/errors'
-import { objectIDValidator } from '../../../../users/infrastructure/helpers/validateObjectID'
-import Admin from '../../../../users/infrastructure/schema/Admin'
-import { type JdEntity } from '../../../domain/jd/jd.entity'
+import Company from '../../../users/infrastructure/schema/Company'
+import { ServerError, UncatchedError } from '../../../errors/errors'
+import { objectIDValidator } from '../../../users/infrastructure/helpers/validateObjectID'
+import Admin from '../../../users/infrastructure/schema/Admin'
+import { type JdEntity } from '../../domain/jd/jd.entity'
 
 export async function RelateJD (JD: JdEntity, operation: string): Promise<void> {
   try {

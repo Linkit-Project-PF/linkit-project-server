@@ -1,15 +1,14 @@
 import { type RequestHandler } from 'express'
 import { type PostulationUseCase } from '../../aplication/postulationUseCase'
 import getPostulationValidator from '../helpers/getPostulationValidator'
-import postulationAuth from '../helpers/postulationAuth'
+import { permValidator } from '../../../errors/validation'
 
 export class PostulationController {
   constructor (private readonly postulationUseCase: PostulationUseCase) { }
 
   public getController: RequestHandler = async (req, res) => {
     try {
-      const authValidate = await postulationAuth((req as any).userId)
-      if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
+      await permValidator((req as any).userId, 'get', 'postulations')
       const postulations = await getPostulationValidator(req.query, this.postulationUseCase)
       return res.status(200).json(postulations)
     } catch (error: any) {
@@ -19,8 +18,7 @@ export class PostulationController {
 
   public postController: RequestHandler = async (req, res) => {
     try {
-      const authValidate = await postulationAuth((req as any).userId)
-      if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
+      await permValidator((req as any).userId, 'create', 'postulations')
       const postulation = await this.postulationUseCase.createPostulation(req.body)
       return res.status(201).json(postulation)
     } catch (error: any) {
@@ -30,8 +28,7 @@ export class PostulationController {
 
   public editController: RequestHandler = async (req, res) => {
     try {
-      const authValidate = await postulationAuth((req as any).userId, req.params.id)
-      if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
+      await permValidator((req as any).userId, 'update', 'postulations')
       const postulation = await this.postulationUseCase.updatePostulation(req.params.id, req.body)
       return res.status(201).json(postulation)
     } catch (error: any) {
@@ -41,8 +38,7 @@ export class PostulationController {
 
   public deleteController: RequestHandler = async (req, res) => {
     try {
-      const authValidate = await postulationAuth((req as any).userId, req.params.id)
-      if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
+      await permValidator((req as any).userId, 'delete', 'postulations')
       const postulation = await this.postulationUseCase.deletePostulation(req.params.id, req.query.total as string)
       return res.status(201).json(postulation)
     } catch (error: any) {
