@@ -1,6 +1,6 @@
-import { ServerError, UncatchedError } from '../../../../errors/errors'
-import { type ReviewUseCase } from '../../../aplication/reviewUseCase'
-import { type ReviewEntity } from '../../../domain/review/review.entity'
+import { ServerError, UncatchedError } from '../../../errors/errors'
+import { type ReviewUseCase } from '../../aplication/reviewUseCase'
+import { type ReviewEntity } from '../../domain/review/review.entity'
 
 interface ReviewQuery {
   id?: string

@@ -1,6 +1,6 @@
-import { ServerError, UncatchedError } from '../../../../errors/errors'
-import { type AdminUseCase } from '../../../aplication/adminUseCase'
-import { type AdminEntity } from '../../../domain/admin/admin.entity'
+import { ServerError, UncatchedError } from '../../../errors/errors'
+import { type AdminUseCase } from '../../aplication/adminUseCase'
+import { type AdminEntity } from '../../domain/admin/admin.entity'
 
 interface AdminQuery {
   id?: string

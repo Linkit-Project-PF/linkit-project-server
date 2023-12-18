@@ -1,6 +1,6 @@
 import { type RequestHandler } from 'express'
 import { type AdminUseCase } from '../../aplication/adminUseCase'
-import getAdminValidator from '../helpers/admin/getAdminValidator'
+import getAdminValidator from '../helpers/getAdminValidator'
 import { permValidator } from '../../../errors/validation'
 
 export class AdminControllers {
@@ -28,7 +28,7 @@ export class AdminControllers {
 
   public putController: RequestHandler = async (req, res) => {
     try {
-      await permValidator((req as any).userId, 'edit', 'admins')
+      await permValidator((req as any).userId, 'update', 'admins')
       const admin = await this.adminUseCase.editAdmin(req.params.id, req.body)
       return res.status(200).json(admin)
     } catch (error: any) {

@@ -1,6 +1,6 @@
-import { ServerError, UncatchedError } from '../../../../errors/errors'
-import { MongoPostulationRepository } from '../../../../postulations/infrastructure/repository/postulation.repository'
-import { type JdEntity } from '../../../domain/jd/jd.entity'
+import { ServerError, UncatchedError } from '../../../errors/errors'
+import { MongoPostulationRepository } from '../../../postulations/infrastructure/repository/postulation.repository'
+import { type JdEntity } from '../../domain/jd/jd.entity'
 import { RelateJD } from './relateJD'
 
 export default async function totalDeletionTrigger (jd: JdEntity): Promise<void> {

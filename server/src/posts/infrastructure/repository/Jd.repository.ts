@@ -5,8 +5,8 @@ import { validateJD } from '../../../errors/validation'
 import { ServerError, UncatchedError } from '../../../errors/errors'
 import CombinedFilters from '../../../users/infrastructure/helpers/CombinedFilters'
 import { objectIDValidator } from '../../../users/infrastructure/helpers/validateObjectID'
-import { RelateJD } from '../helpers/JDs/relateJD'
-import totalDeletionTrigger from '../helpers/JDs/deletionTrigger'
+import { RelateJD } from '../helpers/relateJD'
+import totalDeletionTrigger from '../helpers/deletionTrigger'
 
 export class MongoJdRepository implements JdRepository {
   async createJD (jd: JdEntity): Promise<JdEntity> {

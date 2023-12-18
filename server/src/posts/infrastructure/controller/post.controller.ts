@@ -1,15 +1,14 @@
 import { type RequestHandler } from 'express'
 import { type PostUseCase } from '../../aplication/postUseCase'
-import getPostValidator from '../helpers/Post/getPostValidator'
-import postAuth from '../helpers/Post/postAuthHelper'
+import getPostValidator from '../helpers/getPostValidator'
+import { permValidator } from '../../../errors/validation'
 
 export class PostController {
   constructor (private readonly postUseCase: PostUseCase) {}
 
   public postController: RequestHandler = async (req, res) => {
     try {
-      const authValidate = await postAuth((req as any).userId)
-      if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
+      await permValidator((req as any).userId, 'create', 'posts')
       const post = await this.postUseCase.createPost(req.body)
       if (typeof post === 'string') return res.status(409).json(post)
       return res.status(201).json(post)
@@ -20,8 +19,7 @@ export class PostController {
 
   public getController: RequestHandler = async (req, res) => {
     try {
-      const authValidate = await postAuth((req as any).userId)
-      if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
+      await permValidator((req as any).userId, 'get', 'posts')
       const post = await getPostValidator(req.query, this.postUseCase)
       return res.status(200).json(post)
     } catch (error: any) {
@@ -31,8 +29,7 @@ export class PostController {
 
   public putController: RequestHandler = async (req, res) => {
     try {
-      const authValidate = await postAuth((req as any).userId)
-      if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
+      await permValidator((req as any).userId, 'update', 'posts')
       const post = await this.postUseCase.editPost(req.params._id, req.body)
       return res.status(200).json(post)
     } catch (error: any) {
@@ -42,8 +39,7 @@ export class PostController {
 
   public deleteController: RequestHandler = async (req, res) => {
     try {
-      const authValidate = await postAuth((req as any).userId)
-      if (authValidate.code) return res.status(authValidate.code).json(authValidate.value)
+      await permValidator((req as any).userId, 'delete', 'posts')
       const { id } = req.params
       await this.postUseCase.deletePost(id, req.query.total as string)
       return res.status(200).json('Publicación eliminada')
