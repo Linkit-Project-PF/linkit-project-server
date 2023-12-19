@@ -13,7 +13,8 @@ clientsFollowUpRoute.get('/', async (req, res): Promise<any> => {
     }).eachPage(
       function page (records, fetchNextPage) {
         records.forEach(function (record) {
-          console.log(record.fields)
+          const data = record.fields
+          console.log(data)
         })
         fetchNextPage()
       }
