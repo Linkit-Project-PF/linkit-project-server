@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import base from '../../../db/airtable'
 import { ServerError, UncatchedError } from '../../../errors/errors'
 import { validatePostulation } from '../../../errors/validation'
 import { objectIDValidator } from '../../../users/infrastructure/helpers/validateObjectID'
@@ -11,6 +12,13 @@ export class MongoPostulationRepository implements PostulationRepository {
   async createPostulation (postulation: PostulationEntity): Promise<PostulationEntity> {
     try {
       await validatePostulation(postulation)
+      await base('LinkIT - Candidate application').create([
+        {
+          // fields: {
+
+          // }
+        }
+      ])
       const postulationCreated = await Postulation.create(postulation)
       await relatePostulation(postulationCreated, 'create')
       return postulationCreated
@@ -22,6 +30,25 @@ export class MongoPostulationRepository implements PostulationRepository {
 
   async findPostulation (filter: string, value: string): Promise<PostulationEntity | PostulationEntity[]> {
     try {
+      base('LinkIT - Candidate application').select({
+        // Selecting the first 3 records in Grid view:
+        maxRecords: 3,
+        view: 'Grid view'
+      }).eachPage(function page (records, fetchNextPage) {
+        // This function (`page`) will get called for each page of records.
+
+        records.forEach(function (record) {
+          console.log('Retrieved', record.fields)
+        })
+
+        // To fetch the next page of records, call `fetchNextPage`.
+        // If there are more records, `page` will get called again.
+        // If there are no more records, `done` will get called.
+        fetchNextPage()
+      }, function done (err) {
+        if (err) { console.error(err) }
+      })
+
       let result: PostulationEntity | PostulationEntity[]
       if (filter === 'user') {
         objectIDValidator(value, 'postulation user', 'usuario en postulacion')
