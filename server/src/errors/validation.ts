@@ -12,6 +12,7 @@ import { type UserEntity } from '../users/domain/user/user.entity'
 import Post from '../posts/infrastructure/schema/Post'
 import { type permissions, type AdminEntity } from '../users/domain/admin/admin.entity'
 import { type CompanyEntity } from '../users/domain/company/company.entity'
+import { type postulation } from '../interfaces'
 
 //* GENERAL USER / AUTH VALIDATORS
 
@@ -177,6 +178,42 @@ export async function permValidator (id: string, method: string, entity: string)
 
 //* POSTULATIONS VALIDATOR
 
-export function validatePostulation (postulation: any): void {
+export async function validatePostulation (postulation: postulation): Promise<void> {
+  validateProps(postulation)
+  validatePostulationTypes(postulation)
+  await validateCandidate(postulation) //! Si no se han creado usuarios comentar este codigo para que deje crear testing data.
+}
 
+function validateProps (postulation: postulation): void {
+  const error: { en: string[], es: string[] } = { en: [], es: [] }
+  if (!postulation.stack) { error.en.push('stack'); error.es.push('tecnologias') }
+  if (!postulation.email) { error.en.push('email'); error.es.push('correo electronico') }
+  if (!postulation.linkedin) { error.en.push('linkedin'); error.es.push('linkedin') }
+  if (!postulation.salary) { error.en.push('salary expectation'); error.es.push('expectativa salarial') }
+  if (!postulation.english) { error.en.push('english level'); error.es.push('nievl de ingles') }
+  if (!postulation.reason) { error.en.push('reason'); error.es.push('razon para aplicar') }
+  if (!postulation.availability) { error.en.push('availability'); error.es.push('disponibilidad') }
+  if (!postulation.firstName) { error.en.push('firstName'); error.es.push('nombre del postulante') }
+  if (!postulation.lastName) { error.en.push('lastName'); error.es.push('apellido del postulante') }
+  if (!postulation.country) { error.en.push('country'); error.es.push('pais') }
+  if (error.en.length) throw new ServerError(`Missing properties to create a postulation: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear una postulacion: ${error.es.join(', ')}`, 406)
+}
+
+function validatePostulationTypes (postulation: postulation): void { // TODO Create country list collection here with all country names
+  const validCountries = ['Costa rica', 'Argentina', 'Colombia', 'Peru', 'Chile', 'Mexico', 'Paraguay', 'Venezuela', 'Republica Dominicana', 'Bolivia', 'Ecuador', 'Uruguay', 'Brasil', 'Nicaragua', 'Panama', 'España', 'India', 'Guatemala', 'Emiratos Arabes']
+  const validEnglishLevel = ['intermediate (B2)', 'Intermediate', 'Advanced', 'Professional', 'intermediate (B1)', 'Basic'] //! Add here new english levels
+  const emailRegex: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+  if (!validCountries.includes(postulation.country)) throw new ServerError('Invalid country', 'Pais invalido', 406)
+  if (typeof postulation.salary !== 'number') throw new ServerError('Salary must be a number', 'El salario debe ser un numero', 406)
+  if (!emailRegex.test(postulation.email)) throw new ServerError('Invalid email', 'Email invalido', 406)
+  if (!postulation.linkedin.includes('www.linkedin.com/in')) throw new ServerError('Invalid linkedin', 'LinkedIn invalido', 406)
+  if (!validEnglishLevel.includes(postulation.english)) throw new ServerError('Invalid english level', 'Nivel de ingles invalido', 406)
+  if (!Array.isArray(postulation.stack)) throw new ServerError('Stack must be an array', 'Las tecnologias deben ser un Array', 406)
+  postulation.stack.forEach(stack => { if (typeof stack !== 'string') throw new ServerError('Some stack info is not a string', 'Todas las tecnologias deben ser texto', 406) })
+  if (typeof postulation.reason !== 'string' || typeof postulation.availability !== 'string') throw new ServerError('reason and/or availability are invalid', 'La razon de postulacion y/o la disponibilidad son invalidas', 406)
+}
+
+async function validateCandidate (postulation: postulation): Promise<void> {
+  const talent: UserEntity | null = await User.findOne({ firstName: postulation.firstName, lastName: postulation.lastName })
+  if (!talent) throw new ServerError('No user under that full name', 'No se encuentra usuario con ese nombre y apellido', 404)
 }

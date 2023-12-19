@@ -1,7 +1,6 @@
-import { type PostulationQuery, type translatedResponse } from '../../interfaces'
+import { type postulation, type PostulationQuery, type translatedResponse } from '../../interfaces'
 
 export interface PostulationRepository {
-  // TODO Define types here
-  createPostulation: (postulation: any) => Promise<translatedResponse>
-  findPostulation: (query: PostulationQuery) => Promise<any>
+  createPostulation: (postulation: postulation) => Promise<translatedResponse>
+  findPostulation: (query: PostulationQuery) => Promise<postulation[]>
 }
