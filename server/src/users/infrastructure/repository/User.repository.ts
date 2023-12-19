@@ -1,4 +1,4 @@
-import { type UserEntity } from '../../domain/user/user.entity'
+import { type UserEntity, type MongoUser } from '../../domain/user/user.entity'
 import { type UserRepository } from '../../domain/user/user.reposiroty'
 import { validateUser } from '../../../errors/validation'
 import { ServerError, UncatchedError } from '../../../errors/errors'
@@ -24,8 +24,8 @@ export class MongoUserRepository implements UserRepository {
         Rol: user.role,
         WebID: mongoID
       })
-      await this.mailNodeMailerProvider.sendEmail(userMailCreate(user))
       const userCreated = await User.findByIdAndUpdate(mongoID, { airTableId: airtableUser.getId() }, { new: true })
+      await this.mailNodeMailerProvider.sendEmail(userMailCreate(mongoUser as MongoUser))
       return userCreated as UserEntity
     } catch (error: any) {
       if (error instanceof ServerError) throw error

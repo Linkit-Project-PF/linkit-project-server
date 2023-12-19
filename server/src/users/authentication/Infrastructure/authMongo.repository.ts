@@ -1,6 +1,7 @@
-import { type UserEntity } from '../../domain/user/user.entity'
+import { type MongoUser, type UserEntity } from '../../domain/user/user.entity'
 import { type CompanyEntity } from '../../domain/company/company.entity'
 import { type AdminEntity } from '../../domain/admin/admin.entity'
+import { userWelcomeMailCreate } from './nodemailer/welcome/userWelcomeMail'
 import { type AuthRepository } from './auth.repository'
 import { auth } from '../firebase'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
@@ -80,6 +81,7 @@ export class AuthMongoRepository implements AuthRepository {
       objectIDValidator(id, 'user to verify', 'usuario a verificar')
       if (role === 'user') {
         const user = await User.findById(id)
+        userWelcomeMailCreate(user as MongoUser)
         if (!user) throw new ServerError('No User found with that id', 'No se encuentra un usuario con ese ID', 404)
         await User.updateOne({ _id: user._id }, { $set: { active: true } }, { new: true })
       } else if (role === 'company') {
