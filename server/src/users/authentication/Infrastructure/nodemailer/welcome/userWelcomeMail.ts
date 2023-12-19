@@ -2,9 +2,9 @@
 import { type MongoUser } from '../../../../domain/user/user.entity'
 import { type IMessage } from '../add-email'
 
-export const userMailCreate = (user: MongoUser): IMessage => {
+export const userWelcomeMailCreate = (user: MongoUser): IMessage => {
   const message = `
-  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><meta charset="UTF-8"><meta content="width=device-width, initial-scale=1" name="viewport"><meta name="x-apple-disable-message-reformatting"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta content="telephone=no" name="format-detection"><title>Confirmación de Registro en LinkIT 🚀</title><!--[if (mso 16)]>
+  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><meta charset="UTF-8"><meta content="width=device-width, initial-scale=1" name="viewport"><meta name="x-apple-disable-message-reformatting"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta content="telephone=no" name="format-detection"><title>¡Te damos la bienvenida a LinkIT! 😊</title><!--[if (mso 16)]>
   <style type="text/css">
   a {text-decoration: none;}
   </style>
@@ -28,7 +28,7 @@ margin-left: 47px !important;
 }
 
 </style><![endif]
---></head><body class="body"><span class="esd-hidden-preheader" style="display:none!important;font-size:0px;line-height:0;color:#ffffff;visibility:hidden;opacity:0;height:0;width:0;mso-hide:all;">Por favor verifica tu email para completar tu registro.</span><div dir="ltr" class="es-wrapper-color"><!--[if gte mso 9]>
+--></head><body class="body"><span class="esd-hidden-preheader" style="display:none!important;font-size:0px;line-height:0;color:#ffffff;visibility:hidden;opacity:0;height:0;width:0;mso-hide:all;">Prepárate para explorar el emocionante mundo de proyectos IT.</span><div dir="ltr" class="es-wrapper-color"><!--[if gte mso 9]>
     <v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="t">
       <v:fill type="tile" color="#f6f6f6"></v:fill>
     </v:background>
@@ -53,17 +53,17 @@ margin-left: 47px !important;
         
     </td>
 </tr><tr>
-    <td align="left" class="esd-block-text"><p>¡Hola ${user.firstName}! ¿Cómo estás?</p><p>Estás recibiendo este mensaje porque tu email fue <strong>registrado</strong> en nuestro sitio web.</p><p>Por favor, haz click en el botón de abajo para <strong>verificar tu email </strong>y confirmar que eres el dueño de esta cuenta. Una vez confirmado, este email será asociado de forma única con tu cuenta en LinkIT.</p><p>Si no has sido tú el que se registró con nosotros, por favor desestima este correo.</p></td>
+    <td align="left" class="esd-block-text"><p>¡Hola ${user.firstName}! ¿Cómo estás? 😊</p><p>Nos emociona darte la bienvenida a la vibrante <strong>comunidad de LinkIT,</strong> donde conectar con los mejores proyectos IT es más fácil que nunca. ¡Tu talento es una pieza fundamental y estamos encantados de que formes parte de nuestro selecto grupo!</p><p>Al unirte a nosotros, has abierto la puerta a emocionantes oportunidades para trabajar en <strong>proyectos destacados</strong> de manera remota. Nuestra plataforma te conectará con las mejores opciones que se alinean perfectamente con tus <strong>habilidades y aspiraciones profesionales.</strong></p><p>En LinkIT nos esforzamos por brindarte experiencias profesionales <strong>únicas y desafiantes. </strong>Estamos aquí para apoyarte en cada paso de tu viaje y asegurarnos de que encuentres oportunidades que impulsen tu carrera.</p><p>¡Prepárate para explorar el emocionante mundo de proyectos IT de la mano de LinkIT! Si tienes alguna pregunta o necesitas asistencia, nuestro equipo está aquí para ayudarte.</p><p>Descubre las <strong>vacantes disponibles </strong>aquí o sé parte de la base de datos de IT más grande del mundo. ¡Tu próximo gran paso te espera! 🚀</p></td>
 </tr><tr>
-    <td align="center" class="esd-block-button es-p10t es-p10b">
-        <!--[if mso]><a href="https://www.linkit-hr.com/auth/verify?id=${user._id.toString()}&role=${user.role}" target="_blank" hidden>
-<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" esdevVmlButton href="https://www.linkit-hr.com/" 
-              style="height:34px; v-text-anchor:middle; width:150px" arcsize="50%" strokecolor="#00a489" strokeweight="2px" fillcolor="#00a489">
+    <td align="center" class="esd-block-button es-p10t">
+        <!--[if mso]><a href="https://www.linkit-hr.com/SoyTalento#vacantes" target="_blank" hidden>
+<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" esdevVmlButton href="https://www.linkit-hr.com/SoyTalento#vacantes" 
+              style="height:34px; v-text-anchor:middle; width:169px" arcsize="50%" strokecolor="#00a489" strokeweight="2px" fillcolor="#00a489">
   <w:anchorlock></w:anchorlock>
-  <center style='color:#ffffff; font-family:"open sans", "helvetica neue", helvetica, arial, sans-serif; font-size:12px; font-weight:400; line-height:12px;  mso-text-raise:1px'>Confirmar email</center>
+  <center style='color:#ffffff; font-family:"open sans", "helvetica neue", helvetica, arial, sans-serif; font-size:12px; font-weight:400; line-height:12px;  mso-text-raise:1px'>Descubrir vacantes</center>
 </v:roundrect></a>
 <![endif]--><!--[if !mso]><!-- --><span class="es-button-border">
-            <a class="es-button" target="_blank" style="font-size:14px" href="https://www.linkit-hr.com/">Confirmar email</a>
+            <a class="es-button" target="_blank" style="font-size:14px" href="https://www.linkit-hr.com/SoyTalento#vacantes">Descubrir vacantes</a>
         </span><!--<![endif]-->
     </td>
 </tr><tr>

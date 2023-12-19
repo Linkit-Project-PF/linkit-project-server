@@ -16,3 +16,7 @@ export interface UserEntity {
   postulations: Types.ObjectId[]
   registeredDate: Date
 }
+
+export interface MongoUser extends UserEntity {
+  _id: Types.ObjectId
+}
