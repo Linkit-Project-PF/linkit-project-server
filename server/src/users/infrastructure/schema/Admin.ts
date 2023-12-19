@@ -39,11 +39,6 @@ const adminSchema = new Schema({
     type: Date,
     default: Date()
   },
-  recruiterOf: {
-    type: [Schema.Types.ObjectId],
-    required: true,
-    ref: 'Jd'
-  },
   permissions: {
     get: {
       type: [String],

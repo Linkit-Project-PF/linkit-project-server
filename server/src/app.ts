@@ -28,6 +28,7 @@ const port = process.env.PORT ?? 3000
 
 app.use(langValidator)
 app.use('/resources', resourcesRoute)
+app.use('/postulations', postulationRoute)
 
 app.use(authValidator)
 app.use('/admins', adminRoute)
@@ -37,7 +38,6 @@ app.use('/posts', postRoute)
 app.use('/jds', jdRoute)
 app.use('/auth', authRoute)
 app.use('/reviews', reviewRoute)
-app.use('/postulations', postulationRoute)
 
 mongoDBConnect().then(() => {
   app.listen(port, () => {

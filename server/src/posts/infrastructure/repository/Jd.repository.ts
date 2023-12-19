@@ -5,8 +5,6 @@ import { validateJD } from '../../../errors/validation'
 import { ServerError, UncatchedError } from '../../../errors/errors'
 import CombinedFilters from '../../../users/infrastructure/helpers/CombinedFilters'
 import { objectIDValidator } from '../../../users/infrastructure/helpers/validateObjectID'
-import { RelateJD } from '../helpers/relateJD'
-import totalDeletionTrigger from '../helpers/deletionTrigger'
 
 export class MongoJdRepository implements JdRepository {
   async createJD (jd: JdEntity): Promise<JdEntity> {
@@ -14,7 +12,6 @@ export class MongoJdRepository implements JdRepository {
       await validateJD(jd)
       jd.stack = jd.stack.map(stack => stack.toLowerCase())
       const jdCreated = await Jd.create(jd)
-      await RelateJD(jdCreated, 'create')
       return jdCreated as JdEntity
     } catch (error: any) {
       if (error instanceof ServerError) throw error
@@ -56,18 +53,18 @@ export class MongoJdRepository implements JdRepository {
   async editJD (_id: string, jd: any): Promise<JdEntity> {
     try {
       objectIDValidator(_id, 'jd to edit', 'vacante a editar')
-      const invalidEdit = ['_id', 'users', 'createdDate', 'company']
-      Object.keys(jd).forEach(key => { if (invalidEdit.includes(key)) throw new ServerError('ID/users/date/company cannot be edited', 'ID/usuarios/fecha y empresa no pueden ser editados', 403) })
+      const invalidEdit = ['_id', 'createdDate', 'company']
+      Object.keys(jd).forEach(key => { if (invalidEdit.includes(key)) throw new ServerError('ID/date/company cannot be edited', 'ID/usuarios/fecha y empresa no pueden ser editados', 403) })
       const editedJd = await Jd.findByIdAndUpdate(_id, jd, { new: true })
       if (editedJd) return editedJd as JdEntity
-      else throw new ServerError('JobDescription not found', 'Vacante no encontrada', 404)
+      else throw new ServerError('Job Description not found', 'Vacante no encontrada', 404)
     } catch (error: any) {
       if (error instanceof ServerError) throw error
       else throw new UncatchedError(error.message, 'editing JD', 'editar vacante')
     }
   }
 
-  async deleteJD (_id: string, total?: string): Promise<JdEntity[]> {
+  async deleteJD (_id: string, reqID?: string, total?: string): Promise<JdEntity[]> {
     try {
       objectIDValidator(_id, 'jd to delete', 'vacante a eliminar')
       const JD = await Jd.findById(_id)
@@ -75,7 +72,7 @@ export class MongoJdRepository implements JdRepository {
       if (!total || total === 'false') {
         await Jd.findByIdAndUpdate(_id, { archived: !JD.archived })
       } else if (total === 'true') {
-        await totalDeletionTrigger(JD)
+        if (reqID !== process.env.SUPERADM_ID) throw new ServerError('Only superadm can delete totally', 'El borrado total solo lo puede hcaer el super admin', 401)
         await Jd.findByIdAndDelete(_id)
       }
       //* This is set like this as Front-End requirements.

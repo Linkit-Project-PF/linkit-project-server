@@ -3,16 +3,13 @@ import { type JdUseCase } from '../../aplication/jdUseCase'
 import { type JdEntity } from '../../domain/jd/jd.entity'
 
 interface JDQuery {
-  airTableId?: string
   id?: string
   code?: string
   title?: string
+  type?: string
   location?: string
   modality?: string
   stack?: string
-  status?: string
-  users?: string
-  type?: string
   archived?: string
   company?: string
 }

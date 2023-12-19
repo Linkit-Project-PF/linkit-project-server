@@ -27,12 +27,20 @@ export class MongoAdminRepository implements AdminRepository {
   async findAdmin (value: string, filter: string): Promise<AdminEntity | AdminEntity[]> {
     try {
       let result
-      const validParams = ['name', 'email', 'active']
+      const validParams = ['email', 'active', 'country']
       if (filter === 'all') result = await Admin.find()
       else if (filter === 'id') {
         objectIDValidator(value, 'admin to search', 'admin buscado')
         result = await Admin.findById(value)
         if (!result) throw new ServerError('No admin found under that id', 'No se encontro administrador bajo ese ID', 404)
+      } else if (filter === 'name') {
+        const allAdmins = await Admin.find()
+        const matchedAdmins: AdminEntity[] = []
+        allAdmins.forEach(admin => {
+          const fullName = admin.firstName + admin.lastName
+          if (fullName.includes(value)) matchedAdmins.push(admin)
+        })
+        result = matchedAdmins
       } else if (validParams.includes(filter)) result = await Admin.find({ [filter]: value })
       else throw new ServerError('Not a valid parameter', 'Parametro invalido', 406)
       return result
@@ -45,11 +53,11 @@ export class MongoAdminRepository implements AdminRepository {
   async editAdmin (_id: string, info: any): Promise<AdminEntity> {
     try {
       objectIDValidator(_id, 'admin to edit', 'admin a editar')
-      const invalidEdit = ['_id', 'role', 'createdDate', 'email', 'recruiterOf', 'permissions']
+      const invalidEdit = ['_id', 'role', 'createdDate', 'email', 'permissions']
       Object.keys(info).forEach(key => {
         if (invalidEdit.includes(key)) {
-          throw new ServerError('ID/role/date/email/recruiterOf and/or permissions cannot be changed or this is not the route for it',
-            'El ID/rol/fecha/email/reclutador y/o permisos no son editables o no se permite su cambio por esta ruta', 403)
+          throw new ServerError('ID/role/date/email and/or permissions cannot be changed or this is not the route for it',
+            'El ID/rol/fecha/email y/o permisos no son editables o no se permite su cambio por esta ruta', 403)
         }
       })
       const editAdmin = await Admin.findByIdAndUpdate(_id, info, { new: true })
@@ -61,7 +69,7 @@ export class MongoAdminRepository implements AdminRepository {
     }
   }
 
-  async deleteAdmin (_id: string, total?: string): Promise<AdminEntity | string> {
+  async deleteAdmin (_id: string, reqID?: string, total?: string): Promise<AdminEntity | string> {
     try {
       objectIDValidator(_id, 'admin to delete', 'admin a eliminar')
       const admin: AdminEntity | null = await Admin.findById(_id)
@@ -70,10 +78,11 @@ export class MongoAdminRepository implements AdminRepository {
       if (!total || total === 'false') {
         result = await Admin.findByIdAndUpdate(_id, { active: !admin.active }, { new: true }) as AdminEntity
         return result
-      } else if (total === 'true') { // TODO ADD TRIGGER HERE
+      } else if (total === 'true') {
+        if (reqID !== process.env.SUPERADM_ID) throw new ServerError('Only superadm can delete totally', 'El borrado total solo lo puede hcaer el super admin', 401)
         await Admin.findByIdAndDelete(_id)
       }
-      return 'Fully deleted'
+      return 'Admin totally deleted'
     } catch (error: any) {
       if (error instanceof ServerError) throw error
       else throw new UncatchedError(error.message, 'deleting admin', 'eliminar administrador')

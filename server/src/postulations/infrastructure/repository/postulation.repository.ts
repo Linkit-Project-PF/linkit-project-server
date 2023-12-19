@@ -1,17 +1,13 @@
-import mongoose from 'mongoose'
 import base from '../../../db/airtable'
 import { ServerError, UncatchedError } from '../../../errors/errors'
-import { validatePostulation } from '../../../errors/validation'
-import { objectIDValidator } from '../../../users/infrastructure/helpers/validateObjectID'
-import { type PostulationEntity } from '../../domain/postulation.entity'
 import { type PostulationRepository } from '../../domain/postulation.repository'
-import { relatePostulation } from '../helpers/relatePostulations'
-import Postulation from '../schema/Postulation'
+import { validatePostulation } from '../../../errors/validation'
+import { type PostulationQuery, type translatedResponse } from '../../../interfaces'
 
 export class MongoPostulationRepository implements PostulationRepository {
-  async createPostulation (postulation: PostulationEntity): Promise<PostulationEntity> {
+  async createPostulation (postulation: any): Promise<translatedResponse> {
     try {
-      await validatePostulation(postulation)
+      validatePostulation(postulation)
       await base('LinkIT - Candidate application').create([
         {
           // fields: {
@@ -19,96 +15,49 @@ export class MongoPostulationRepository implements PostulationRepository {
           // }
         }
       ])
-      const postulationCreated = await Postulation.create(postulation)
-      await relatePostulation(postulationCreated, 'create')
-      return postulationCreated
+      return { en: 'Postulation sent', es: 'Postulación enviada' }
     } catch (error: any) {
       if (error instanceof ServerError) throw error
       else throw new UncatchedError(error.message, 'creating postulation', 'crear postulacion')
     }
   }
 
-  async findPostulation (filter: string, value: string): Promise<PostulationEntity | PostulationEntity[]> {
+  async findPostulation (query: PostulationQuery): Promise<any> {
     try {
-      base('LinkIT - Candidate application').select({
-        // Selecting the first 3 records in Grid view:
-        maxRecords: 3,
-        view: 'Grid view'
-      }).eachPage(function page (records, fetchNextPage) {
-        // This function (`page`) will get called for each page of records.
+      // TODO Return here an array with all postulations
+      // base('LinkIT - Candidate application').select({
+      //   Selecting the first 3 records in Grid view:
+      //   maxRecords: 3,
+      //   view: 'Grid view'
+      // }).eachPage(function page (records, fetchNextPage) {
+      //   This function (`page`) will get called for each page of records.
 
-        records.forEach(function (record) {
-          console.log('Retrieved', record.fields)
-        })
+      //   records.forEach(function (record) {
+      //     console.log('Retrieved', record.fields)
+      //   })
 
-        // To fetch the next page of records, call `fetchNextPage`.
-        // If there are more records, `page` will get called again.
-        // If there are no more records, `done` will get called.
-        fetchNextPage()
-      }, function done (err) {
-        if (err) { console.error(err) }
-      })
-
-      let result: PostulationEntity | PostulationEntity[]
-      if (filter === 'user') {
-        objectIDValidator(value, 'postulation user', 'usuario en postulacion')
-        const userID = new mongoose.Types.ObjectId(value)
-        result = await Postulation.find({ user: { $in: [userID] } }).populate('jd')
-        return result
-      } else if (filter === 'all') {
-        result = await Postulation.find({})
-      } else if (filter === 'jd') {
-        objectIDValidator(value, 'postulation jd', 'vacante en postulacion')
-        const jdID = new mongoose.Types.ObjectId(value)
-        result = await Postulation.find({ jd: { $in: [jdID] } }).populate('user')
-      } else if (filter === 'id') {
-        objectIDValidator(value, 'postulation id', 'ID de postulacion')
-        result = await Postulation.findById(value) as PostulationEntity
-      } else throw new ServerError('Invalid filter', 'Filtro invalido', 403)
+      //   To fetch the next page of records, call `fetchNextPage`.
+      //   If there are more records, `page` will get called again.
+      //   If there are no more records, `done` will get called.
+      //   fetchNextPage()
+      // }, function done (err) {
+      //   if (err) { console.error(err) }
+      // })
+      console.log(query)
+      const filter = Object.keys(query)[0]
+      const value = Object.values(query)[0]
+      const airtable = await base('LinkIT - Candidate application').select({ view: 'Grid view' }).all()
+      const fields = airtable.map(result => result.fields)
+      let result
+      if (!filter) {
+        result = fields
+      } else if (filter === 'user') {
+        result = fields.filter(records => (records['Nombre completo'] as string).includes(value))
+      } else throw new ServerError('Invalid filter parameter', 'Parametro de filtrado invalido', 406)
       return result
     } catch (error: any) {
       if (error instanceof ServerError) throw error
-      else throw new UncatchedError(error.message, 'creating postulation', 'crear postulacion')
-    }
-  }
-
-  async updatePostulation (_id: string, postulation: PostulationEntity): Promise<PostulationEntity> {
-    try {
-      objectIDValidator(_id, 'postulation to edit', 'postulacion a editar')
-      const validParams = ['status', 'followUps']
-      Object.keys(postulation).forEach(param => {
-        if (!validParams.includes(param)) {
-          throw new ServerError(
-            'Invalid param, only status or followUps can be edited', 'Parametro invalido, solo el estado o los reclutadores pueden ser editados', 403
-          )
-        }
-      })
-      const postulationFound = await Postulation.findByIdAndUpdate(_id, postulation, { new: true })
-      if (!postulationFound) throw new ServerError('No postulation found under that ID', 'No se encontro postulacion con ese ID', 404)
-      return postulationFound
-    } catch (error: any) {
-      if (error instanceof ServerError) throw error
-      else throw new UncatchedError(error.message, 'editing postulation', 'editar postulacion')
-    }
-  }
-
-  async deletePostulation (_id: string, total?: string): Promise<PostulationEntity | string> {
-    try {
-      objectIDValidator(_id, 'postulation to delete', 'postulacion a eliminar')
-      const postulation = await Postulation.findById(_id) as PostulationEntity
-      if (!postulation) throw new ServerError('No postulation found under that ID', 'No se encontro postulacion con ese ID', 404)
-      if (!total || total === 'false') {
-        console.log(postulation.archived)
-        const result = await Postulation.findByIdAndUpdate(_id, { archived: !postulation.archived }) as PostulationEntity
-        return result
-      } else if (total === 'true') {
-        await relatePostulation(postulation, 'delete')
-        await Postulation.findByIdAndDelete(_id)
-      }
-      return 'Postulation deleted successfully'
-    } catch (error: any) {
-      if (error instanceof ServerError) throw error
-      else throw new UncatchedError(error.message, 'editing postulation', 'editar postulacion')
+      else throw new UncatchedError(error.message, 'searching postulations', 'buscar postulaciones')
     }
   }
 }

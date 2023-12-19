@@ -1,4 +1,4 @@
-import { Schema, type Types, model } from 'mongoose'
+import { Schema, model } from 'mongoose'
 
 const jdSchema = new Schema({
   code: {
@@ -74,33 +74,13 @@ const jdSchema = new Schema({
       message: 'Benefits array must have at least 1 benefit added'
     }
   },
-  recruiter: {
-    type: [Schema.Types.ObjectId],
-    ref: 'Admin',
-    required: true,
-    validate: {
-      validator: (array: Types.ObjectId[]) => array.length >= 1,
-      message: 'JD cannot be created with at least one recruiter assigned'
-    }
-  },
   archived: {
     type: Boolean,
     required: true,
     default: false
   },
   company: {
-    type: Schema.Types.ObjectId,
-    ref: 'Company',
-    required: true
-  },
-  status: {
     type: String,
-    required: true,
-    enum: ['open', 'first-interview', 'second-interview', 'closed']
-  },
-  users: {
-    type: [Schema.Types.ObjectId],
-    ref: 'Postulation',
     required: true
   },
   createdDate: {
