@@ -2,17 +2,30 @@ import base from '../../../db/airtable'
 import { ServerError, UncatchedError } from '../../../errors/errors'
 import { type PostulationRepository } from '../../domain/postulation.repository'
 import { validatePostulation } from '../../../errors/validation'
-import { type PostulationQuery, type translatedResponse } from '../../../interfaces'
+import { type postulation, type PostulationQuery, type translatedResponse } from '../../../interfaces'
 
 export class MongoPostulationRepository implements PostulationRepository {
-  async createPostulation (postulation: any): Promise<translatedResponse> {
+  async createPostulation (postulation: postulation): Promise<translatedResponse> {
     try {
-      validatePostulation(postulation)
+      // TODO Add CV from cloudinary, check with front ppl how they storage that.
+      // TODO Check ALL postulations from Airtable to validate If user has already created a postulation for that JD, return error If so.
+      await validatePostulation(postulation)
+      postulation.created = new Date()
       await base('LinkIT - Candidate application').create([
         {
-          // fields: {
-
-          // }
+          fields: {
+            'Candidate Stack + PM tools': postulation.stack,
+            LinkedIn: postulation.linkedin,
+            'Salary expectation (USD)': postulation.salary,
+            Country: postulation.country,
+            'English Level': postulation.english,
+            'Why Change': postulation.reason,
+            'Candidate Email': postulation.email,
+            'When to start availability': postulation.availability,
+            Created: postulation.created.toLocaleDateString('en-CA', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-'),
+            Nombre: postulation.firstName,
+            Apellido: postulation.lastName
+          }
         }
       ])
       return { en: 'Postulation sent', es: 'Postulación enviada' }
@@ -22,9 +35,8 @@ export class MongoPostulationRepository implements PostulationRepository {
     }
   }
 
-  async findPostulation (query: PostulationQuery): Promise<any> {
+  async findPostulation (query: PostulationQuery): Promise<postulation[]> {
     try {
-      // TODO Return here an array with all postulations
       // base('LinkIT - Candidate application').select({
       //   Selecting the first 3 records in Grid view:
       //   maxRecords: 3,
@@ -54,7 +66,7 @@ export class MongoPostulationRepository implements PostulationRepository {
       } else if (filter === 'user') {
         result = fields.filter(records => (records['Nombre completo'] as string).includes(value))
       } else throw new ServerError('Invalid filter parameter', 'Parametro de filtrado invalido', 406)
-      return result
+      return result as unknown as postulation[]
     } catch (error: any) {
       if (error instanceof ServerError) throw error
       else throw new UncatchedError(error.message, 'searching postulations', 'buscar postulaciones')

@@ -5,8 +5,6 @@ import { type translatedResponse } from '../../../interfaces'
 export class PostulationController {
   constructor (private readonly postulationUseCase: PostulationUseCase) { }
 
-  // TODO Check response type here
-
   public getController: RequestHandler = async (req, res) => {
     try {
       const postulations = await this.postulationUseCase.findPostulation(req.query)

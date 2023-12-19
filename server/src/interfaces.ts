@@ -8,3 +8,16 @@ export interface PostulationQuery {
 }
 
 // TODO Create postulation interface here to define find postulations type
+export interface postulation {
+  stack: string[]
+  email: string
+  country: string
+  linkedin: string
+  salary: number
+  english: string
+  reason: string
+  availability: string
+  created: Date
+  firstName: string
+  lastName: string
+}
