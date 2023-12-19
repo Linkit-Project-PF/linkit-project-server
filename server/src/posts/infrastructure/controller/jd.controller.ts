@@ -40,7 +40,7 @@ export class JdController {
     try {
       await permValidator((req as any).userId, 'delete', 'jds')
       const { id } = req.params
-      const result = await this.jdUseCase.deleteJD(id, req.query.total as string)
+      const result = await this.jdUseCase.deleteJD(id, (req as any).userId, req.query.total as string)
       return res.status(200).json(result)
     } catch (error: any) {
       return res.status(error.code).json(error[(req as any).lang as keyof Error])

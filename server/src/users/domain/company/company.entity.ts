@@ -1,5 +1,3 @@
-import { type Types } from 'mongoose'
-
 export interface CompanyEntity {
   airTableId?: string | null
   image?: string
@@ -11,6 +9,5 @@ export interface CompanyEntity {
   role: string
   interested?: string | null
   active?: boolean | null
-  jds: Types.ObjectId[]
   registeredDate: Date
 }

@@ -11,8 +11,8 @@ export class UserUseCase {
     return userCreated
   }
 
-  public findUser = async (value: string | string[], filter: string | string[], combined?: boolean): Promise<UserEntity | UserEntity[] | string> => {
-    const user = await this.userRepository.findUser(value, filter, combined)
+  public findUser = async (value: string, filter: string): Promise<UserEntity | UserEntity[] | string> => {
+    const user = await this.userRepository.findUser(value, filter)
     return user
   }
 
@@ -21,8 +21,8 @@ export class UserUseCase {
     return editUser
   }
 
-  public deleteUser = async (id: string, total?: string): Promise<UserEntity | string> => {
-    const deleteUser = await this.userRepository.deleteUser(id, total)
+  public deleteUser = async (id: string, reqID?: string, total?: string): Promise<UserEntity | string> => {
+    const deleteUser = await this.userRepository.deleteUser(id, reqID, total)
     return deleteUser
   }
 }

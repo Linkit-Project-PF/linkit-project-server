@@ -60,11 +60,6 @@ const userSchema = new Schema({
     required: true,
     default: true
   },
-  postulations: {
-    type: [Schema.Types.ObjectId],
-    ref: 'Postulation',
-    required: true
-  },
   registeredDate: {
     type: Date,
     default: Date()

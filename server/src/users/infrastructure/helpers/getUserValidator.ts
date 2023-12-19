@@ -6,21 +6,19 @@ interface UserQuery {
   id?: string
   name?: string
   email?: string
-  technology?: string
+  technologies?: string
   active?: string
+  country?: string
 }
 
 export default async function getUserValidator (query: UserQuery, userUseCase: UserUseCase): Promise<UserEntity | UserEntity[] | string> {
   try {
     let user
-    const filters = Object.keys(query)
-    const values = Object.values(query)
-    if (filters.length) {
-      if (filters.length === 1) {
-        user = await userUseCase.findUser(values[0], filters[0])
-      } else {
-        user = await userUseCase.findUser(values, filters, true)
-      }
+    if (Object.keys(query).length) {
+      const filter = Object.keys(query)[0]
+      const value = Object.values(query)[0]
+      if (filter.length > 1) throw new ServerError('Combined filters are not valid for user', 'No se permiten filtros combinados para usuarios', 403)
+      user = await userUseCase.findUser(value, filter)
     } else {
       user = await userUseCase.findUser('', 'all')
     }
