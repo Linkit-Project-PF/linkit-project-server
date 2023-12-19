@@ -7,7 +7,6 @@ import { type MailNodeMailerProvider } from '../../authentication/Infrastructure
 import { objectIDValidator } from '../helpers/validateObjectID'
 import { validateCompanyCreation } from '../../../errors/validation'
 import { ServerError, UncatchedError } from '../../../errors/errors'
-import { MongoJdRepository } from '../../../posts/infrastructure/repository/Jd.repository'
 
 export class MongoCompanyRepository implements CompanyRepository {
   constructor (private readonly mailNodeMailerProvider: MailNodeMailerProvider) {}
@@ -34,17 +33,16 @@ export class MongoCompanyRepository implements CompanyRepository {
   async findCompany (value: string, filter: string): Promise<CompanyEntity | CompanyEntity[]> {
     try {
       let result
-      const validSingleParams = ['name', 'email', 'active']
-      const validIncludeParams = ['jds']
+      const validSingleParams = ['companyName', 'email', 'active', 'country', 'interested']
       if (filter === 'all') result = await Company.find()
       else if (filter === 'id') {
         objectIDValidator(value, 'company id to search', 'empresa a buscar')
         result = await Company.findById(value)
         if (!result) throw new ServerError('No company found under that id', 'No se encontro empresa con ese ID', 404)
+      } else if (filter === 'companyName') {
+        result = await Company.find({ companyName: { $regex: new RegExp(value, 'i') } })
       } else if (validSingleParams.includes(filter)) result = await Company.find({ [filter]: value })
-      else if (validIncludeParams.includes(filter)) {
-        result = await Company.find({ [filter]: { $in: [value] } })
-      } else throw new ServerError('Not a valid parameter', 'Parametro invalido', 406)
+      else throw new ServerError('Not a valid parameter', 'Parametro invalido', 406)
       return result as CompanyEntity
     } catch (error: any) {
       if (error instanceof ServerError) throw error
@@ -55,11 +53,11 @@ export class MongoCompanyRepository implements CompanyRepository {
   async editCompany (id: string, info: any): Promise<CompanyEntity> {
     try {
       objectIDValidator(id, 'company to edit', 'empresa a editar')
-      const invalidEdit = ['_id', 'role', 'airTableId', 'jds', 'registeredDate', 'email']
+      const invalidEdit = ['_id', 'role', 'airTableId', 'registeredDate', 'email']
       Object.keys(info).forEach(key => {
         if (invalidEdit.includes(key)) {
-          throw new ServerError('ID/airtableID/role/date/email or jds cannot be changed through this route',
-            'ID/ID de airtable/rol/fecha/email o vacantes no son editables o no se pueden editar por esta ruta', 403)
+          throw new ServerError('ID/airtableID/role/date nor email can be changed through this route',
+            'ID/ID de airtable/rol/fecha o email no son editables o no se pueden editar por esta ruta', 403)
         }
       })
       const editedCompany = await Company.findByIdAndUpdate(id, info, { new: true })
@@ -71,7 +69,7 @@ export class MongoCompanyRepository implements CompanyRepository {
     }
   }
 
-  async deleteCompany (id: string, total?: string): Promise<CompanyEntity | string> {
+  async deleteCompany (id: string, reqID?: string, total?: string): Promise<CompanyEntity | string> {
     try {
       objectIDValidator(id, 'company to delete', 'empresa a eliminar')
       const company = await Company.findById(id)
@@ -84,13 +82,10 @@ export class MongoCompanyRepository implements CompanyRepository {
           )
           return resultado as CompanyEntity
         } else if (total === 'true') {
-          const provider = new MongoJdRepository()
-          for (let i = 0; i < company.jds.length; i++) {
-            await provider.deleteJD(company.jds[i].toString(), 'true')
-          }
+          if (reqID !== process.env.SUPERADM_ID) throw new ServerError('Only superadm can delete totally', 'El borrado total solo lo puede hcaer el super admin', 401)
           await Company.findByIdAndDelete(id)
         }
-        return 'Company deleted completely, plus JDS related, plus postulations related to each JD'
+        return 'Company deleted completely'
       }
     } catch (error: any) {
       if (error instanceof ServerError) throw error

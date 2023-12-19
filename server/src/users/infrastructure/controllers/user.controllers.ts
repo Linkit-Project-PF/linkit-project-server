@@ -39,7 +39,7 @@ export class UserControllers {
   public deleteController: RequestHandler = async (req, res) => {
     try {
       await permValidator((req as any).userId, 'delete', 'users')
-      const user = await this.userUseCase.deleteUser(req.params.id, req.query.total as string)
+      const user = await this.userUseCase.deleteUser(req.params.id, (req as any).userId, req.query.total as string)
       return res.status(200).json(user)
     } catch (error: any) {
       return res.status(error.code).json(error[(req as any).lang as keyof Error])

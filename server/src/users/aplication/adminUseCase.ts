@@ -21,8 +21,8 @@ export class AdminUseCase {
     return editAdmin
   }
 
-  public deleteAdmin = async (id: string, total?: string): Promise<AdminEntity | string> => {
-    const deleteAdmin = await this.adminRepository.deleteAdmin(id, total)
+  public deleteAdmin = async (id: string, reqID?: string, total?: string): Promise<AdminEntity | string> => {
+    const deleteAdmin = await this.adminRepository.deleteAdmin(id, total, reqID)
     return deleteAdmin
   }
 

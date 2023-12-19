@@ -2,7 +2,7 @@ import { type Types } from 'mongoose'
 
 export interface UserEntity {
   airTableId?: string | null
-  image?: string
+  image?: string | null
   firstName: string
   lastName: string
   email: string
@@ -13,7 +13,6 @@ export interface UserEntity {
   role: string
   technologies?: string[]
   active: boolean
-  postulations: Types.ObjectId[]
   registeredDate: Date
 }
 

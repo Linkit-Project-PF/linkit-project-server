@@ -1,4 +1,3 @@
-import { type Types } from 'mongoose'
 import { type permissions, type AdminEntity } from './admin.entity'
 
 export class AdminValue implements AdminEntity {
@@ -11,7 +10,6 @@ export class AdminValue implements AdminEntity {
   role?: string | null
   active?: boolean | null
   createdDate: Date
-  recruiterOf: Types.ObjectId[]
   permissions?: permissions | null
 
   constructor (admin: AdminEntity) {
@@ -24,7 +22,6 @@ export class AdminValue implements AdminEntity {
     this.role = admin.role ?? 'admin'
     this.active = admin.active ?? true
     this.createdDate = admin.createdDate
-    this.recruiterOf = admin.recruiterOf
     this.permissions = admin.permissions
   }
 }
