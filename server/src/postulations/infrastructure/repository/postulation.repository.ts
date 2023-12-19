@@ -2,12 +2,10 @@ import base from '../../../db/airtable'
 import { ServerError, UncatchedError } from '../../../errors/errors'
 import { type PostulationRepository } from '../../domain/postulation.repository'
 import { validatePostulation } from '../../../errors/validation'
-
-// TODO Return an object {en, es} and response will depend on lang on controller
-// For this create an interface
+import { type translatedResponse } from '../../../interfaces'
 
 export class MongoPostulationRepository implements PostulationRepository {
-  async createPostulation (postulation: any): Promise<string> {
+  async createPostulation (postulation: any): Promise<translatedResponse> {
     try {
       validatePostulation(postulation)
       await base('LinkIT - Candidate application').create([
@@ -17,8 +15,7 @@ export class MongoPostulationRepository implements PostulationRepository {
           // }
         }
       ])
-
-      return 'Postulation has been created'
+      return { en: 'Postulation sent', es: 'Postulación enviada' }
     } catch (error: any) {
       if (error instanceof ServerError) throw error
       else throw new UncatchedError(error.message, 'creating postulation', 'crear postulacion')
@@ -27,6 +24,7 @@ export class MongoPostulationRepository implements PostulationRepository {
 
   async findPostulation (filter: string, value: string): Promise<any> {
     try {
+      // TODO Return here an array with all postulations
       base('LinkIT - Candidate application').select({
         // Selecting the first 3 records in Grid view:
         maxRecords: 3,
