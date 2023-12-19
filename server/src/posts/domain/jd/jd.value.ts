@@ -1,4 +1,3 @@
-import { type Types } from 'mongoose'
 import { type JdEntity } from './jd.entity'
 
 export class JdValue implements JdEntity {
@@ -15,15 +14,11 @@ export class JdValue implements JdEntity {
   requirements: string[]
   niceToHave?: string[] | null
   benefits: string[]
-  recruiter: Types.ObjectId[]
   archived: boolean
-  company: Types.ObjectId
-  status: string
-  users: Types.ObjectId[]
+  company: string
   createdDate: Date
 
   constructor (jd: JdEntity) {
-    // this.airTableId = jd.airTableId ?? undefined
     this.code = jd.code
     this.title = jd.title
     this.description = jd.description
@@ -37,11 +32,8 @@ export class JdValue implements JdEntity {
     this.requirements = jd.requirements
     this.niceToHave = jd.niceToHave ?? []
     this.benefits = jd.benefits
-    this.recruiter = jd.recruiter
     this.archived = jd.archived
     this.company = jd.company
-    this.status = jd.status
-    this.users = jd.users
     this.createdDate = jd.createdDate
   }
 }

@@ -22,7 +22,7 @@ export class AdminUseCase {
   }
 
   public deleteAdmin = async (id: string, reqID?: string, total?: string): Promise<AdminEntity | string> => {
-    const deleteAdmin = await this.adminRepository.deleteAdmin(id, total, reqID)
+    const deleteAdmin = await this.adminRepository.deleteAdmin(id, reqID, total)
     return deleteAdmin
   }
 

@@ -1,5 +1,3 @@
-import { type Types } from 'mongoose'
-
 export interface JdEntity {
   code: string
   title: string
@@ -14,10 +12,7 @@ export interface JdEntity {
   requirements: string[]
   niceToHave?: string[] | null
   benefits: string[]
-  recruiter: Types.ObjectId[]
   archived: boolean
-  company: Types.ObjectId
-  status: string
-  users: Types.ObjectId[]
+  company: string
   createdDate: Date
 }
