@@ -9,7 +9,7 @@ export class PostulationController {
 
   public getController: RequestHandler = async (req, res) => {
     try {
-      const postulations = await this.postulationUseCase.findPostulation('', '') // TODO Change this here depending on filters
+      const postulations = await this.postulationUseCase.findPostulation(req.query)
       return res.status(200).json(postulations)
     } catch (error: any) {
       return res.status(error.code).json(error[(req as any).lang as keyof Error])
