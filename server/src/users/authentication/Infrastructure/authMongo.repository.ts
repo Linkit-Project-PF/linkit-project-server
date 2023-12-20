@@ -2,6 +2,7 @@ import { type MongoUser, type UserEntity } from '../../domain/user/user.entity'
 import { type CompanyEntity } from '../../domain/company/company.entity'
 import { type AdminEntity } from '../../domain/admin/admin.entity'
 import { userWelcomeMailCreate } from './nodemailer/welcome/userWelcomeMail'
+import { validateUserExists } from '../../helpers/validateAirtable'
 import { type AuthRepository } from './auth.repository'
 import { auth } from '../firebase'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
@@ -36,6 +37,7 @@ export class AuthMongoRepository implements AuthRepository {
 
   async register (entity: CustomType): Promise<UserEntity | CompanyEntity | AdminEntity | string> {
     try {
+      await validateUserExists(entity)
       let entityCreated
       let provider
       if (entity.role === 'user') {
