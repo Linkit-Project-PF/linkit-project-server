@@ -1,68 +1,75 @@
-import mongoose from 'mongoose'
+import base from '../../../db/airtable'
 import { ServerError, UncatchedError } from '../../../errors/errors'
-import { validatePostulation } from '../../../errors/validation'
-import { objectIDValidator } from '../../../users/infrastructure/helpers/validateObjectID'
-import { type PostulationEntity } from '../../domain/postulation.entity'
 import { type PostulationRepository } from '../../domain/postulation.repository'
-import { relatePostulation } from '../helpers/relatePostulations'
-import Postulation from '../schema/Postulation'
+import { validatePostulation } from '../../../errors/validation'
+import { type postulation, type PostulationQuery, type translatedResponse } from '../../../interfaces'
 
 export class MongoPostulationRepository implements PostulationRepository {
-  async createPostulation (postulation: PostulationEntity): Promise<PostulationEntity> {
+  async createPostulation (postulation: postulation): Promise<translatedResponse> {
     try {
+      // TODO Add CV from cloudinary, check with front ppl how they storage that.
+      // TODO Check ALL postulations from Airtable to validate If user has already created a postulation for that JD, return error If so.
       await validatePostulation(postulation)
-      const postulationCreated = await Postulation.create(postulation)
-      await relatePostulation(postulationCreated._id.toString(), postulation.user, postulation.jd)
-      return postulationCreated as unknown as PostulationEntity
+      postulation.created = new Date()
+      await base('LinkIT - Candidate application').create([
+        {
+          fields: {
+            'Candidate Stack + PM tools': postulation.stack,
+            LinkedIn: postulation.linkedin,
+            'Salary expectation (USD)': postulation.salary,
+            Country: postulation.country,
+            'English Level': postulation.english,
+            'Why Change': postulation.reason,
+            'Candidate Email': postulation.email,
+            'When to start availability': postulation.availability,
+            Created: postulation.created.toLocaleDateString('en-CA', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-'),
+            Nombre: postulation.firstName,
+            Apellido: postulation.lastName
+          }
+        }
+      ])
+      return { en: 'Postulation sent', es: 'Postulación enviada' }
     } catch (error: any) {
       if (error instanceof ServerError) throw error
       else throw new UncatchedError(error.message, 'creating postulation', 'crear postulacion')
     }
   }
 
-  async findPostulation (filter: string, value: string): Promise<PostulationEntity | PostulationEntity[]> {
-    // TODO validators here
+  async findPostulation (query: PostulationQuery): Promise<postulation[]> {
     try {
-      let result: PostulationEntity | PostulationEntity[]
-      if (filter === 'user') {
-        objectIDValidator(value, 'postulation user', 'usuario en postulacion')
-        const userID = new mongoose.Types.ObjectId(value)
-        result = await Postulation.find({ user: { $in: [userID] } }).populate('jd')
-        return result
-      } else if (filter === 'all') {
-        result = await Postulation.find({})
-      } else if (filter === 'jd') {
-        objectIDValidator(value, 'postulation jd', 'vacante en postulacion')
-        const jdID = new mongoose.Types.ObjectId(value)
-        result = await Postulation.find({ jd: { $in: [jdID] } }).populate('user')
-      } else if (filter === 'id') {
-        objectIDValidator(value, 'postulation id', 'ID de postulacion')
-        result = await Postulation.findById(value) as PostulationEntity
-      } else throw new ServerError('Invalid filter', 'Filtro invalido', 403)
-      return result
-    } catch (error: any) {
-      if (error instanceof ServerError) throw error
-      else throw new UncatchedError(error.message, 'creating postulation', 'crear postulacion')
-    }
-  }
+      // base('LinkIT - Candidate application').select({
+      //   Selecting the first 3 records in Grid view:
+      //   maxRecords: 3,
+      //   view: 'Grid view'
+      // }).eachPage(function page (records, fetchNextPage) {
+      //   This function (`page`) will get called for each page of records.
 
-  async updatePostulation (_id: string, postulation: PostulationEntity): Promise<PostulationEntity> {
-    try {
-      const postulationFound = await Postulation.findByIdAndUpdate(_id, postulation, { new: true })
-      return postulationFound as unknown as PostulationEntity
-    } catch (error: any) {
-      if (error instanceof ServerError) throw error
-      else throw new UncatchedError(error.message, 'editing postulation', 'editar postulacion')
-    }
-  }
+      //   records.forEach(function (record) {
+      //     console.log('Retrieved', record.fields)
+      //   })
 
-  async removePostulation (_id: string): Promise<PostulationEntity> {
-    try {
-      const postulation = await Postulation.findByIdAndDelete(_id)
-      return postulation as unknown as PostulationEntity
+      //   To fetch the next page of records, call `fetchNextPage`.
+      //   If there are more records, `page` will get called again.
+      //   If there are no more records, `done` will get called.
+      //   fetchNextPage()
+      // }, function done (err) {
+      //   if (err) { console.error(err) }
+      // })
+      console.log(query)
+      const filter = Object.keys(query)[0]
+      const value = Object.values(query)[0]
+      const airtable = await base('LinkIT - Candidate application').select({ view: 'Grid view' }).all()
+      const fields = airtable.map(result => result.fields)
+      let result
+      if (!filter) {
+        result = fields
+      } else if (filter === 'user') {
+        result = fields.filter(records => (records['Nombre completo'] as string).includes(value))
+      } else throw new ServerError('Invalid filter parameter', 'Parametro de filtrado invalido', 406)
+      return result as unknown as postulation[]
     } catch (error: any) {
       if (error instanceof ServerError) throw error
-      else throw new UncatchedError(error.message, 'editing postulation', 'editar postulacion')
+      else throw new UncatchedError(error.message, 'searching postulations', 'buscar postulaciones')
     }
   }
 }

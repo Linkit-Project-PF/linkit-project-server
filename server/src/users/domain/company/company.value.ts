@@ -11,15 +11,12 @@ export class CompanyValue implements CompanyEntity {
   role: string
   interested?: string | null
   active?: boolean | null
-  jds: string[]
   registeredDate: Date
-  password?: string | null
 
   constructor (company: CompanyEntity) {
     this.airTableId = company.airTableId ?? undefined
     this.image = company.image ?? undefined
     this.companyName = company.companyName
-    this.password = company.password ?? undefined
     this.email = company.email
     this.country = company.country ?? undefined
     this.role = company.role ?? 'company'
@@ -27,6 +24,5 @@ export class CompanyValue implements CompanyEntity {
     this.active = company.active ?? true
     this.interested = company.interested ?? undefined
     this.registeredDate = company.registeredDate
-    this.jds = company.jds
   }
 }

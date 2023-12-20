@@ -4,19 +4,15 @@ const jdSchema = new Schema({
   code: {
     type: String,
     required: true,
-    minlength: 3,
-    maxlength: 40
+    unique: true
   },
   title: {
     type: String,
-    required: true,
-    minlength: 3,
-    maxlength: 100
+    required: true
   },
   description: {
     type: String,
-    required: true,
-    minlength: 10
+    required: true
   },
   type: {
     type: String,
@@ -35,10 +31,12 @@ const jdSchema = new Schema({
     enum: ['remote', 'specific-remote', 'on-site', 'hybrid']
   },
   stack: {
-    type: Array,
+    type: [String],
     required: true,
-    minlength: 0,
-    maxlength: 50
+    validate: {
+      validator: (array: string[]) => array.length >= 1,
+      message: 'Stack array must have at least 1 stack added'
+    }
   },
   aboutUs: {
     type: String,
@@ -56,20 +54,25 @@ const jdSchema = new Schema({
     default: ''
   },
   requirements: {
-    type: Array,
-    required: true
+    type: [String],
+    required: true,
+    validate: {
+      validator: (array: string[]) => array.length >= 1,
+      message: 'Add at least one requirement to create the JD'
+    }
   },
   niceToHave: {
-    type: Array,
-    required: true
+    type: [String],
+    required: false,
+    default: []
   },
   benefits: {
-    type: Array,
-    required: true
-  },
-  recruiter: {
-    type: String,
-    required: true
+    type: [String],
+    required: true,
+    validate: {
+      validator: (array: string[]) => array.length >= 1,
+      message: 'Benefits array must have at least 1 benefit added'
+    }
   },
   archived: {
     type: Boolean,
@@ -78,17 +81,6 @@ const jdSchema = new Schema({
   },
   company: {
     type: String,
-    required: true,
-    minlength: 1,
-    maxlength: 100
-  },
-  status: {
-    type: String,
-    required: true,
-    enum: ['open', 'first-interview', 'second-interview', 'closed']
-  },
-  users: {
-    type: Array,
     required: true
   },
   createdDate: {

@@ -1,15 +1,10 @@
-// Entities
-import { type UserEntity } from '../../domain/user/user.entity'
+import { type MongoUser, type UserEntity } from '../../domain/user/user.entity'
 import { type CompanyEntity } from '../../domain/company/company.entity'
 import { type AdminEntity } from '../../domain/admin/admin.entity'
-// Repositories
+import { userWelcomeMailCreate } from './nodemailer/welcome/userWelcomeMail'
 import { type AuthRepository } from './auth.repository'
-// Validations
-//* Error handling imports here
-// Firebase
 import { auth } from '../firebase'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
-// Repositories
 import Admin from '../../infrastructure/schema/Admin'
 import User from '../../infrastructure/schema/User'
 import Company from '../../infrastructure/schema/Company'
@@ -18,10 +13,21 @@ import { MongoCompanyRepository } from '../../infrastructure/repository/Company.
 import { MongoAdminRepository } from '../../infrastructure/repository/Admin.repository'
 import { objectIDValidator } from '../../infrastructure/helpers/validateObjectID'
 import { type MailNodeMailerProvider } from './nodemailer/nodeMailer'
-import { ValidateUserRegister, validateIfEmailExists } from '../../../errors/validation'
 import { ServerError, UncatchedError } from '../../../errors/errors'
 
-export type CustomType = UserEntity | CompanyEntity | AdminEntity
+interface registeringUser extends UserEntity {
+  password: string
+}
+
+interface registeringCompany extends CompanyEntity {
+  password: string
+}
+
+interface registeringAdmin extends AdminEntity {
+  password: string
+}
+
+export type CustomType = registeringUser | registeringCompany | registeringAdmin
 
 export class AuthMongoRepository implements AuthRepository {
   constructor (private readonly mailNodeMailerProvider: MailNodeMailerProvider) {
@@ -30,9 +36,6 @@ export class AuthMongoRepository implements AuthRepository {
 
   async register (entity: CustomType): Promise<UserEntity | CompanyEntity | AdminEntity | string> {
     try {
-      await validateIfEmailExists(entity.email)
-      ValidateUserRegister(entity)
-      await createUserWithEmailAndPassword(auth, String(entity.email), entity.password ? String(entity.password) : '')
       let entityCreated
       let provider
       if (entity.role === 'user') {
@@ -44,7 +47,8 @@ export class AuthMongoRepository implements AuthRepository {
       } else if (entity.role === 'admin') {
         provider = new MongoAdminRepository(this.mailNodeMailerProvider)
         entityCreated = await provider.createAdmin(entity as AdminEntity)
-      } else entityCreated = 'No entity created, role does not exist'
+      } else throw new ServerError('Entity was not created, role does not exist', 'No se creo entidad, el rol no existe', 406)
+      await createUserWithEmailAndPassword(auth, entity.email, entity.password)
       return entityCreated
     } catch (error: any) {
       if (error instanceof ServerError) throw error
@@ -77,12 +81,17 @@ export class AuthMongoRepository implements AuthRepository {
       objectIDValidator(id, 'user to verify', 'usuario a verificar')
       if (role === 'user') {
         const user = await User.findById(id)
+        userWelcomeMailCreate(user as MongoUser)
         if (!user) throw new ServerError('No User found with that id', 'No se encuentra un usuario con ese ID', 404)
         await User.updateOne({ _id: user._id }, { $set: { active: true } }, { new: true })
       } else if (role === 'company') {
         const company = await Company.findById(id)
         if (!company) throw new ServerError('No Company found with that id', 'No se encuentra una empresa con ese ID', 404)
         await Company.updateOne({ email: company.email }, { $set: { active: true } }, { new: true })
+      } else if (role === 'admin') {
+        const admin = await Admin.findById(id)
+        if (!admin) throw new ServerError('No admin found with that id', 'No se encuentra un administrador con ese ID', 404)
+        await Admin.updateOne({ email: admin.email }, { $set: { active: true } }, { new: true })
       } else {
         throw new ServerError('Not a valid role', 'El rol no es valido', 409)
       }

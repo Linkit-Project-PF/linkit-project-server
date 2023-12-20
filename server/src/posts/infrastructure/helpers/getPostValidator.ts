@@ -1,5 +1,6 @@
-import { type PostUseCase } from '../../../aplication/postUseCase'
-import { type PostEntity } from '../../../domain/post/post.entity'
+import { ServerError, UncatchedError } from '../../../errors/errors'
+import { type PostUseCase } from '../../aplication/postUseCase'
+import { type PostEntity } from '../../domain/post/post.entity'
 
 interface PostQuery {
   id?: string
@@ -20,6 +21,7 @@ export default async function getPostValidator (query: PostQuery, postUseCase: P
     }
     return post as PostEntity[]
   } catch (error: any) {
-    throw Error(error)
+    if (error instanceof ServerError) throw error
+    else throw new UncatchedError(error.message, 'searching post', 'buscar publicacion')
   }
 }

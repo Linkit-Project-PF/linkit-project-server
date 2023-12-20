@@ -9,7 +9,5 @@ export interface CompanyEntity {
   role: string
   interested?: string | null
   active?: boolean | null
-  jds: string[]
   registeredDate: Date
-  password?: string | null
 }

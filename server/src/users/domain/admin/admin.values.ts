@@ -1,7 +1,7 @@
-import { type AdminEntity } from './admin.entity'
+import { type permissions, type AdminEntity } from './admin.entity'
 
 export class AdminValue implements AdminEntity {
-  image?: string
+  image?: string | null
   firstName: string
   lastName: string
   email: string
@@ -10,6 +10,7 @@ export class AdminValue implements AdminEntity {
   role?: string | null
   active?: boolean | null
   createdDate: Date
+  permissions?: permissions | null
 
   constructor (admin: AdminEntity) {
     this.image = admin.image ?? 'https://api.dicebear.com/7.x/avataaars-neutral/svg?seed=Callie'
@@ -21,5 +22,6 @@ export class AdminValue implements AdminEntity {
     this.role = admin.role ?? 'admin'
     this.active = admin.active ?? true
     this.createdDate = admin.createdDate
+    this.permissions = admin.permissions
   }
 }

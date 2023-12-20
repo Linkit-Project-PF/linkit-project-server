@@ -1,5 +1,13 @@
+export interface permissions {
+  get: string[]
+  create: string[]
+  update: string[]
+  delete: string[]
+  special: string[]
+}
+
 export interface AdminEntity {
-  image?: string
+  image?: string | null
   firstName: string
   lastName: string
   email: string
@@ -8,4 +16,5 @@ export interface AdminEntity {
   role?: string | null
   active?: boolean | null
   createdDate: Date
+  permissions?: permissions | null
 }

@@ -8,16 +8,17 @@ const adminSchema = new Schema({
   },
   firstName: {
     type: String,
-    required: true,
+    required: true
   },
   lastName: {
     type: String,
-    required: true,
+    required: true
   },
   email: {
     type: String,
     required: true,
-    minlength: 3
+    match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    message: 'Invalid email address format'
   },
   country: {
     type: String,
@@ -37,6 +38,33 @@ const adminSchema = new Schema({
   createdDate: {
     type: Date,
     default: Date()
+  },
+  permissions: {
+    get: {
+      type: [String],
+      required: true,
+      default: []
+    },
+    create: {
+      type: [String],
+      required: true,
+      default: []
+    },
+    update: {
+      type: [String],
+      required: true,
+      default: []
+    },
+    delete: {
+      type: [String],
+      required: true,
+      default: []
+    },
+    special: {
+      type: [String],
+      required: true,
+      default: []
+    }
   }
 })
 

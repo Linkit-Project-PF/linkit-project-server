@@ -8,4 +8,5 @@ export interface PostEntity {
   type: string
   archived?: boolean | null
   category: string
+  createdBy: string
 }

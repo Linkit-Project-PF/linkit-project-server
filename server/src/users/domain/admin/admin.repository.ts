@@ -1,8 +1,9 @@
-import { type AdminEntity } from './admin.entity'
+import { type permissions, type AdminEntity } from './admin.entity'
 
 export interface AdminRepository {
-  findAdmin: (value: string, filter: string) => Promise<AdminEntity | AdminEntity[] | string>
-  createAdmin: (admin: AdminEntity) => Promise<AdminEntity | string>
-  editAdmin: (id: string, admin: AdminEntity) => Promise<AdminEntity | string>
-  deleteAdmin: (id: string) => Promise<AdminEntity | string>
+  findAdmin: (value: string, filter: string) => Promise<AdminEntity | AdminEntity[]>
+  createAdmin: (admin: AdminEntity) => Promise<AdminEntity>
+  editAdmin: (id: string, admin: AdminEntity) => Promise<AdminEntity>
+  deleteAdmin: (id: string, reqID?: string, total?: string) => Promise<AdminEntity | string>
+  editPermissions: (id: string, permissions: permissions) => Promise<AdminEntity>
 }

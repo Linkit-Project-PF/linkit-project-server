@@ -25,8 +25,8 @@ const companySchema = new Schema({
   email: {
     type: String,
     required: true,
-    minlength: 3,
-    maxlength: 50
+    match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    message: 'Invalid email address format'
   },
   country: {
     type: String,
@@ -53,10 +53,6 @@ const companySchema = new Schema({
     type: Boolean,
     required: true,
     default: true
-  },
-  jds: {
-    type: Array,
-    required: true
   },
   registeredDate: {
     type: Date,

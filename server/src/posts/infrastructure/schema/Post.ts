@@ -12,7 +12,7 @@ const postSchema = new Schema({
     minlength: 3
   },
   headers: {
-    type: Array,
+    type: [String],
     required: true
   },
   createdDate: {
@@ -45,6 +45,10 @@ const postSchema = new Schema({
     type: Boolean,
     required: true,
     default: false
+  },
+  createdBy: {
+    type: String,
+    required: true
   }
 })
 

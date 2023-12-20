@@ -1,12 +1,11 @@
-import { type UserEntity } from '../../domain/user/user.entity'
+import { type UserEntity, type MongoUser } from '../../domain/user/user.entity'
 import { type UserRepository } from '../../domain/user/user.reposiroty'
-import { ValidateUserRegister, validateIfEmailExists } from '../../../errors/validation'
+import { validateUser } from '../../../errors/validation'
 import { ServerError, UncatchedError } from '../../../errors/errors'
 import { userMailCreate } from '../../authentication/Infrastructure/nodemailer/verifyMail/userMail'
 import { type MailNodeMailerProvider } from '../../authentication/Infrastructure/nodemailer/nodeMailer'
 import User from '../schema/User'
 import base from '../../../db/airtable'
-import CombinedFilters from '../helpers/CombinedFilters'
 import { objectIDValidator } from '../helpers/validateObjectID'
 
 export class MongoUserRepository implements UserRepository {
@@ -14,8 +13,7 @@ export class MongoUserRepository implements UserRepository {
 
   async createUser (user: UserEntity): Promise<UserEntity> {
     try {
-      await validateIfEmailExists(user.email)
-      ValidateUserRegister(user)
+      await validateUser(user)
       const mongoUser = await User.create(user)
       const mongoID = String(mongoUser._id)
       const airtableUser = await base('UsersInfo').create({
@@ -25,8 +23,8 @@ export class MongoUserRepository implements UserRepository {
         Rol: user.role,
         WebID: mongoID
       })
-      await this.mailNodeMailerProvider.sendEmail(userMailCreate(user))
       const userCreated = await User.findByIdAndUpdate(mongoID, { airTableId: airtableUser.getId() }, { new: true })
+      await this.mailNodeMailerProvider.sendEmail(userMailCreate(mongoUser as MongoUser))
       return userCreated as UserEntity
     } catch (error: any) {
       if (error instanceof ServerError) throw error
@@ -34,38 +32,28 @@ export class MongoUserRepository implements UserRepository {
     }
   }
 
-  async deleteUser (id: string): Promise<UserEntity | string> {
-    try {
-      objectIDValidator(id, 'user to delete', 'usuario a eliminar')
-      const resultado = await User.findByIdAndUpdate(
-        id,
-        { $set: { active: false } }, { new: true }
-      )
-      return resultado as UserEntity
-    } catch (error: any) {
-      if (error instanceof ServerError) throw error
-      else throw new UncatchedError(error.message, 'deleting user', 'eliminar usuario')
-    }
-  }
-
-  async findUser (value: string[] | string, filter: string[] | string, combined?: boolean): Promise<UserEntity | UserEntity[]> {
+  async findUser (value: string, filter: string): Promise<UserEntity | UserEntity[]> {
     try {
       let result
-      const validSingleParams = ['name', 'email', 'active', 'country', 'userStatus', 'internStatus']
-      const validIncludeFilters = ['technologies', 'postulations']
-      if (!combined) {
-        if (filter === 'all') result = await User.find()
-        else if (filter === 'id') {
-          objectIDValidator(value as string, 'user to search', 'usuario buscado')
-          result = await User.findById(value)
-          if (!result) throw new ServerError('No user found under that ID', 'No hay un usuario con ese ID', 404)
-        } else if (validIncludeFilters.includes(filter as string)) {
-          result = (await User.find()).filter(user => (user as any)[filter as string].includes(value))
-        } else if (validSingleParams.includes(filter as string)) result = await User.find({ [filter as string]: value })
-        else throw new ServerError('Not a valid parameter', 'Parametro de busqueda no valido', 406)
-      } else {
-        result = CombinedFilters(filter as string[], value as string[], validSingleParams, validIncludeFilters, 'user')
-      }
+      const validSingleParams = ['email', 'active', 'country']
+      const validIncludeFilters = ['technologies']
+      if (filter === 'all') result = await User.find()
+      else if (filter === 'id') {
+        objectIDValidator(value, 'user to search', 'usuario buscado')
+        result = await User.findById(value)
+        if (!result) throw new ServerError('No user found under that ID', 'No hay un usuario con ese ID', 404)
+      } else if (filter === 'name') {
+        const allUsers = await User.find()
+        const matchedUsers: UserEntity[] = []
+        allUsers.forEach(user => {
+          const fullName = user.firstName + user.lastName
+          if (fullName.includes(value)) matchedUsers.push(user)
+        })
+        result = matchedUsers
+      } else if (validIncludeFilters.includes(filter)) {
+        result = await User.find({ [filter]: { $in: [value] } })
+      } else if (validSingleParams.includes(filter)) result = await User.find({ [filter]: value })
+      else throw new ServerError('Not a valid parameter', 'Parametro de busqueda no valido', 406)
       return result as UserEntity[]
     } catch (error: any) {
       if (error instanceof ServerError) throw error
@@ -76,9 +64,10 @@ export class MongoUserRepository implements UserRepository {
   async editUser (id: string, info: any): Promise<UserEntity> {
     try {
       objectIDValidator(id, 'user to edit', 'usuario a editar')
-      const invalidEdit = ['_id', 'role', 'airTableId', 'postulations', 'registeredDate']
-      Object.keys(info).forEach(key => { if (invalidEdit.includes(key)) throw new ServerError('ID/airtableID/role/date or postulations cannot be changed through this route', 'Ningun ID, rol, fecha o postulaciones puede editarse por aqui', 403) })
-      const editedUser = await User.findByIdAndUpdate(id, info, { new: true }) //! Check what happens if no user here
+      const invalidEdit = ['_id', 'role', 'airTableId', 'registeredDate', 'email']
+      Object.keys(info).forEach(key => { if (invalidEdit.includes(key)) throw new ServerError('Unable to edit: _id, role, airtableID, registeredDate, email', 'Ningun ID, rol, fecha o email puede editarse por aqui', 403) })
+      const editedUser = await User.findByIdAndUpdate(id, info, { new: true })
+      if (!editedUser) throw new ServerError('No user found with that ID', 'No se encontro usuario con ese ID', 404)
       return editedUser as UserEntity
     } catch (error: any) {
       if (error instanceof ServerError) throw error
@@ -86,17 +75,27 @@ export class MongoUserRepository implements UserRepository {
     }
   }
 
-  async editRoleUser (id: string): Promise <UserEntity> {
+  async deleteUser (id: string, reqID?: string, total?: string): Promise<UserEntity | string> {
     try {
-      objectIDValidator(id, 'user to edit', 'usuario a editar')
-      const result = await User.findByIdAndUpdate(
-        id,
-        { role: 'admin' }, { new: true }
-      ) //! Check what happens if no user here
-      return result as UserEntity
+      objectIDValidator(id, 'user to delete', 'usuario a eliminar')
+      const user = await User.findById(id)
+      if (!user) throw new ServerError('No user found with that ID', 'No se encontro usuario con ese ID', 404)
+      else {
+        if (!total || total === 'false') {
+          const resultado = await User.findByIdAndUpdate(
+            id,
+            { $set: { active: !user.active } }, { new: true }
+          )
+          return resultado as UserEntity
+        } else if (total === 'true') {
+          if (reqID !== process.env.SUPERADM_ID) throw new ServerError('Only superadm can delete totally', 'El borrado total solo lo puede hcaer el super admin', 401)
+          await User.findByIdAndDelete(id)
+        }
+        return 'User totally deleted'
+      }
     } catch (error: any) {
       if (error instanceof ServerError) throw error
-      else throw new UncatchedError(error.message, 'editing user', 'editar usuario')
+      else throw new UncatchedError(error.message, 'deleting user', 'eliminar usuario')
     }
   }
 }

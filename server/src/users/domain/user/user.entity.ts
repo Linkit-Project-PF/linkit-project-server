@@ -1,6 +1,8 @@
+import { type Types } from 'mongoose'
+
 export interface UserEntity {
   airTableId?: string | null
-  image?: string
+  image?: string | null
   firstName: string
   lastName: string
   email: string
@@ -10,8 +12,10 @@ export interface UserEntity {
   englishLevel?: string | null
   role: string
   technologies?: string[]
-  active?: boolean | null
-  postulations: string[]
+  active: boolean
   registeredDate: Date
-  password?: string | null
+}
+
+export interface MongoUser extends UserEntity {
+  _id: Types.ObjectId
 }

@@ -4,25 +4,21 @@ export class JdValue implements JdEntity {
   code: string
   title: string
   description: string
-  type: string
+  type: 'full-time' | 'part-time' | 'freelance'
   location: string
-  modality: string
+  modality: 'remote' | 'specific-remote' | 'on-site' | 'hybrid'
   stack: string[]
   aboutUs?: string | null
   aboutClient?: string | null
   responsabilities?: string | null
   requirements: string[]
-  niceToHave: string[]
+  niceToHave?: string[] | null
   benefits: string[]
-  recruiter: string
   archived: boolean
   company: string
-  status: string
-  users: string[]
   createdDate: Date
 
   constructor (jd: JdEntity) {
-    // this.airTableId = jd.airTableId ?? undefined
     this.code = jd.code
     this.title = jd.title
     this.description = jd.description
@@ -34,13 +30,10 @@ export class JdValue implements JdEntity {
     this.aboutClient = jd.aboutClient ?? undefined
     this.responsabilities = jd.responsabilities ?? undefined
     this.requirements = jd.requirements
-    this.niceToHave = jd.niceToHave
+    this.niceToHave = jd.niceToHave ?? []
     this.benefits = jd.benefits
-    this.recruiter = jd.recruiter
     this.archived = jd.archived
     this.company = jd.company
-    this.status = jd.status
-    this.users = jd.users
     this.createdDate = jd.createdDate
   }
 }

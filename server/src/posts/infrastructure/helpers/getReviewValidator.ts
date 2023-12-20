@@ -1,5 +1,6 @@
-import { type ReviewUseCase } from '../../../aplication/reviewUseCase'
-import { type ReviewEntity } from '../../../domain/review/review.entity'
+import { ServerError, UncatchedError } from '../../../errors/errors'
+import { type ReviewUseCase } from '../../aplication/reviewUseCase'
+import { type ReviewEntity } from '../../domain/review/review.entity'
 
 interface ReviewQuery {
   id?: string
@@ -22,6 +23,7 @@ export default async function getReviewtValidator (query: ReviewQuery, reviewUse
     }
     return review as ReviewEntity[]
   } catch (error: any) {
-    throw Error(error)
+    if (error instanceof ServerError) throw error
+    else throw new UncatchedError(error.message, 'searching review', 'buscar valoracion')
   }
 }
