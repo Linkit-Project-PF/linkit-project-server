@@ -10,7 +10,15 @@ clientsFollowUpRoute.get('/', async (req, res): Promise<void> => {
     const airtable = await base('LinkIT - Clients Follow up').select({
       view: 'Grid view'
     }).all()
-    const result = airtable.map(result => result.fields)
+    const fields = airtable.map(result => result.fields)
+    const filter = Object.keys(req.query)[0]
+    const value = Object.values(req.query)[0] as string
+    let result
+    if (filter === 'company') {
+      result = fields.filter(followUp => (followUp.Client as string).toLowerCase().includes(value.toLowerCase()))
+    } else {
+      result = fields
+    }
     res.status(200).json(result)
   } catch (error: any) {
     const newError = new UncatchedError(error.message, 'requesting airtable info', 'requerir informacion de airtable')
