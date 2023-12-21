@@ -144,7 +144,7 @@ async function validateCompany (title: string): Promise<void> {
   let exists = false
   const companies = await Company.find({}, 'companyName')
   companies.forEach(comp => { if (comp.companyName === title) exists = true })
-  if (!exists) throw new ServerError('Company not found', 'No se encontro una empresa con ese ID en el registro', 404)
+  if (!exists) throw new ServerError('Company not found', 'No se encontro una empresa con ese nombre en el registro', 404)
 }
 
 export async function validateJD (jobDescription: JdEntity): Promise<void> {
