@@ -15,7 +15,11 @@ clientsFollowUpRoute.get('/', async (req, res): Promise<void> => {
     const value = Object.values(req.query)[0] as string
     let result
     if (filter === 'company') {
-      result = fields.filter(followUp => (followUp.Client as string).toLowerCase().includes(value.toLowerCase()))
+      result = fields.filter(followUp => {
+        if (followUp.Client) {
+          return (followUp.Client as string).toLowerCase().includes(value.toLowerCase())
+        } else return false
+      })
     } else {
       result = fields
     }
