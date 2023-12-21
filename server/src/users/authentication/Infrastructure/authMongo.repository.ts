@@ -58,7 +58,12 @@ export class AuthMongoRepository implements AuthRepository {
 
   async login (email: string, password: string, role: string): Promise<UserEntity | CompanyEntity | AdminEntity> {
     try {
-      await signInWithEmailAndPassword(auth, email, password)
+      try {
+        await signInWithEmailAndPassword(auth, email, password)
+      } catch (error: any) {
+        if (error.code === 'auth/invalid-login-credentials') throw new ServerError('Wrong username or password', 'Usuario o contraseña incorrectos', 406)
+        else throw new ServerError('Unexpected error with auth service. Please try later', 'Error inesperado con el proveedor de autenticacion, por favor intenta mas tarde', 400)
+      }
       if (role === 'user') {
         const result1 = await User.find({ email })
         const result2 = await Admin.find({ email })
