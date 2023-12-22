@@ -1,18 +1,12 @@
 import base from '../../db/airtable'
-import { type UserEntity } from '../domain/user/user.entity'
-import { type CompanyEntity } from '../domain/company/company.entity'
-import { type AdminEntity } from '../domain/admin/admin.entity'
 import { type CustomType } from '../authentication/Infrastructure/authMongo.repository'
-export const validateUserExists = async (user: CustomType): Promise<UserEntity | CompanyEntity | AdminEntity | string> => {
+import { ServerError, UncatchedError } from '../../errors/errors'
+export const validateUserExists = async (user: CustomType): Promise<void> => {
   try {
     const airtable = await base('UsersInfo').select({ view: 'Grid view' }).all()
     const fields = airtable.map(result => result.fields)
-    const filterField = fields.filter(field => field.Email === user.email)
-    if (filterField.length) throw new Error('Existe usuario')
-    else return user as unknown as CustomType
-    // else return 'Existe un usuario'
+    fields.forEach(record => { if (record.email === user.email) throw new ServerError('This email is already registered', 'El email ya esta registrado', 409) })
   } catch (error: any) {
-    console.log(error)
-    return 'no data'
+    throw new UncatchedError(error.message, 'validating existence on airtable', 'validar existencia de usuario en airtable')
   }
 }

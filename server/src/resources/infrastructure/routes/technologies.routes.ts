@@ -22,7 +22,7 @@ stackRouter.post('/', async (req, res): Promise<any> => {
     if (!name) throw new ServerError('Stack name is needed to be added', 'El nombre de la tecnologia es necesario para agregar', 406)
     const existing = await stack.find({ name: name.toLowerCase() })
     if (existing.length) throw new ServerError('That exact stack name already exists on register', 'El nombre de la tecnologia ya existe', 409)
-    await stack.create({ name: name.toLowerCase() })
+    await stack.create({ name })
     const response = await stack.find()
     res.status(200).json(response)
   } catch (error: any) {
