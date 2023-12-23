@@ -61,14 +61,15 @@ export class MongoUserRepository implements UserRepository {
     }
   }
 
-  async editUser (id: string, info: any): Promise<UserEntity> {
+  async editUser (id: string, info: any): Promise<UserEntity[]> {
     try {
       objectIDValidator(id, 'user to edit', 'usuario a editar')
       const invalidEdit = ['_id', 'role', 'airTableId', 'registeredDate', 'email']
       Object.keys(info).forEach(key => { if (invalidEdit.includes(key)) throw new ServerError('Unable to edit: _id, role, airtableID, registeredDate, email', 'Ningun ID, rol, fecha o email puede editarse por aqui', 403) })
       const editedUser = await User.findByIdAndUpdate(id, info, { new: true })
       if (!editedUser) throw new ServerError('No user found with that ID', 'No se encontro usuario con ese ID', 404)
-      return editedUser as UserEntity
+      const allUsers = await User.find()
+      return allUsers
     } catch (error: any) {
       if (error instanceof ServerError) throw error
       else throw new UncatchedError(error.message, 'editing user', 'editar usuario')
