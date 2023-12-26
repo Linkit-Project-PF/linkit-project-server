@@ -1,6 +1,7 @@
 import { type UserEntity, type MongoUser } from '../../domain/user/user.entity'
 import { type UserRepository } from '../../domain/user/user.reposiroty'
 import { validateUser } from '../../../errors/validation'
+import { updatePassword } from 'firebase/auth'
 import { ServerError, UncatchedError } from '../../../errors/errors'
 import { userMailCreate } from '../../authentication/Infrastructure/nodemailer/verifyMail/userMail'
 import { type MailNodeMailerProvider } from '../../authentication/Infrastructure/nodemailer/nodeMailer'
@@ -96,6 +97,15 @@ export class MongoUserRepository implements UserRepository {
     } catch (error: any) {
       if (error instanceof ServerError) throw error
       else throw new UncatchedError(error.message, 'deleting user', 'eliminar usuario')
+    }
+  }
+
+  async changePassword (user: any, password: string): Promise<void> {
+    try {
+      const newPassword = password
+      await updatePassword(user, newPassword)
+    } catch (error: any) {
+      console.log(error)
     }
   }
 }
