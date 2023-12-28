@@ -107,3 +107,104 @@ export async function getTiers (auth: any): Promise<any> {
     allPositions: uniquePositions
   }
 }
+
+export async function getOKRsLinkITTable (auth: any): Promise<any> {
+  const sheets = google.sheets({ version: 'v4', auth })
+  const res = await sheets.spreadsheets.values.get({
+    spreadsheetId: '1Q96-Gi4-DYPASVK8wiMHvSoawbqu836iW7ouU38TuEs',
+    range: 'LinkIT!A22:J'
+  })
+  const rows = res.data.values
+  if (!rows || rows.length === 0) {
+    console.log('No data found.')
+    return []
+  }
+  const LinkITTable = rows.map((row) => ({
+    OKRsIniciativas: row[0],
+    porcentajeCompletado: row[1],
+    inicioPlaneado: row[2],
+    finalizacionPlaneada: row[3],
+    duracionPlaneada: row[4],
+    inicioPlanReal: row[5],
+    finPlanReal: row[6],
+    duracionReal: row[7],
+    status: row[8],
+    responsable: row[9]
+  }))
+  return LinkITTable
+}
+
+export async function getOKRsSalesTable (auth: any): Promise<any> {
+  const sheets = google.sheets({ version: 'v4', auth })
+  const res = await sheets.spreadsheets.values.get({
+    spreadsheetId: '1Q96-Gi4-DYPASVK8wiMHvSoawbqu836iW7ouU38TuEs',
+    range: 'Sales!A22:H'
+  })
+  const rows = res.data.values
+  if (!rows || rows.length === 0) {
+    console.log('No data found.')
+    return []
+  }
+  const salesTable = rows.map((row) => ({
+    OKRsIniciativas: row[0],
+    porcentajeCompletado: row[1],
+    inicioPlaneado: row[2],
+    finalizacionPlaneada: row[3],
+    duracionReal: row[7]
+  }))
+  return salesTable
+}
+
+export async function getOKRsQ4RecruitingTable (auth: any): Promise<any> {
+  const sheets = google.sheets({ version: 'v4', auth })
+  const res = await sheets.spreadsheets.values.get({
+    spreadsheetId: '1Q96-Gi4-DYPASVK8wiMHvSoawbqu836iW7ouU38TuEs',
+    range: 'Q4 - Recruiting!A1:K'
+  })
+  const rows = res.data.values
+  if (!rows || rows.length === 0) {
+    console.log('No data found.')
+    return []
+  }
+  const Q4RecruitingTable = rows.map((row) => ({
+    OKRsIniciativas: row[0],
+    metricaInicial: row[1],
+    metricaFinal: row[2],
+    target: row[3],
+    porcentajeCompletado: row[4],
+    inicioPlaneado: row[5],
+    finalizacionPlaneada: row[6],
+    duracionPlaneada: row[7],
+    inicioPlanReal: row[8],
+    finPlanReal: row[9],
+    duracionReal: row[10]
+  }))
+  return Q4RecruitingTable
+}
+
+export async function getRecruitingTable (auth: any): Promise<any> {
+  const sheets = google.sheets({ version: 'v4', auth })
+  const res = await sheets.spreadsheets.values.get({
+    spreadsheetId: '1Q96-Gi4-DYPASVK8wiMHvSoawbqu836iW7ouU38TuEs',
+    range: 'Recruiting!A1:K'
+  })
+  const rows = res.data.values
+  if (!rows || rows.length === 0) {
+    console.log('No data found.')
+    return []
+  }
+  const Q4RecruitingTable = rows.map((row) => ({
+    OKRsIniciativas: row[0],
+    metricaInicial: row[1],
+    metricaFinal: row[2],
+    target: row[3],
+    porcentajeCompletado: row[4],
+    inicioPlaneado: row[5],
+    finalizacionPlaneada: row[6],
+    duracionPlaneada: row[7],
+    inicioPlanReal: row[8],
+    finPlanReal: row[9],
+    duracionReal: row[10]
+  }))
+  return Q4RecruitingTable
+}

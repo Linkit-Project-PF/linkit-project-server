@@ -6,6 +6,7 @@ export interface UserEntity {
   firstName: string
   lastName: string
   email: string
+  password?: string
   country?: string | null
   linkedin?: string | null
   cv?: string | null
