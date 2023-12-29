@@ -38,19 +38,25 @@ export class AuthMongoRepository implements AuthRepository {
   async register (entity: CustomType): Promise<UserEntity | CompanyEntity | AdminEntity | string> {
     try {
       await validateUserExists(entity)
+      if (!entity.password) throw new ServerError('Missing password', 'Contraseña invalida', 406)
       let entityCreated
       let provider
+      let updateMethod
       if (entity.role === 'user') {
         provider = new MongoUserRepository(this.mailNodeMailerProvider)
+        updateMethod = provider.editUser
         entityCreated = await provider.createUser(entity as UserEntity)
       } else if (entity.role === 'company') {
         provider = new MongoCompanyRepository(this.mailNodeMailerProvider)
+        updateMethod = provider.editCompany
         entityCreated = await provider.createCompany(entity as CompanyEntity)
       } else if (entity.role === 'admin') {
         provider = new MongoAdminRepository(this.mailNodeMailerProvider)
+        updateMethod = provider.editAdmin
         entityCreated = await provider.createAdmin(entity as AdminEntity)
       } else throw new ServerError('Entity was not created, role does not exist', 'No se creo entidad, el rol no existe', 406)
-      await createUserWithEmailAndPassword(auth, entity.email, entity.password)
+      const result = await createUserWithEmailAndPassword(auth, entity.email, entity.password)
+      await updateMethod((entityCreated as any)._id, { firebaseId: result.user.uid }); entityCreated.firebaseId = result.user.uid
       return entityCreated
     } catch (error: any) {
       if (error instanceof ServerError) throw error

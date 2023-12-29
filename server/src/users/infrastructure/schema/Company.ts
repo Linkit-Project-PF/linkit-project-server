@@ -1,6 +1,11 @@
 import { Schema, model } from 'mongoose'
 
 const companySchema = new Schema({
+  firebaseId: {
+    type: String,
+    required: false,
+    default: ''
+  },
   airTableId: {
     type: String,
     required: false,

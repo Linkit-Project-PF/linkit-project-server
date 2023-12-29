@@ -1,6 +1,7 @@
 import { type Types } from 'mongoose'
 
 export interface UserEntity {
+  firebaseId?: string | null
   airTableId?: string | null
   image?: string | null
   firstName: string

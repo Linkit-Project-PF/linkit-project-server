@@ -56,8 +56,8 @@ export class MongoCompanyRepository implements CompanyRepository {
       const invalidEdit = ['_id', 'role', 'airTableId', 'registeredDate', 'email']
       Object.keys(info).forEach(key => {
         if (invalidEdit.includes(key)) {
-          throw new ServerError('ID/airtableID/role/date nor email can be changed through this route',
-            'ID/ID de airtable/rol/fecha o email no son editables o no se pueden editar por esta ruta', 403)
+          throw new ServerError('No Id/role/date nor email can be changed through this route',
+            'Ningun ID, rol, fecha o email son editables o no se pueden editar por esta ruta', 403)
         }
       })
       const editedCompany = await Company.findByIdAndUpdate(id, info, { new: true })
