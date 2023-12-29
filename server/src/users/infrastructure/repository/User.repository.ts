@@ -78,18 +78,19 @@ export class MongoUserRepository implements UserRepository {
     }
   }
 
-  async deleteUser (id: string, reqID?: string, total?: string): Promise<UserEntity | string> {
+  async deleteUser (id: string, reqID?: string, total?: string): Promise<UserEntity[] | string> {
     try {
       objectIDValidator(id, 'user to delete', 'usuario a eliminar')
       const user = await User.findById(id)
       if (!user) throw new ServerError('No user found with that ID', 'No se encontro usuario con ese ID', 404)
       else {
         if (!total || total === 'false') {
-          const resultado = await User.findByIdAndUpdate(
+          await User.findByIdAndUpdate(
             id,
             { $set: { active: !user.active } }, { new: true }
           )
-          return resultado as UserEntity
+          const resultado = await User.find()
+          return resultado
         } else if (total === 'true') {
           if (reqID !== process.env.SUPERADM_ID) throw new ServerError('Only superadm can delete totally', 'El borrado total solo lo puede hcaer el super admin', 401)
           await deletionTrigger(user.firebaseId as string, user.airTableId as string)
