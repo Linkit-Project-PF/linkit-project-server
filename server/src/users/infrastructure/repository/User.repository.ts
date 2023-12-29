@@ -49,7 +49,7 @@ export class MongoUserRepository implements UserRepository {
         const matchedUsers: UserEntity[] = []
         allUsers.forEach(user => {
           const fullName = user.firstName + user.lastName
-          if (fullName.includes(value)) matchedUsers.push(user)
+          if (fullName.includes(value)) matchedUsers.push(user as UserEntity)
         })
         result = matchedUsers
       } else if (validIncludeFilters.includes(filter)) {
@@ -71,7 +71,7 @@ export class MongoUserRepository implements UserRepository {
       const editedUser = await User.findByIdAndUpdate(id, info, { new: true })
       if (!editedUser) throw new ServerError('No user found with that ID', 'No se encontro usuario con ese ID', 404)
       const allUsers = await User.find()
-      return allUsers
+      return allUsers as UserEntity[]
     } catch (error: any) {
       if (error instanceof ServerError) throw error
       else throw new UncatchedError(error.message, 'editing user', 'editar usuario')
@@ -90,7 +90,7 @@ export class MongoUserRepository implements UserRepository {
             { $set: { active: !user.active } }, { new: true }
           )
           const resultado = await User.find()
-          return resultado
+          return resultado as UserEntity[]
         } else if (total === 'true') {
           if (reqID !== process.env.SUPERADM_ID) throw new ServerError('Only superadm can delete totally', 'El borrado total solo lo puede hcaer el super admin', 401)
           await deletionTrigger(user.firebaseId as string, user.airTableId as string)
