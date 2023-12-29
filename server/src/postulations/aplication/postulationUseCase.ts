@@ -9,8 +9,8 @@ export class PostulationUseCase {
     return postulation
   }
 
-  public createPostulation = async (postulation: postulation): Promise<translatedResponse> => {
-    const postulationCreated = await this.postulationRepo.createPostulation(postulation)
+  public createPostulation = async (postulation: postulation, userId: string): Promise<translatedResponse> => {
+    const postulationCreated = await this.postulationRepo.createPostulation(postulation, userId)
     return postulationCreated
   }
 }

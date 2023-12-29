@@ -68,6 +68,10 @@ const userSchema = new Schema({
   registeredDate: {
     type: Date,
     default: Date()
+  },
+  postulations: {
+    type: [String],
+    required: true
   }
 })
 

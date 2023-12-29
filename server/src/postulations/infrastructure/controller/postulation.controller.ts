@@ -16,7 +16,7 @@ export class PostulationController {
 
   public postController: RequestHandler = async (req, res) => {
     try {
-      const postulation = await this.postulationUseCase.createPostulation(req.body)
+      const postulation = await this.postulationUseCase.createPostulation(req.body, req.query.user as string)
       return res.status(201).json(postulation[(req as any).lang as keyof translatedResponse])
     } catch (error: any) {
       return res.status(error.code).json(error[(req as any).lang as keyof Error])

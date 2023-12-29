@@ -16,6 +16,7 @@ export interface UserEntity {
   technologies?: string[]
   active: boolean
   registeredDate: Date
+  postulations: string[]
 }
 
 export interface MongoUser extends UserEntity {

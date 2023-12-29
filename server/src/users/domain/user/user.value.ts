@@ -16,6 +16,7 @@ export class UserValue implements UserEntity {
   technologies?: string[]
   active: boolean
   registeredDate: Date
+  postulations: string[]
 
   constructor (user: UserEntity) {
     this.firebaseId = user.firebaseId ?? undefined
@@ -32,5 +33,6 @@ export class UserValue implements UserEntity {
     this.registeredDate = user.registeredDate
     this.technologies = user.technologies ?? []
     this.active = user.active
+    this.postulations = user.postulations
   }
 }
