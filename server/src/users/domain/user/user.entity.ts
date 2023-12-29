@@ -17,6 +17,7 @@ export interface UserEntity {
   active: boolean
   registeredDate: Date
   postulations: string[]
+  provider?: string
 }
 
 export interface MongoUser extends UserEntity {
