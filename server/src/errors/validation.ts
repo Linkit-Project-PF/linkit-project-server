@@ -183,7 +183,7 @@ export async function validatePostulation (postulation: postulation, userid: str
   objectIDValidator(userid, 'user creating application', 'usuario aplicando')
   validateProps(postulation)
   validatePostulationTypes(postulation)
-  await validateCandidate(postulation) //! Si no se han creado usuarios comentar este codigo para que deje crear testing data.
+  await validateCandidate(postulation, userid) //! Si no se han creado usuarios comentar este codigo para que deje crear testing data.
 }
 
 function validateProps (postulation: postulation): void {
@@ -202,7 +202,7 @@ function validateProps (postulation: postulation): void {
 }
 
 function validatePostulationTypes (postulation: postulation): void { // TODO Create country list collection here with all country names
-  const validCountries = ['Costa rica', 'Argentina', 'Colombia', 'Peru', 'Chile', 'Mexico', 'Paraguay', 'Venezuela', 'Republica Dominicana', 'Bolivia', 'Ecuador', 'Uruguay', 'Brasil', 'Nicaragua', 'Panama', 'España', 'India', 'Guatemala', 'Emiratos Arabes']
+  const validCountries = ['Canada', 'Costa rica', 'Argentina', 'Colombia', 'Peru', 'Chile', 'Mexico', 'Paraguay', 'Venezuela', 'Republica Dominicana', 'Bolivia', 'Ecuador', 'Uruguay', 'Brasil', 'Nicaragua', 'Panama', 'España', 'India', 'Guatemala', 'Emiratos Arabes']
   const validEnglishLevel = ['intermediate (B2)', 'Intermediate', 'Advanced', 'Professional', 'intermediate (B1)', 'Basic'] //! Add here new english levels
   const emailRegex: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
   if (!validCountries.includes(postulation.country)) throw new ServerError('Invalid country', 'Pais invalido', 406)
@@ -215,7 +215,10 @@ function validatePostulationTypes (postulation: postulation): void { // TODO Cre
   if (typeof postulation.reason !== 'string' || typeof postulation.availability !== 'string') throw new ServerError('reason and/or availability are invalid', 'La razon de postulacion y/o la disponibilidad son invalidas', 406)
 }
 
-async function validateCandidate (postulation: postulation): Promise<void> {
+async function validateCandidate (postulation: postulation, userid: string): Promise<void> {
+  const loggedUser = await User.findById(userid)
+  if (!loggedUser) throw new ServerError('Unauthorized', 'No autorizado', 401)
+  else loggedUser.postulations.forEach(code => { if (code === postulation.code) throw new ServerError('You have already a postulation for this job description', 'Ya tienes una postulación para esta vacante', 409) })
   const talent: UserEntity | null = await User.findOne({ firstName: postulation.firstName, lastName: postulation.lastName })
   if (!talent) throw new ServerError('No user under that full name', 'No se encuentra usuario con ese nombre y apellido', 404)
 }

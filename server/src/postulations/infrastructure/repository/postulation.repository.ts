@@ -26,13 +26,12 @@ export class MongoPostulationRepository implements PostulationRepository {
             Created: postulation.created.toLocaleDateString('en-CA', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-'),
             Nombre: postulation.firstName,
             Apellido: postulation.lastName,
-            'What would be your area of experise?': postulation.techStack,
+            'What would be your area of expertise?': postulation.techStack,
             recruiter: postulation.recruiter ? postulation.recruiter : undefined
           }
         }
       ])
-      const sample = await User.findByIdAndUpdate(userId, { $push: { postulations: postulation.code } }, { new: true })
-      console.log(sample, postulation.code)
+      await User.findByIdAndUpdate(userId, { $push: { postulations: postulation.code } }, { new: true })
       return { en: 'Postulation sent', es: 'Postulación enviada' }
     } catch (error: any) {
       if (error instanceof ServerError) throw error
