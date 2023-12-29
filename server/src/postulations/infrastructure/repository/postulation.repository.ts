@@ -3,13 +3,14 @@ import { ServerError, UncatchedError } from '../../../errors/errors'
 import { type PostulationRepository } from '../../domain/postulation.repository'
 import { validatePostulation } from '../../../errors/validation'
 import { type postulation, type PostulationQuery, type translatedResponse } from '../../../interfaces'
+import User from '../../../users/infrastructure/schema/User'
 
 export class MongoPostulationRepository implements PostulationRepository {
-  async createPostulation (postulation: postulation): Promise<translatedResponse> {
+  async createPostulation (postulation: postulation, userId: string): Promise<translatedResponse> {
     try {
       // TODO Add CV from cloudinary, check with front ppl how they storage that.
       // TODO Check ALL postulations from Airtable to validate If user has already created a postulation for that JD, return error If so.
-      await validatePostulation(postulation)
+      await validatePostulation(postulation, userId)
       postulation.created = new Date()
       await base('LinkIT - Candidate application').create([
         {
@@ -28,6 +29,8 @@ export class MongoPostulationRepository implements PostulationRepository {
           }
         }
       ])
+      const sample = await User.findByIdAndUpdate(userId, { $push: { postulations: postulation.code } }, { new: true })
+      console.log(sample, postulation.code)
       return { en: 'Postulation sent', es: 'Postulación enviada' }
     } catch (error: any) {
       if (error instanceof ServerError) throw error

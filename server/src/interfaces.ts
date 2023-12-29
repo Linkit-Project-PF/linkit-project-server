@@ -9,6 +9,7 @@ export interface PostulationQuery {
 
 // TODO Create postulation interface here to define find postulations type
 export interface postulation {
+  code: string
   stack: string[]
   email: string
   country: string
