@@ -8,6 +8,7 @@ import { type MailNodeMailerProvider } from '../../authentication/Infrastructure
 import User from '../schema/User'
 import base from '../../../db/airtable'
 import { objectIDValidator } from '../helpers/validateObjectID'
+import deletionTrigger from '../helpers/DeletionTrigger'
 
 export class MongoUserRepository implements UserRepository {
   constructor (private readonly mailNodeMailerProvider: MailNodeMailerProvider) {}
@@ -66,7 +67,7 @@ export class MongoUserRepository implements UserRepository {
     try {
       objectIDValidator(id, 'user to edit', 'usuario a editar')
       const invalidEdit = ['_id', 'role', 'airTableId', 'registeredDate', 'email']
-      Object.keys(info).forEach(key => { if (invalidEdit.includes(key)) throw new ServerError('Unable to edit: _id, role, airtableID, registeredDate, email', 'Ningun ID, rol, fecha o email puede editarse por aqui', 403) })
+      Object.keys(info).forEach(key => { if (invalidEdit.includes(key)) throw new ServerError('No Id/role/date nor email can be changed through this route', 'Ningun ID, rol, fecha o email son editables o no se pueden editar por esta ruta', 403) })
       const editedUser = await User.findByIdAndUpdate(id, info, { new: true })
       if (!editedUser) throw new ServerError('No user found with that ID', 'No se encontro usuario con ese ID', 404)
       const allUsers = await User.find()
@@ -91,6 +92,7 @@ export class MongoUserRepository implements UserRepository {
           return resultado as UserEntity
         } else if (total === 'true') {
           if (reqID !== process.env.SUPERADM_ID) throw new ServerError('Only superadm can delete totally', 'El borrado total solo lo puede hcaer el super admin', 401)
+          await deletionTrigger(user.firebaseId as string, user.airTableId as string)
           await User.findByIdAndDelete(id)
         }
         return 'User totally deleted'

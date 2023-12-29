@@ -1,6 +1,7 @@
 import { type permissions, type AdminEntity } from './admin.entity'
 
 export class AdminValue implements AdminEntity {
+  firebaseId?: string | null
   image?: string | null
   firstName: string
   lastName: string
@@ -13,6 +14,7 @@ export class AdminValue implements AdminEntity {
   permissions?: permissions | null
 
   constructor (admin: AdminEntity) {
+    this.firebaseId = admin.firebaseId ?? undefined
     this.image = admin.image ?? 'https://api.dicebear.com/7.x/avataaars-neutral/svg?seed=Callie'
     this.firstName = admin.firstName
     this.lastName = admin.lastName

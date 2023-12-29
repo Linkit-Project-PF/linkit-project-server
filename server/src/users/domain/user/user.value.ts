@@ -1,6 +1,7 @@
 import { type UserEntity } from './user.entity'
 
 export class UserValue implements UserEntity {
+  firebaseId?: string | null
   airTableId?: string | null
   image?: string | null
   firstName: string
@@ -17,6 +18,7 @@ export class UserValue implements UserEntity {
   registeredDate: Date
 
   constructor (user: UserEntity) {
+    this.firebaseId = user.firebaseId ?? undefined
     this.airTableId = user.airTableId ?? undefined
     this.image = user.image ?? 'https://api.dicebear.com/7.x/avataaars-neutral/svg?seed=Callie'
     this.firstName = user.firstName

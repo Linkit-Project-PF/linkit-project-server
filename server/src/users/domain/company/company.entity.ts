@@ -1,4 +1,5 @@
 export interface CompanyEntity {
+  firebaseId?: string | null
   airTableId?: string | null
   image?: string
   companyName: string

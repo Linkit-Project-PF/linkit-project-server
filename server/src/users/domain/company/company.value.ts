@@ -1,6 +1,7 @@
 import { type CompanyEntity } from './company.entity'
 
 export class CompanyValue implements CompanyEntity {
+  firebaseId?: string | null
   airTableId?: string | null
   image?: string
   companyName: string
@@ -14,6 +15,7 @@ export class CompanyValue implements CompanyEntity {
   registeredDate: Date
 
   constructor (company: CompanyEntity) {
+    this.firebaseId = company.firebaseId ?? undefined
     this.airTableId = company.airTableId ?? undefined
     this.image = company.image ?? undefined
     this.companyName = company.companyName
