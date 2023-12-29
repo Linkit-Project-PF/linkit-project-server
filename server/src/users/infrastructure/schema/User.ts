@@ -72,6 +72,10 @@ const userSchema = new Schema({
   postulations: {
     type: [String],
     required: true
+  },
+  provider: {
+    type: String,
+    required: false
   }
 })
 
