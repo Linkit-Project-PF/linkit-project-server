@@ -17,7 +17,7 @@ const firebaseConfig = {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const serviceAccount = require('../authentication/admin-firebase.json')
+const serviceAccount = require('../../admin-firebase.json')
 admin.initializeApp({ credential: admin.credential.cert(serviceAccount) })
 
 // Initialize Firebase
