@@ -1,6 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
+import * as admin from 'firebase-admin'
+// import serviceAccount from '../authentication/admin-firebase.json'
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -14,8 +16,12 @@ const firebaseConfig = {
   measurementId: 'G-M6F6EHLMX7'
 }
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const serviceAccount = require('../authentication/admin-firebase.json')
+admin.initializeApp({ credential: admin.credential.cert(serviceAccount) })
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
 
-export { app, auth }
+export { app, auth, admin }

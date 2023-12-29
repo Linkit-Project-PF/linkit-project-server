@@ -7,6 +7,7 @@ export interface permissions {
 }
 
 export interface AdminEntity {
+  firebaseId?: string | null
   image?: string | null
   firstName: string
   lastName: string

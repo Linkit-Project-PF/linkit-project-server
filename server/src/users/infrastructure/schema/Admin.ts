@@ -1,6 +1,11 @@
 import { Schema, model } from 'mongoose'
 
 const adminSchema = new Schema({
+  firebaseId: {
+    type: String,
+    required: false,
+    default: ''
+  },
   image: {
     type: String,
     required: false,

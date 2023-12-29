@@ -9,7 +9,7 @@ const contactUsRoute = Router()
 contactUsRoute.post('/', async (req, res): Promise<any> => {
   try {
     const newContact = req.body
-    await base('Contactanos').create([
+    await base('Contactos').create([
       {
         fields: {
           Nombre: newContact.name,
