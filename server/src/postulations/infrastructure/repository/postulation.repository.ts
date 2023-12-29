@@ -25,7 +25,9 @@ export class MongoPostulationRepository implements PostulationRepository {
             'When to start availability': postulation.availability,
             Created: postulation.created.toLocaleDateString('en-CA', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-'),
             Nombre: postulation.firstName,
-            Apellido: postulation.lastName
+            Apellido: postulation.lastName,
+            'What would be your area of experise?': postulation.techStack,
+            recruiter: postulation.recruiter ? postulation.recruiter : undefined
           }
         }
       ])
