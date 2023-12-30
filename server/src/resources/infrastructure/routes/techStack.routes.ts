@@ -2,17 +2,17 @@ import { Router } from 'express'
 import { ServerError, UncatchedError, type customError } from '../../../errors/errors'
 import { addInfo, deleteInfo, getInfo } from '../../methods/resourcesJSON.methods'
 
-const stackRouter = Router()
-const filePath = './src/resources/infrastructure/schema/stack.json'
+const techStackRouter = Router()
+const filePath = './src/resources/infrastructure/schema/techStack.json'
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-stackRouter.get('/', async (req, res) => {
+techStackRouter.get('/', async (req, res) => {
   const response = await getInfo(filePath)
   res.status(200).json(response)
 })
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-stackRouter.post('/', async (req, res) => {
+techStackRouter.post('/', async (req, res) => {
   try {
     await addInfo(filePath, req.body)
     res.status(201).json('Created')
@@ -26,7 +26,7 @@ stackRouter.post('/', async (req, res) => {
 })
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-stackRouter.delete('/', async (req, res) => {
+techStackRouter.delete('/', async (req, res) => {
   try {
     await deleteInfo(filePath, req.query.id as string)
     res.status(200).json('Deleted')
@@ -39,4 +39,4 @@ stackRouter.delete('/', async (req, res) => {
   }
 })
 
-export default stackRouter
+export default techStackRouter

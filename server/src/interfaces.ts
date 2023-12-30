@@ -7,7 +7,6 @@ export interface PostulationQuery {
   user?: string
 }
 
-// TODO Create postulation interface here to define find postulations type
 export interface postulation {
   code: string
   techStack: string[]
