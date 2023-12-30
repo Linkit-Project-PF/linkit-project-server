@@ -1,0 +1,165 @@
+{
+  "entries": [
+    { "id": 1, "name": "Android" },
+    {
+      "id": 2,
+      "name": "AWS"
+    },
+    {
+      "id": 3,
+      "name": "Azure"
+    },
+    {
+      "id": 4,
+      "name": "C"
+    },
+    {
+      "id": 5,
+      "name": "C#: .NET"
+    },
+    {
+      "id": 6,
+      "name": "C++"
+    },
+    {
+      "id": 7,
+      "name": "CSS"
+    },
+    {
+      "id": 8,
+      "name": "Cypress"
+    },
+    {
+      "id": 9,
+      "name": "Docker"
+    },
+    {
+      "id": 10,
+      "name": "GCP"
+    },
+    {
+      "id": 11,
+      "name": "Go"
+    },
+    {
+      "id": 12,
+      "name": "HTML"
+    },
+    {
+      "id": 13,
+      "name": "IOS"
+    },
+    {
+      "id": 14,
+      "name": "Java: Springboot"
+    },
+    {
+      "id": 15,
+      "name": "Javascript Vanilla"
+    },
+    {
+      "id": 16,
+      "name": "Javascript: Angular"
+    },
+    {
+      "id": 17,
+      "name": "Javascript: Next"
+    },
+    {
+      "id": 18,
+      "name": "Javascript: Node"
+    },
+    {
+      "id": 19,
+      "name": "Javascript: React"
+    },
+    {
+      "id": 20,
+      "name": "Javascript: Vue"
+    },
+    {
+      "id": 21,
+      "name": "Kubernetes"
+    },
+    {
+      "id": 22,
+      "name": "Machine Learning"
+    },
+    {
+      "id": 23,
+      "name": "Python: Django"
+    },
+    {
+      "id": 24,
+      "name": "Python: Flask"
+    },
+    {
+      "id": 25,
+      "name": "QA Automation"
+    },
+    {
+      "id": 26,
+      "name": "QA Manual"
+    },
+    {
+      "id": 27,
+      "name": "QA Manual & Automation"
+    },
+    {
+      "id": 28,
+      "name": "Ruby on Rails"
+    },
+    {
+      "id": 29,
+      "name": "Ruby: Sinatra"
+    },
+    {
+      "id": 30,
+      "name": "Rust"
+    },
+    {
+      "id": 31,
+      "name": "Selenium"
+    },
+    {
+      "id": 32,
+      "name": "Solidity"
+    },
+    {
+      "id": 33,
+      "name": "Unity"
+    },
+    {
+      "id": 34,
+      "name": "Flutter"
+    },
+    {
+      "id": 35,
+      "name": "Figma"
+    },
+    {
+      "id": 36,
+      "name": "Sketch"
+    },
+    {
+      "id": 37,
+      "name": "SAP"
+    },
+    {
+      "id": 38,
+      "name": "UX/UI"
+    },
+    {
+      "id": 39,
+      "name": "PM"
+    },
+    {
+      "id": 40,
+      "name": "Typescript"
+    },
+    {
+      "id": 41,
+      "name": "AEM"
+    }
+  ]
+}

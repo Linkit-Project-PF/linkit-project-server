@@ -1,0 +1,52 @@
+{
+  "entries": [
+    {
+      "id": 1,
+      "name": "Back-end development"
+    },
+    {
+      "id": 2,
+      "name": "Full-stack WEB development"
+    },
+    {
+      "id": 3,
+      "name": "Mobile development"
+    },
+    {
+      "id": 4,
+      "name": "Digital/Product design"
+    },
+    {
+      "id": 5,
+      "name": "Testing"
+    },
+    {
+      "id": 6,
+      "name": "Product Management"
+    },
+    {
+      "id": 7,
+      "name": "Marketing"
+    },
+    {
+      "id": 8,
+      "name": "Sales"
+    },
+    {
+      "id": 9,
+      "name": "HR"
+    },
+    {
+      "id": 10,
+      "name": "Operations"
+    },
+    {
+      "id": 11,
+      "name": "Administrative"
+    },
+    {
+      "id": 11,
+      "name": "Finance"
+    }
+  ]
+}
