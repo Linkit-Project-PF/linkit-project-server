@@ -1,3 +1,5 @@
+import { type Types } from 'mongoose'
+
 export interface JdEntity {
   code: string
   title: string
@@ -15,4 +17,8 @@ export interface JdEntity {
   archived: boolean
   company: string
   createdDate: Date
+}
+
+export interface MongoJd extends JdEntity {
+  _id: Types.ObjectId
 }

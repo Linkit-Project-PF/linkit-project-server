@@ -1,5 +1,5 @@
 import { type MongoUser, type UserEntity } from '../../domain/user/user.entity'
-import { type CompanyEntity } from '../../domain/company/company.entity'
+import { type MongoCompany, type CompanyEntity } from '../../domain/company/company.entity'
 import { type AdminEntity } from '../../domain/admin/admin.entity'
 import { userWelcomeMailCreate } from './nodemailer/welcome/userWelcomeMail'
 import { validateUserExists } from '../../helpers/validateAirtable'
@@ -15,6 +15,7 @@ import { MongoAdminRepository } from '../../infrastructure/repository/Admin.repo
 import { objectIDValidator } from '../../infrastructure/helpers/validateObjectID'
 import { type MailNodeMailerProvider } from './nodemailer/nodeMailer'
 import { ServerError, UncatchedError } from '../../../errors/errors'
+import { companyWelcomeMailCreate } from './nodemailer/welcome/companyWelcomeMail'
 
 interface registeringUser extends UserEntity {
   password: string
@@ -94,13 +95,14 @@ export class AuthMongoRepository implements AuthRepository {
       objectIDValidator(id, 'user to verify', 'usuario a verificar')
       if (role === 'user') {
         const user = await User.findById(id)
-        userWelcomeMailCreate(user as MongoUser)
+        await this.mailNodeMailerProvider.sendEmail(userWelcomeMailCreate(user as MongoUser))
         if (!user) throw new ServerError('No User found with that id', 'No se encuentra un usuario con ese ID', 404)
         await User.updateOne({ _id: user._id }, { $set: { active: true } }, { new: true })
       } else if (role === 'company') {
         const company = await Company.findById(id)
         if (!company) throw new ServerError('No Company found with that id', 'No se encuentra una empresa con ese ID', 404)
         await Company.updateOne({ email: company.email }, { $set: { active: true } }, { new: true })
+        await this.mailNodeMailerProvider.sendEmail(companyWelcomeMailCreate(company as MongoCompany))
       } else if (role === 'admin') {
         const admin = await Admin.findById(id)
         if (!admin) throw new ServerError('No admin found with that id', 'No se encuentra un administrador con ese ID', 404)
