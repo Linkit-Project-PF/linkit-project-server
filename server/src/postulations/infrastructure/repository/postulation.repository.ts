@@ -41,7 +41,6 @@ export class MongoPostulationRepository implements PostulationRepository {
 
   async findPostulation (query: PostulationQuery): Promise<postulation[]> {
     try {
-      console.log(query)
       const filter = Object.keys(query)[0]
       const value = Object.values(query)[0]
       const airtable = await base('LinkIT - Candidate application').select({ view: 'Grid view' }).all()
