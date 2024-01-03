@@ -1,3 +1,5 @@
+import { type Types } from 'mongoose'
+
 export interface CompanyEntity {
   firebaseId?: string | null
   airTableId?: string | null
@@ -11,4 +13,8 @@ export interface CompanyEntity {
   interested?: string | null
   active?: boolean | null
   registeredDate: Date
+}
+
+export interface MongoCompany extends CompanyEntity {
+  _id: Types.ObjectId
 }

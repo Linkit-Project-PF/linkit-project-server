@@ -1,6 +1,7 @@
-import { type permissions, type AdminEntity } from '../../domain/admin/admin.entity'
+import { type permissions, type AdminEntity, type MongoAdmin } from '../../domain/admin/admin.entity'
 import { type AdminRepository } from '../../domain/admin/admin.repository'
-import { adminMailCreate } from '../../authentication/Infrastructure/nodemailer/verifyMail/adminMailCreate'
+
+import { adminMailCreate } from '../../authentication/Infrastructure/nodemailer/verifyMail/adminMail'
 import { type MailNodeMailerProvider } from '../../authentication/Infrastructure/nodemailer/nodeMailer'
 import { validateAdmin } from '../../../errors/validation'
 import Admin from '../schema/Admin'
@@ -16,7 +17,7 @@ export class MongoAdminRepository implements AdminRepository {
     try {
       await validateAdmin(admin)
       const adminCreated = await Admin.create(admin)
-      await this.mailNodeMailerProvider.sendEmail(adminMailCreate(admin))
+      await this.mailNodeMailerProvider.sendEmail(adminMailCreate(adminCreated as MongoAdmin))
       return adminCreated
     } catch (error: any) {
       if (error instanceof ServerError) throw error
