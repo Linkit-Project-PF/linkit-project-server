@@ -1,4 +1,4 @@
-import { type CompanyEntity } from '../../domain/company/company.entity'
+import { type MongoCompany, type CompanyEntity } from '../../domain/company/company.entity'
 import { type CompanyRepository } from '../../domain/company/company.repository'
 import Company from '../schema/Company'
 import { companyMailCreate } from '../../authentication/Infrastructure/nodemailer/verifyMail/companyMail'
@@ -21,7 +21,7 @@ export class MongoCompanyRepository implements CompanyRepository {
         Rol: company.role,
         WebID: mongoID
       })
-      await this.mailNodeMailerProvider.sendEmail(companyMailCreate(company))
+      await this.mailNodeMailerProvider.sendEmail(companyMailCreate(company as MongoCompany))
       const companyCreated = await Company.findByIdAndUpdate(mongoID, { airTableId: airtableCompany.getId() }, { new: true })
       return companyCreated as CompanyEntity
     } catch (error: any) {
