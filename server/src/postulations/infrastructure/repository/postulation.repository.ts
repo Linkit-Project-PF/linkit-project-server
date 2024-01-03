@@ -1,11 +1,20 @@
 import base from '../../../db/airtable'
 import { ServerError, UncatchedError } from '../../../errors/errors'
+import { type MongoJd } from '../../../posts/domain/jd/jd.entity'
 import { type PostulationRepository } from '../../domain/postulation.repository'
+import { type MailNodeMailerProvider } from '../../../users/authentication/Infrastructure/nodemailer/nodeMailer'
 import { validatePostulation } from '../../../errors/validation'
 import { type postulation, type PostulationQuery, type translatedResponse } from '../../../interfaces'
+import { type MongoUser } from '../../../users/domain/user/user.entity'
 import User from '../../../users/infrastructure/schema/User'
+import { postulationMailCreate } from '../../../users/authentication/Infrastructure/nodemailer/postulationMail/postulationMail'
+import Jd from '../../../posts/infrastructure/schema/Jd'
 
 export class MongoPostulationRepository implements PostulationRepository {
+  constructor (private readonly mailNodeMailerProvider: MailNodeMailerProvider) {
+    this.mailNodeMailerProvider = mailNodeMailerProvider
+  }
+
   async createPostulation (postulation: postulation, userId: string): Promise<translatedResponse> {
     try {
       // TODO Add CV from cloudinary, check with front ppl how they storage that.
@@ -32,6 +41,9 @@ export class MongoPostulationRepository implements PostulationRepository {
         }
       ])
       await User.findByIdAndUpdate(userId, { $push: { postulations: postulation.code } }, { new: true })
+      const jd = await Jd.find({ code: postulation.code })
+      const user = await User.findById(userId)
+      await this.mailNodeMailerProvider.sendEmail(postulationMailCreate(user as MongoUser, jd as unknown as MongoJd))
       return { en: 'Postulation sent', es: 'Postulación enviada' }
     } catch (error: any) {
       if (error instanceof ServerError) throw error

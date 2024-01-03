@@ -57,14 +57,14 @@ margin-left: 47px !important;
     <td align="left" class="esd-block-text"><p>¡Hola ${admin.firstName}! ¿Cómo estás?</p><p>Estás recibiendo este mensaje porque tu email fue <strong>registrado</strong> en nuestro sitio web.</p><p>Por favor, haz click en el botón de abajo para <strong>verificar tu email </strong>y confirmar que eres el dueño de esta cuenta. Una vez confirmado, este email será asociado de forma única con tu cuenta en LinkIT.</p><p>Si no has sido tú el que se registró con nosotros, por favor desestima este correo.</p></td>
 </tr><tr>
     <td align="center" class="esd-block-button es-p10t es-p10b">
-        <!--[if mso]><a href=${process.env.HOSTING_CLIENT_URL} target="_blank" hidden>
-<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" esdevVmlButton href=${process.env.HOSTING_CLIENT_URL}
+        <!--[if mso]><a href="${process.env.HOSTING_CLIENT_URL}" target="_blank" hidden>
+<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" esdevVmlButton href="${process.env.HOSTING_CLIENT_URL}"
               style="height:34px; v-text-anchor:middle; width:150px" arcsize="50%" strokecolor="#00a489" strokeweight="2px" fillcolor="#00a489">
   <w:anchorlock></w:anchorlock>
   <center style='color:#ffffff; font-family:"open sans", "helvetica neue", helvetica, arial, sans-serif; font-size:12px; font-weight:400; line-height:12px;  mso-text-raise:1px'>Confirmar email</center>
 </v:roundrect></a>
 <![endif]--><!--[if !mso]><!-- --><span class="es-button-border">
-            <a class="es-button" target="_blank" style="font-size:14px" href=${process.env.HOSTING_SERVER_URL}auth/verify?id=${admin._id.toString()}&role=admin>Confirmar email</a>
+            <a class="es-button" target="_blank" style="font-size:14px" href="${process.env.HOSTING_SERVER_URL}auth/verify?id=${admin._id.toString()}&role=admin">Confirmar email</a>
         </span><!--<![endif]-->
     </td>
 </tr><tr>
@@ -87,7 +87,7 @@ margin-left: 47px !important;
     </td>
 </tr><tr>
     <td align="center" class="esd-block-image" style="font-size: 0">
-        <a target="_blank" href=${process.env.HOSTING_CLIENT_URL}>
+        <a target="_blank" href="${process.env.HOSTING_CLIENT_URL}">
             <img src="https://fcoqzhd.stripocdn.email/content/guids/CABINET_c5c6e376dd6b2da146dd8238f60741b1854cf9cd35ddc80612282df9e8dff0db/images/linkitmailslogo.png" alt="" width="144">
         </a>
     </td>
@@ -131,7 +131,7 @@ margin-left: 47px !important;
 </td>
 </tr><tr>
     <td align="left" class="esd-block-text es-text-7928">
-        <p style="font-size:14px;line-height:130% !important;color:#2e2d2c" align="left" class="es-m-txt-c"><strong>www.linkit-hr.com</strong></p>
+        <p style="font-size:14px;line-height:130% !important;color:#2e2d2c" align="left" class="es-m-txt-c"><strong>${process.env.PAGE_ADDRESS}</strong></p>
     </td>
 </tr><tr>
     <td align="center" class="esd-block-spacer es-spacer-5262" style="font-size: 0" height="20">
@@ -157,9 +157,9 @@ margin-left: 47px !important;
     },
     from: {
       name: 'LinkIT',
-      email: 'juanvelez.personal@gmail.com'
+      email: `${process.env.NODEMAILER_USER}`
     },
-    subject: 'Confirmación de email',
+    subject: 'Confirmación de Registro en LinkIT 🚀',
     html: message
   }
 }
