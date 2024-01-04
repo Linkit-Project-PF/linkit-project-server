@@ -159,7 +159,7 @@ export async function getOKRsQ4RecruitingTable (auth: any): Promise<any> {
   const sheets = google.sheets({ version: 'v4', auth })
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: '1Q96-Gi4-DYPASVK8wiMHvSoawbqu836iW7ouU38TuEs',
-    range: 'Q4 - Recruiting!A1:K'
+    range: 'Q4 - Recruiting!A:K'
   })
   const rows = res.data.values
   if (!rows || rows.length === 0) {
