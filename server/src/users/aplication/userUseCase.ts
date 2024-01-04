@@ -16,7 +16,7 @@ export class UserUseCase {
     return user
   }
 
-  public editUser = async (id: string, user: UserEntity): Promise<UserEntity[]> => {
+  public editUser = async (id: string, user: UserEntity): Promise<UserEntity> => {
     const editUser = await this.userRepository.editUser(id, user)
     return editUser
   }

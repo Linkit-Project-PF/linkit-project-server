@@ -5,7 +5,7 @@ import { userWelcomeMailCreate } from './nodemailer/welcome/userWelcomeMail'
 import { validateUserExists } from '../../helpers/validateAirtable'
 import { type AuthRepository } from './auth.repository'
 import { auth } from '../firebase'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth'
 import Admin from '../../infrastructure/schema/Admin'
 import User from '../../infrastructure/schema/User'
 import Company from '../../infrastructure/schema/Company'
@@ -112,6 +112,16 @@ export class AuthMongoRepository implements AuthRepository {
     } catch (error: any) {
       if (error instanceof ServerError) throw error
       else throw new UncatchedError(error.message, 'verifying', 'verificar usuario')
+    }
+  }
+
+  async resetPassword (email: string): Promise<string> {
+    try {
+      const auth = getAuth()
+      await sendPasswordResetEmail(auth, email)
+      return 'Email sent'
+    } catch (error: any) {
+      throw new UncatchedError(error.message, 'sending password reset email', 'enviar email de restablecimiento de contraseña')
     }
   }
 }

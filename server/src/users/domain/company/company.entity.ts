@@ -10,5 +10,6 @@ export interface CompanyEntity {
   role: string
   interested?: string | null
   active?: boolean | null
-  registeredDate: Date
+  createdDate: Date
+  provider: string
 }

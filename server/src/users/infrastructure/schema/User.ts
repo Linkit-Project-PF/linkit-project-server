@@ -65,7 +65,7 @@ const userSchema = new Schema({
     required: true,
     default: true
   },
-  registeredDate: {
+  createdDate: {
     type: Date,
     default: Date()
   },
@@ -75,7 +75,8 @@ const userSchema = new Schema({
   },
   provider: {
     type: String,
-    required: false
+    required: true,
+    enum: ['email', 'google', 'github']
   }
 })
 
