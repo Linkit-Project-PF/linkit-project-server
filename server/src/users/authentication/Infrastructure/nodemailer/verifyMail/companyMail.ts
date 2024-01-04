@@ -1,31 +1,22 @@
 /* eslint-disable no-tabs */
-import { type CompanyEntity } from '../../../../domain/company/company.entity'
+import { type MongoCompany } from '../../../../domain/company/company.entity'
 import { type IMessage } from '../add-email'
+import 'dotenv/config'
 
-export const companyMailCreate = (company: CompanyEntity): IMessage => {
+export const companyMailCreate = (company: MongoCompany): IMessage => {
   const message = `
-  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office"><head>
-  <meta charset="UTF-8">
-  <meta content="width=device-width, initial-scale=1" name="viewport">
-  <meta name="x-apple-disable-message-reformatting">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta content="telephone=no" name="format-detection">
-  <title></title>
-  <!--[if (mso 16)]>
+  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><meta charset="UTF-8"><meta content="width=device-width, initial-scale=1" name="viewport"><meta name="x-apple-disable-message-reformatting"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta content="telephone=no" name="format-detection"><title>Confirmación de Registro en LinkIT 🚀</title><!--[if (mso 16)]>
     <style type="text/css">
     a {text-decoration: none;}
     </style>
-    <![endif]-->
-  <!--[if gte mso 9]><style>sup { font-size: 100% !important; }</style><![endif]-->
-  <!--[if gte mso 9]>
+    <![endif]--><!--[if gte mso 9]><style>sup { font-size: 100% !important; }</style><![endif]--><!--[if gte mso 9]>
 <xml>
     <o:OfficeDocumentSettings>
     <o:AllowPNG></o:AllowPNG>
     <o:PixelsPerInch>96</o:PixelsPerInch>
     </o:OfficeDocumentSettings>
 </xml>
-<![endif]-->
- <!--[if mso]>
+<![endif]--><!--[if !mso]><!-- --><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700,700i"><!--<![endif]--><!--[if mso]>
  <style type="text/css">
      ul {
   margin: 0 !important;
@@ -38,180 +29,125 @@ export const companyMailCreate = (company: CompanyEntity): IMessage => {
   }
 
  </style><![endif]
---></head>
- <body class="body">
-  <div dir="ltr" class="es-wrapper-color">
-   <!--[if gte mso 9]>
+--></head><body class="body"><span class="esd-hidden-preheader" style="display:none!important;font-size:0px;line-height:0;color:#ffffff;visibility:hidden;opacity:0;height:0;width:0;mso-hide:all;">Por favor verifica tu email para completar tu registro.</span><div dir="ltr" class="es-wrapper-color"><!--[if gte mso 9]>
 			<v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="t">
-				<v:fill type="tile" color="#fafafa"></v:fill>
+				<v:fill type="tile" color="#f6f6f6"></v:fill>
 			</v:background>
-		<![endif]-->
-   <table class="es-wrapper" width="100%" cellspacing="0" cellpadding="0">
-    <tbody>
-     <tr>
-      <td class="esd-email-paddings" valign="top">
-       <table cellpadding="0" cellspacing="0" class="es-content esd-header-popover" align="center">
-        <tbody>
-         <tr>
-          <td class="esd-stripe esd-synchronizable-module" align="center">
-           <table class="es-content-body" align="center" cellpadding="0" cellspacing="0" width="600" style="background-color: transparent;" bgcolor="rgba(0, 0, 0, 0)">
-            <tbody>
-             <tr>
-              <td class="esd-structure es-p50t es-p5b es-p120l es-p120r" align="left">
-               <table cellpadding="0" cellspacing="0" width="100%">
-                <tbody>
-                 <tr>
-                      
-                  <td width="360" class="esd-container-frame" align="center" valign="top">
-                      <table cellpadding="0" cellspacing="0" width="100%">
-                          <tbody><tr>
-            <td align="center" class="esd-block-image" style="font-size: 0">
-                <a target="_blank">
-                    <img class="adapt-img" src="https://fcoqzhd.stripocdn.email/content/guids/CABINET_43b45519799d201a2b57e63f4ea687bca879216df4f4c7dc05c38df3b54f4ab9/images/image_a5O.png" alt="" width="360">
-                </a>
+		<![endif]--><table class="es-wrapper" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td class="esd-email-paddings" valign="top"><table class="esd-header-popover es-header" cellspacing="0" cellpadding="0" align="center"><tbody><tr><td class="esd-stripe" align="center"><table class="es-header-body" width="600" cellspacing="0" cellpadding="0" bgcolor="#ffffff" align="center"><tbody><tr><td class="es-p20t es-p20r es-p20l esd-structure" align="left"><!--[if mso]><table width="560" cellpadding="0"
+                            cellspacing="0"><tr><td width="180" valign="top"><![endif]--><table class="es-left" cellspacing="0" cellpadding="0" align="left"><tbody><tr>
+                
+            <td class="es-m-p0r es-m-p20b esd-container-frame" width="180" valign="top" align="center">
+                <table width="100%" cellspacing="0" cellpadding="0">
+                    <tbody><tr><td align="center" class="esd-empty-container" style="display: none"></td>
+                </tr></tbody></table>
             </td>
-        </tr></tbody></table>
-                  </td>
-              
-                      
-              </tr>
-                </tbody>
-               </table></td>
-             </tr>
-            </tbody>
-           </table></td>
-         </tr>
-        </tbody>
-       </table>
-       
-       <table cellpadding="0" cellspacing="0" class="es-content" align="center">
-        <tbody>
-         <tr>
-          <td class="esd-stripe" align="center">
-           <table bgcolor="#ffffff" class="es-content-body" align="center" cellpadding="0" cellspacing="0" width="600">
-            <tbody>
-             <tr>
-              <td class="esd-structure es-p30r es-p30b es-p30l es-p15t" align="left">
-               <table cellpadding="0" cellspacing="0" width="100%">
-                <tbody>
-                 <tr>
-                  <td width="540" class="esd-container-frame" align="center" valign="top">
-                   <table cellpadding="0" cellspacing="0" width="100%">
-                    <tbody>
-                     
-                     <tr>
-                      <td align="center" class="esd-block-text es-p10b es-m-txt-c"><h1 style="font-size: 46px; line-height: 100%;">Confirm Your Email</h1></td>
-                     </tr>
-                     <tr>
-                      <td align="center" class="esd-block-text es-p5t es-p5b es-p40r es-p40l es-m-p0r es-m-p0l"><p>You’ve received this message because your email address has been registered with our site. Please click the button below to verify your email address and confirm that you are the owner of this account.</p></td>
-                     </tr>
-                     <tr>
-                      <td align="center" class="esd-block-text es-p10t es-p5b"><p>If you did not register with us, please disregard this email.</p></td>
-                     </tr>
-                     <tr>
-                      <td align="center" class="esd-block-button es-p10t es-p10b"><span class="es-button-border" style="border-radius: 6px;"><a href="https://link-it-project.vercel.app/" class="es-button" target="_blank" style="border-left-width: 30px; border-right-width: 30px; border-radius: 6px;">CONFIRM YOUR EMAIL</a></span></td>
-                     </tr>
-                     <tr>
-                      <td align="center" class="esd-block-text es-p5t es-p5b es-p40r es-p40l es-m-p0r es-m-p0l"><p>Once confirmed, this email will be uniquely associated with your account.</p></td>
-                     </tr>
-                    </tbody>
-                   </table></td>
-                 </tr>
-                </tbody>
-               </table></td>
-             </tr>
-            </tbody>
-           </table></td>
-         </tr>
-        </tbody>
-       </table>
-       <table cellpadding="0" cellspacing="0" class="es-footer" align="center">
-        <tbody>
-         <tr>
-          <td class="esd-stripe esd-synchronizable-module" align="center">
-           <table class="es-footer-body" align="center" cellpadding="0" cellspacing="0" width="640" style="background-color: transparent;">
-            <tbody>
-             <tr>
-              <td class="esd-structure es-p20t es-p20b es-p20r es-p20l" align="left">
-               <table cellpadding="0" cellspacing="0" width="100%">
-                <tbody>
-                 <tr>
-                  <td width="600" class="esd-container-frame" align="left">
-                   <table cellpadding="0" cellspacing="0" width="100%">
-                    <tbody>
-                     <tr>
-                      <td align="center" class="esd-block-social es-p15t es-p15b" style="font-size:0">
-                       <table cellpadding="0" cellspacing="0" class="es-table-not-adapt es-social">
-                        <tbody>
-                         <tr>
-                          <td align="center" valign="top" class="es-p40r"><a target="_blank" href=""><img title="Facebook" src="https://fcoqzhd.stripocdn.email/content/assets/img/social-icons/logo-black/facebook-logo-black.png" alt="Fb" width="32"></a></td>
-                          <td align="center" valign="top" class="es-p40r"><a target="_blank" href=""><img title="X.com" src="https://fcoqzhd.stripocdn.email/content/assets/img/social-icons/logo-black/x-logo-black.png" alt="X" width="32"></a></td>
-                          <td align="center" valign="top" class="es-p40r"><a target="_blank" href=""><img title="Instagram" src="https://fcoqzhd.stripocdn.email/content/assets/img/social-icons/logo-black/instagram-logo-black.png" alt="Inst" width="32"></a></td>
-                          <td align="center" valign="top"><a target="_blank" href=""><img title="Youtube" src="https://fcoqzhd.stripocdn.email/content/assets/img/social-icons/logo-black/youtube-logo-black.png" alt="Yt" width="32"></a></td>
-                         </tr>
-                        </tbody>
-                       </table></td>
-                     </tr>
-                     <tr>
-                      <td align="center" class="esd-block-text es-p35b"><p>Style Casual&nbsp;© 2021 Style Casual, Inc. All Rights Reserved.</p><p>4562 Hazy Panda Limits, Chair Crossing, Kentucky, US, 607898</p></td>
-                     </tr>
-                     <tr>
-                      <td class="esd-block-menu" esd-tmp-menu-padding="5|5" esd-tmp-divider="1|solid|#cccccc" esd-tmp-menu-color="#999999">
-                       <table cellpadding="0" cellspacing="0" width="100%" class="es-menu">
-                        <tbody>
-                         <tr>
-                          <td align="center" valign="top" width="33.33%" class="es-p10t es-p10b es-p5r es-p5l" style="padding-top: 5px; padding-bottom: 5px;"><a target="_blank" href="https://" style="color: #999999;">Visit Us </a></td>
-                          <td align="center" valign="top" width="33.33%" class="es-p10t es-p10b es-p5r es-p5l" style="padding-top: 5px; padding-bottom: 5px; border-left: 1px solid #cccccc;"><a target="_blank" href="https://" style="color: #999999;">Privacy Policy</a></td>
-                          <td align="center" valign="top" width="33.33%" class="es-p10t es-p10b es-p5r es-p5l" style="padding-top: 5px; padding-bottom: 5px; border-left: 1px solid #cccccc;"><a target="_blank" href="https://" style="color: #999999;">Terms of Use</a></td>
-                         </tr>
-                        </tbody>
-                       </table></td>
-                     </tr>
-                    </tbody>
-                   </table></td>
-                 </tr>
-                </tbody>
-               </table></td>
-             </tr>
-            </tbody>
-           </table></td>
-         </tr>
-        </tbody>
-       </table>
-       <table cellpadding="0" cellspacing="0" class="es-content esd-footer-popover" align="center">
-        <tbody>
-         <tr>
-          <td class="esd-stripe esd-synchronizable-module" align="center">
-           <table class="es-content-body" align="center" cellpadding="0" cellspacing="0" width="600" style="background-color: transparent;" bgcolor="rgba(0, 0, 0, 0)">
-            <tbody>
-             <tr>
-              <td class="esd-structure es-p20" align="left">
-               <table cellpadding="0" cellspacing="0" width="100%">
-                <tbody>
-                 <tr>
-                  <td width="560" class="esd-container-frame" align="center" valign="top">
-                   <table cellpadding="0" cellspacing="0" width="100%">
-                    <tbody>
-                     <tr>
-                      <td align="center" class="esd-block-text es-infoblock"><p><a target="_blank"></a>No longer want to receive these emails?&nbsp;<a href="" target="_blank">Unsubscribe</a>.<a target="_blank"></a></p></td>
-                     </tr>
-                    </tbody>
-                   </table></td>
-                 </tr>
-                </tbody>
-               </table></td>
-             </tr>
-            </tbody>
-           </table></td>
-         </tr>
-        </tbody>
-       </table></td>
-     </tr>
-    </tbody>
-   </table>
-  </div>
- 
-</body></html>
+        
+                
+        </tr></tbody></table><!--[if mso]></td><td width="20"></td><td width="360" valign="top"><![endif]--><table class="es-right" cellspacing="0" cellpadding="0" align="right"><tbody><tr><td class="esd-container-frame" width="360" align="left"><table width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td class="esd-empty-container" style="display: none;" align="center"></td></tr></tbody></table></td></tr></tbody></table><!--[if mso]></td></tr></table><![endif]--></td></tr></tbody></table></td></tr></tbody></table><table class="es-content" cellspacing="0" cellpadding="0" align="center"><tbody><tr><td class="esd-stripe" align="center"><table class="es-content-body" width="600" cellspacing="0" cellpadding="0" bgcolor="#ffffff" align="center"><tbody><tr><td class="es-p20t es-p20r es-p20l esd-structure" align="left"><table width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td class="esd-container-frame" width="560" valign="top" align="center"><table width="100%" cellspacing="0" cellpadding="0"><tbody><tr>
+      <td align="center" class="esd-block-image" style="font-size: 0">
+          <a target="_blank">
+              <img src="https://fcoqzhd.stripocdn.email/content/guids/CABINET_c5c6e376dd6b2da146dd8238f60741b1854cf9cd35ddc80612282df9e8dff0db/images/linkitmailsbanner2.jpg" alt="" width="560" class="adapt-img">
+          </a>
+      </td>
+  </tr><tr>
+      <td align="center" class="esd-block-spacer" style="font-size: 0" height="30">
+          
+      </td>
+  </tr><tr>
+      <td align="left" class="esd-block-text"><p>¡Hola ${company.companyName}! ¿Cómo estás?</p><p>Estás recibiendo este mensaje porque tu email fue <strong>registrado</strong> en nuestro sitio web.</p><p>Por favor, haz click en el botón de abajo para <strong>verificar tu email </strong>y confirmar que eres el dueño de esta cuenta. Una vez confirmado, este email será asociado de forma única con tu cuenta en LinkIT.</p><p>Si no has sido tú el que se registró con nosotros, por favor desestima este correo.</p></td>
+  </tr><tr>
+      <td align="center" class="esd-block-button es-p10t es-p10b">
+          <!--[if mso]><a href="${process.env.HOSTING_CLIENT_URL}" target="_blank" hidden>
+	<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" esdevVmlButton href="${process.env.HOSTING_CLIENT_URL}" 
+                style="height:34px; v-text-anchor:middle; width:150px" arcsize="50%" strokecolor="#00a489" strokeweight="2px" fillcolor="#00a489">
+		<w:anchorlock></w:anchorlock>
+		<center style='color:#ffffff; font-family:"open sans", "helvetica neue", helvetica, arial, sans-serif; font-size:12px; font-weight:400; line-height:12px;  mso-text-raise:1px'>Confirmar email</center>
+	</v:roundrect></a>
+<![endif]--><!--[if !mso]><!-- --><span class="es-button-border">
+              <a class="es-button" target="_blank" style="font-size:14px" href="${process.env.HOSTING_SERVER_URL}auth/verify?id=${company._id.toString()}&role=company">Confirmar email</a>
+          </span><!--<![endif]-->
+      </td>
+  </tr><tr>
+      <td align="center" class="esd-block-spacer" style="font-size: 0" height="30">
+          
+      </td>
+  </tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table><table class="esd-footer-popover es-footer" cellspacing="0" cellpadding="0" align="center"><tbody><tr><td class="esd-stripe" align="center"><table class="es-footer-body" width="600" cellspacing="0" cellpadding="0" bgcolor="#ffffff" align="center"><tbody><tr>
+      <td class="esd-structure es-p20t es-p20r es-p20l" align="left" bgcolor="#eaecee" style="background-color:#eaecee">
+        
+    <!--[if mso]><table width="560" cellpadding="0" cellspacing="0"><tr><td width="174" valign="top"><![endif]-->
+    <table cellpadding="0" cellspacing="0" class="es-left" align="left">
+        
+        <tbody><tr>
+                
+            <td width="174" class="esd-container-frame" align="left">
+                <table cellpadding="0" cellspacing="0" width="100%" role="presentation">
+                    <tbody><tr>
+      <td align="center" class="esd-block-spacer" style="font-size: 0" height="20">
+          
+      </td>
+  </tr><tr>
+      <td align="center" class="esd-block-image" style="font-size: 0">
+          <a target="_blank" href="${process.env.HOSTING_CLIENT_URL}">
+              <img src="https://fcoqzhd.stripocdn.email/content/guids/CABINET_c5c6e376dd6b2da146dd8238f60741b1854cf9cd35ddc80612282df9e8dff0db/images/linkitmailslogo.png" alt="" width="144">
+          </a>
+      </td>
+  </tr><tr>
+      <td align="center" class="esd-block-spacer" style="font-size: 0" height="30">
+          
+      </td>
+  </tr></tbody></table>
+            </td>
+        
+                
+        </tr>
+    
+    </tbody></table>
+    <!--[if mso]></td><td width="20"></td><td width="366" valign="top"><![endif]-->
+    <table cellpadding="0" cellspacing="0" class="es-right" align="right">
+        
+        <tbody><tr>
+                
+            <td width="366" class="esd-container-frame" align="left">
+                <table cellpadding="0" cellspacing="0" width="100%" role="presentation">
+                    <tbody><tr>
+      <td align="center" class="esd-block-spacer" style="font-size: 0" height="20">
+          
+      </td>
+  </tr><tr>
+      <td align="left" class="esd-block-text es-text-2110 es-p25t">
+          <p style="font-size:14px;line-height:130% !important" align="left" class="es-m-txt-c">Síguenos en LinkedIn para estar al tanto de todas las novedades del mundo IT.</p>
+      </td>
+  </tr><tr>
+  <td align="left" class="esd-block-social es-p5b es-p15t es-m-txt-c" style="font-size:0">
+    <table cellpadding="0" cellspacing="0" class="es-table-not-adapt es-social">
+      <tbody>
+        <tr>
+          <td align="center" valign="top">
+  <a target="_blank" href="https://www.linkedin.com/company/linkit-hr/"><img title="Linkedin" src="https://fcoqzhd.stripocdn.email/content/assets/img/social-icons/circle-black/linkedin-circle-black.png" alt="In" width="26" height="26"></a>
+</td>
+        </tr>
+      </tbody>
+    </table>
+  </td>
+</tr><tr>
+      <td align="left" class="esd-block-text es-text-7928">
+          <p style="font-size:14px;line-height:130% !important;color:#2e2d2c" align="left" class="es-m-txt-c"><strong>${process.env.PAGE_ADDRESS}</strong></p>
+      </td>
+  </tr><tr>
+      <td align="center" class="esd-block-spacer es-spacer-5262" style="font-size: 0" height="20">
+          
+      </td>
+  </tr></tbody></table>
+            </td>
+        
+                
+        </tr>
+    
+    </tbody></table>
+    <!--[if mso]></td></tr></table><![endif]-->
+
+      </td>
+    </tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></div></body></html>
   `
   return {
     to: {
@@ -220,9 +156,9 @@ export const companyMailCreate = (company: CompanyEntity): IMessage => {
     },
     from: {
       name: 'LinkIT',
-      email: 'juanvelez.personal@gmail.com'
+      email: `${process.env.NODEMAILER_USER}`
     },
-    subject: '',
+    subject: 'Confirmación de Registro en LinkIT 🚀',
     html: message
   }
 }

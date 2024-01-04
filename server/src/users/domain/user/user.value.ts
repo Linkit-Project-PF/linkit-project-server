@@ -13,11 +13,11 @@ export class UserValue implements UserEntity {
   cv?: string | null
   englishLevel?: string | null
   role: string
-  technologies?: string[]
+  technologies: string[]
   active: boolean
-  registeredDate: Date
+  createdDate: Date
   postulations: string[]
-  provider?: string | undefined
+  provider: string
 
   constructor (user: UserEntity) {
     this.firebaseId = user.firebaseId ?? undefined
@@ -31,10 +31,10 @@ export class UserValue implements UserEntity {
     this.role = user.role ?? 'user'
     this.linkedin = user.linkedin ?? undefined
     this.cv = user.cv ?? undefined
-    this.registeredDate = user.registeredDate
-    this.technologies = user.technologies ?? []
+    this.createdDate = user.createdDate
+    this.technologies = user.technologies
     this.active = user.active
     this.postulations = user.postulations
-    this.provider = user.provider ?? undefined
+    this.provider = user.provider
   }
 }

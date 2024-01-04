@@ -13,11 +13,11 @@ export interface UserEntity {
   cv?: string | null
   englishLevel?: string | null
   role: string
-  technologies?: string[]
+  technologies: string[]
   active: boolean
-  registeredDate: Date
+  createdDate: Date
   postulations: string[]
-  provider?: string
+  provider: string
 }
 
 export interface MongoUser extends UserEntity {
