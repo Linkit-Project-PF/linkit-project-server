@@ -14,6 +14,7 @@ import { type permissions, type AdminEntity } from '../users/domain/admin/admin.
 import { type CompanyEntity } from '../users/domain/company/company.entity'
 import { type postulation } from '../interfaces'
 import { readFile } from '../resources/infrastructure/helpers/JSONfiles'
+import { type OKRsEntity } from '../posts/domain/OKRs/OKRs.entity'
 
 //* GENERAL USER / AUTH VALIDATORS
 
@@ -159,6 +160,15 @@ export async function validateJD (jobDescription: JdEntity): Promise<void> {
   }
 }
 
+//* OKRs VALIDATORS
+
+export async function ValidateOKRsCreate (OKR: OKRsEntity): Promise<void> {
+  const error: { en: string[], es: string[] } = { en: [], es: [] }
+  if (!OKR.OKRtitle) { error.en.push('OKR title'); error.es.push('Titulo del OKR') }
+  if (!OKR.specificOKRs) { error.en.push('specific OKRs'); error.es.push('OKRs específicos') }
+  if (error.en.length) throw new ServerError(`Missing properties to create a OKR: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear un OKR: ${error.es.join(', ')}`, 406)
+}
+
 //* PERMISSIONS VALIDATOR
 
 export async function permValidator (id: string, method: string, entity: string): Promise<void> {
@@ -168,7 +178,7 @@ export async function permValidator (id: string, method: string, entity: string)
     if (!admin) throw new ServerError('No admin found under that ID', 'No se encontro administrador bajo ese ID', 404)
     const validMethods = ['get', 'create', 'update', 'delete', 'special']
     if (!validMethods.includes(method)) throw new ServerError('Invalid permission', 'Permiso invalido', 406)
-    const validEntities = ['users', 'admins', 'companies', 'posts', 'jds', 'reviews', 'permissions']
+    const validEntities = ['users', 'admins', 'companies', 'posts', 'jds', 'reviews', 'permissions', 'OKRs']
     if (!validEntities.includes(entity)) throw new ServerError('Invalid value for permission', 'Valor invalido para permiso', 406)
     if (!(admin.permissions as permissions)[method as keyof permissions].includes(entity)) throw new ServerError('You do not have the permission for this action', 'No tienes los permisos para hacer esta accion', 401)
   } catch (error: any) {
