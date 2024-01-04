@@ -70,6 +70,11 @@ const adminSchema = new Schema({
       required: true,
       default: []
     }
+  },
+  provider: {
+    type: String,
+    required: true,
+    enum: ['email', 'google', 'github']
   }
 })
 

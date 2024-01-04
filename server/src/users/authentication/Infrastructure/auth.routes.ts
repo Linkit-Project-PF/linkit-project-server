@@ -14,5 +14,6 @@ const authController = new AuthControllers(authCase)
 authRoute.get('/login', authController.getController)
 authRoute.get('/verify', authController.putController)
 authRoute.post('/register', authController.postController)
+authRoute.get('/resetPassword', authController.resetPasswordController)
 
 export default authRoute

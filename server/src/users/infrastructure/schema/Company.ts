@@ -59,9 +59,14 @@ const companySchema = new Schema({
     required: true,
     default: true
   },
-  registeredDate: {
+  createdDate: {
     type: Date,
     default: Date()
+  },
+  provider: {
+    type: String,
+    required: true,
+    enum: ['email', 'google', 'github']
   }
 })
 

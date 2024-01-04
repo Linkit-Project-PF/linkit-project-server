@@ -1,5 +1,4 @@
 import { type RequestHandler } from 'express'
-import { getAuth, sendPasswordResetEmail } from 'firebase/auth'
 import { type UserUseCase } from '../../aplication/userUseCase'
 import getUserValidator from '../helpers/getUserValidator'
 import { permValidator } from '../../../errors/validation'
@@ -29,16 +28,9 @@ export class UserControllers {
 
   public putController: RequestHandler = async (req, res) => {
     try {
-      const { password, email } = req.body
       await permValidator((req as any).userId, 'update', 'users')
-      if (password) {
-        const auth = getAuth()
-        await sendPasswordResetEmail(auth, email)
-        return res.status(200).json('result')
-      } else {
-        const user = await this.userUseCase.editUser(req.params.id, req.body)
-        return res.status(200).json(user)
-      }
+      const user = await this.userUseCase.editUser(req.params.id, req.body)
+      return res.status(200).json(user)
     } catch (error: any) {
       return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }

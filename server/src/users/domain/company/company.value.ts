@@ -12,7 +12,8 @@ export class CompanyValue implements CompanyEntity {
   role: string
   interested?: string | null
   active?: boolean | null
-  registeredDate: Date
+  createdDate: Date
+  provider: string
 
   constructor (company: CompanyEntity) {
     this.firebaseId = company.firebaseId ?? undefined
@@ -25,6 +26,7 @@ export class CompanyValue implements CompanyEntity {
     this.linkedin = company.linkedin ?? undefined
     this.active = company.active ?? true
     this.interested = company.interested ?? undefined
-    this.registeredDate = company.registeredDate
+    this.createdDate = company.createdDate
+    this.provider = company.provider
   }
 }

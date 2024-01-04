@@ -8,4 +8,5 @@ export interface AuthRepository {
   login: (email: string, password: string, role: string) => Promise<UserEntity | CompanyEntity | AdminEntity | string>
   register: (entity: CustomType) => Promise<UserEntity | CompanyEntity | AdminEntity | string>
   verify: (id: string, role: string) => Promise<string>
+  resetPassword: (email: string) => Promise<string>
 }

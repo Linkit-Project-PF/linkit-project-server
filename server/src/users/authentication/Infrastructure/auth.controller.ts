@@ -30,4 +30,13 @@ export class AuthControllers {
       return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }
+
+  public resetPasswordController: RequestHandler = async (req, res) => {
+    try {
+      const result = await this.authUseCase.resetPassword(req.query.email as string)
+      return res.status(200).send(result)
+    } catch (error: any) {
+      return res.status(error.code).json(error[(req as any).lang as keyof Error])
+    }
+  }
 }

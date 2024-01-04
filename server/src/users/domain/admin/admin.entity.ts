@@ -20,6 +20,7 @@ export interface AdminEntity {
   active?: boolean | null
   createdDate: Date
   permissions?: permissions | null
+  provider: string
 }
 
 export interface MongoAdmin extends AdminEntity {
