@@ -9,6 +9,7 @@ import jdRoute from './posts/infrastructure/routes/jd.routes'
 import companyRoute from './users/infrastructure/routes/company.routes'
 import authRoute from './users/authentication/Infrastructure/auth.routes'
 import reviewRoute from './posts/infrastructure/routes/review.routes'
+import OKRRoute from './posts/infrastructure/routes/OKRs.routes'
 import resourcesRoute from './resources/infrastructure/routes/resources.routes'
 import { authValidator, langValidator } from './middlewares'
 import postulationRoute from './postulations/infrastructure/routes/postulation.route'
@@ -38,6 +39,7 @@ app.use('/posts', postRoute)
 app.use('/jds', jdRoute)
 app.use('/auth', authRoute)
 app.use('/reviews', reviewRoute)
+app.use('/OKRs', OKRRoute)
 
 mongoDBConnect().then(() => {
   app.listen(port, () => {
