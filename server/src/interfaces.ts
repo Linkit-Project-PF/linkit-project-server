@@ -23,3 +23,8 @@ export interface postulation {
   lastName: string
   recruiter?: string
 }
+
+export interface cv {
+  fileName?: string | null | undefined
+  cloudinaryId?: string | null | undefined
+}

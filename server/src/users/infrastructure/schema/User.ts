@@ -41,9 +41,16 @@ const userSchema = new Schema({
     default: ''
   },
   cv: {
-    type: String,
-    required: false,
-    default: ''
+    fileName: {
+      type: String,
+      required: false,
+      default: ''
+    },
+    cloudinaryId: {
+      type: String,
+      required: false,
+      default: ''
+    }
   },
   englishLevel: {
     type: String,

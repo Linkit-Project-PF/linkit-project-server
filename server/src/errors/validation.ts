@@ -15,6 +15,7 @@ import { type CompanyEntity } from '../users/domain/company/company.entity'
 import { type postulation } from '../interfaces'
 import { readFile } from '../resources/infrastructure/helpers/JSONfiles'
 import { type OKRsEntity } from '../posts/domain/OKRs/OKRs.entity'
+import countriesList from '../resources/infrastructure/schema/countries.json'
 
 //* GENERAL USER / AUTH VALIDATORS
 
@@ -37,6 +38,21 @@ const validateUserCreation = (user: UserEntity): void => {
 export async function validateUser (user: UserEntity): Promise<void> {
   validateUserCreation(user)
   await validateIfEmailExists(user.email)
+}
+
+export function validateUserEdition (user: Partial<UserEntity>): void {
+  const linkedinRegex = /^(https?:\/\/)?(www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]+\/?$/
+  const countries = countriesList.entries.map(country => country.name)
+  if (user.linkedin) {
+    if (!linkedinRegex.test(user.linkedin)) throw new ServerError('Not a valid linkedin profile link', 'No es un enlace valido de perfil de linkedin', 406)
+  }
+  if (user.country) {
+    if (!countries.includes(user.country)) throw new ServerError('Not a valid country', 'Pais invalido', 406)
+  }
+  if (user.cv) {
+    if (!(typeof user.cv === 'object' && user.cv !== null && 'fileName' in user.cv &&
+     'cloudinaryId' in user.cv)) throw new ServerError('Not a valid CV information', 'Informacion de CV invalida', 406)
+  }
 }
 
 //* COMPANY VALIDATIONS
