@@ -32,7 +32,6 @@ export class MongoPostulationRepository implements PostulationRepository {
             'Why Change': postulation.reason,
             'Candidate Email': postulation.email,
             'When to start availability': postulation.availability,
-            Created: postulation.created.toLocaleDateString('en-CA', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-'),
             Nombre: postulation.firstName,
             Apellido: postulation.lastName,
             'What would be your area of expertise?': postulation.techStack,
