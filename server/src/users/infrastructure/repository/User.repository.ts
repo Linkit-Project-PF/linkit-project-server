@@ -1,6 +1,6 @@
 import { type UserEntity, type MongoUser } from '../../domain/user/user.entity'
 import { type UserRepository } from '../../domain/user/user.reposiroty'
-import { validateUser } from '../../../errors/validation'
+import { validateUser, validateUserEdition } from '../../../errors/validation'
 import { ServerError, UncatchedError } from '../../../errors/errors'
 import { userMailCreate } from '../../authentication/Infrastructure/nodemailer/verifyMail/userMail'
 import { type MailNodeMailerProvider } from '../../authentication/Infrastructure/nodemailer/nodeMailer'
@@ -62,8 +62,9 @@ export class MongoUserRepository implements UserRepository {
     }
   }
 
-  async editUser (id: string, info: any): Promise<UserEntity> {
+  async editUser (id: string, info: Partial<UserEntity>): Promise<UserEntity> {
     try {
+      validateUserEdition(info)
       objectIDValidator(id, 'user to edit', 'usuario a editar')
       const invalidEdit = ['_id', 'role', 'airTableId', 'registeredDate', 'email']
       Object.keys(info).forEach(key => { if (invalidEdit.includes(key)) throw new ServerError('No Id/role/date nor email can be changed through this route', 'Ningun ID, rol, fecha o email son editables o no se pueden editar por esta ruta', 403) })

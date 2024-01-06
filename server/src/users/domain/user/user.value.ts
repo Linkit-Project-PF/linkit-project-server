@@ -1,3 +1,4 @@
+import { type cv } from '../../../interfaces'
 import { type UserEntity } from './user.entity'
 
 export class UserValue implements UserEntity {
@@ -10,7 +11,7 @@ export class UserValue implements UserEntity {
   password?: string
   country?: string | null
   linkedin?: string | null
-  cv?: string | null
+  cv?: cv | null
   englishLevel?: string | null
   role: string
   technologies: string[]
@@ -30,7 +31,7 @@ export class UserValue implements UserEntity {
     this.country = user.country ?? undefined
     this.role = user.role ?? 'user'
     this.linkedin = user.linkedin ?? undefined
-    this.cv = user.cv ?? undefined
+    this.cv = { fileName: user.cv?.fileName ?? undefined, cloudinaryId: user.cv?.cloudinaryId ?? undefined }
     this.createdDate = user.createdDate
     this.technologies = user.technologies
     this.active = user.active
