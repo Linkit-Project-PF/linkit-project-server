@@ -5,7 +5,7 @@ import { companyMailCreate } from '../../authentication/Infrastructure/nodemaile
 import base from '../../../db/airtable'
 import { type MailNodeMailerProvider } from '../../authentication/Infrastructure/nodemailer/nodeMailer'
 import { objectIDValidator } from '../helpers/validateObjectID'
-import { validateCompanyCreation } from '../../../errors/validation'
+import { validateCompanyCreation, validateCompanyEdition } from '../../../errors/validation'
 import { ServerError, UncatchedError } from '../../../errors/errors'
 
 export class MongoCompanyRepository implements CompanyRepository {
@@ -50,8 +50,9 @@ export class MongoCompanyRepository implements CompanyRepository {
     }
   }
 
-  async editCompany (id: string, info: any): Promise<CompanyEntity> {
+  async editCompany (id: string, info: Partial<CompanyEntity>): Promise<CompanyEntity> {
     try {
+      validateCompanyEdition(info)
       objectIDValidator(id, 'company to edit', 'empresa a editar')
       const invalidEdit = ['_id', 'role', 'airTableId', 'registeredDate', 'email']
       Object.keys(info).forEach(key => {
