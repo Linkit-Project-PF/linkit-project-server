@@ -69,6 +69,17 @@ export async function validateCompanyCreation (company: CompanyEntity): Promise<
   await validateIfEmailExists(company.email)
 }
 
+export function validateCompanyEdition (company: Partial<CompanyEntity>): void {
+  const linkedinRegex = /^(https?:\/\/)?(www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]+\/?$/
+  const countries = countriesList.entries.map(country => country.name)
+  if (company.linkedin) {
+    if (!linkedinRegex.test(company.linkedin)) throw new ServerError('Not a valid linkedin profile link', 'No es un enlace valido de perfil de linkedin', 406)
+  }
+  if (company.country) {
+    if (!countries.includes(company.country)) throw new ServerError('Not a valid country', 'Pais invalido', 406)
+  }
+}
+
 //* ADMIN VALIDATIONS
 
 const adminCreateValidator = (admin: AdminEntity): void => {
