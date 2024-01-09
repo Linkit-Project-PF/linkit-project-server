@@ -1,9 +1,12 @@
 import { Router } from 'express'
 import base from '../../../db/airtable'
+import { MailNodeMailerProvider } from '../../../users/authentication/Infrastructure/nodemailer/nodeMailer'
+import { newsletterWelcomeMailCreate } from '../../../users/authentication/Infrastructure/nodemailer/welcome/newsletterWelcome'
 import { type translatedResponse } from '../../../interfaces'
 import { UncatchedError, type customError } from '../../../errors/errors'
 
 const newsLetterRouter = Router()
+const mailProvider = new MailNodeMailerProvider()
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 newsLetterRouter.post('/', async (req, res): Promise<any> => {
@@ -19,6 +22,7 @@ newsLetterRouter.post('/', async (req, res): Promise<any> => {
         }
       }
     ])
+    await mailProvider.sendEmail(newsletterWelcomeMailCreate(req.body))
     const response: translatedResponse = { en: 'Your information has been sent successfully', es: 'Tu informacion ha sido enviada con exito' }
     res.status(200).send(response[(req as any).lang as keyof translatedResponse])
   } catch (error: any) {
