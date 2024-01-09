@@ -30,14 +30,14 @@ const port = process.env.PORT ?? 3000
 app.use(langValidator)
 app.use('/resources', resourcesRoute)
 app.use('/postulations', postulationRoute)
+app.use('/auth', authRoute)
 
 app.use(authValidator)
 app.use('/admins', adminRoute)
-app.use('/companies', companyRoute)
 app.use('/users', userRoute)
+app.use('/companies', companyRoute)
 app.use('/posts', postRoute)
 app.use('/jds', jdRoute)
-app.use('/auth', authRoute)
 app.use('/reviews', reviewRoute)
 app.use('/OKRs', OKRRoute)
 
