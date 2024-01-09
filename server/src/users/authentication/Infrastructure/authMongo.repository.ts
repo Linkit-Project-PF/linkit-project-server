@@ -5,6 +5,7 @@ import { userWelcomeMailCreate } from './nodemailer/welcome/userWelcomeMail'
 import { validateUserExists } from '../../helpers/validateAirtable'
 import { type AuthRepository } from './auth.repository'
 import { auth } from '../firebase'
+import 'dotenv/config'
 import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth'
 import Admin from '../../infrastructure/schema/Admin'
 import User from '../../infrastructure/schema/User'
@@ -95,13 +96,15 @@ export class AuthMongoRepository implements AuthRepository {
       objectIDValidator(id, 'user to verify', 'usuario a verificar')
       if (role === 'user') {
         const user = await User.findById(id)
-        await this.mailNodeMailerProvider.sendEmail(userWelcomeMailCreate(user as MongoUser))
         if (!user) throw new ServerError('No User found with that id', 'No se encuentra un usuario con ese ID', 404)
         await User.updateOne({ _id: user._id }, { $set: { active: true } }, { new: true })
+        window.location.href = process.env.PAGE_ADDRESS as any
+        await this.mailNodeMailerProvider.sendEmail(userWelcomeMailCreate(user as MongoUser))
       } else if (role === 'company') {
         const company = await Company.findById(id)
         if (!company) throw new ServerError('No Company found with that id', 'No se encuentra una empresa con ese ID', 404)
         await Company.updateOne({ email: company.email }, { $set: { active: true } }, { new: true })
+        window.location.href = process.env.PAGE_ADDRESS as any
         await this.mailNodeMailerProvider.sendEmail(companyWelcomeMailCreate(company as MongoCompany))
       } else if (role === 'admin') {
         const admin = await Admin.findById(id)
