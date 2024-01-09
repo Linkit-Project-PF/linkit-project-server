@@ -12,6 +12,7 @@ export class AdminValue implements AdminEntity {
   active?: boolean | null
   createdDate: Date
   permissions?: permissions | null
+  provider: string
 
   constructor (admin: AdminEntity) {
     this.firebaseId = admin.firebaseId ?? undefined
@@ -25,5 +26,6 @@ export class AdminValue implements AdminEntity {
     this.active = admin.active ?? true
     this.createdDate = admin.createdDate
     this.permissions = admin.permissions
+    this.provider = admin.provider
   }
 }

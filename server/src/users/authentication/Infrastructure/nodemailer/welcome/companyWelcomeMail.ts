@@ -1,11 +1,11 @@
 /* eslint-disable no-tabs */
-import { type MongoUser } from '../../../../domain/user/user.entity'
+import { type MongoCompany } from '../../../../domain/company/company.entity'
 import { type IMessage } from '../add-email'
 import 'dotenv/config'
 
-export const userWelcomeMailCreate = (user: MongoUser): IMessage => {
+export const companyWelcomeMailCreate = (company: MongoCompany): IMessage => {
   const message = `
-  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><meta charset="UTF-8"><meta content="width=device-width, initial-scale=1" name="viewport"><meta name="x-apple-disable-message-reformatting"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta content="telephone=no" name="format-detection"><title>¡Te damos la bienvenida a LinkIT! 😊</title><!--[if (mso 16)]>
+  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><meta charset="UTF-8"><meta content="width=device-width, initial-scale=1" name="viewport"><meta name="x-apple-disable-message-reformatting"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta content="telephone=no" name="format-detection"><title>¡Les damos la bienvenida a LinkIT! 😊</title><!--[if (mso 16)]>
     <style type="text/css">
     a {text-decoration: none;}
     </style>
@@ -29,7 +29,7 @@ export const userWelcomeMailCreate = (user: MongoUser): IMessage => {
   }
 
  </style><![endif]
---></head><body class="body"><span class="esd-hidden-preheader" style="display:none!important;font-size:0px;line-height:0;color:#ffffff;visibility:hidden;opacity:0;height:0;width:0;mso-hide:all;">Prepárate para explorar el emocionante mundo de proyectos IT.</span><div dir="ltr" class="es-wrapper-color"><!--[if gte mso 9]>
+--></head><body class="body"><span class="esd-hidden-preheader" style="display:none!important;font-size:0px;line-height:0;color:#ffffff;visibility:hidden;opacity:0;height:0;width:0;mso-hide:all;">Estamos emocionados de colaborar con ustedes para potenciar su equipo con el mejor talento IT.</span><div dir="ltr" class="es-wrapper-color"><!--[if gte mso 9]>
 			<v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="t">
 				<v:fill type="tile" color="#f6f6f6"></v:fill>
 			</v:background>
@@ -54,17 +54,17 @@ export const userWelcomeMailCreate = (user: MongoUser): IMessage => {
           
       </td>
   </tr><tr>
-      <td align="left" class="esd-block-text"><p>¡Hola ${user.firstName}! ¿Cómo estás? 😊</p><p>Nos emociona darte la bienvenida a la vibrante <strong>comunidad de LinkIT,</strong> donde conectar con los mejores proyectos IT es más fácil que nunca. ¡Tu talento es una pieza fundamental y estamos encantados de que formes parte de nuestro selecto grupo!</p><p>Al unirte a nosotros, has abierto la puerta a emocionantes oportunidades para trabajar en <strong>proyectos destacados</strong> de manera remota. Nuestra plataforma te conectará con las mejores opciones que se alinean perfectamente con tus <strong>habilidades y aspiraciones profesionales.</strong></p><p>En LinkIT nos esforzamos por brindarte experiencias profesionales <strong>únicas y desafiantes. </strong>Estamos aquí para apoyarte en cada paso de tu viaje y asegurarnos de que encuentres oportunidades que impulsen tu carrera.</p><p>¡Prepárate para explorar el emocionante mundo de proyectos IT de la mano de LinkIT! Si tienes alguna pregunta o necesitas asistencia, nuestro equipo está aquí para ayudarte.</p><p>Descubre las <strong>vacantes disponibles </strong>aquí o sé parte de la base de datos de IT más grande del mundo. ¡Tu próximo gran paso te espera! 🚀</p></td>
+      <td align="left" class="esd-block-text"><p>¡Hola ${company.repName}!</p><p>Nos complace darle a<strong> ${company.companyName} </strong>la más cordial bienvenida a la comunidad de LinkIT. Estamos entusiasmados de tenerlos a bordo y ofrecerles acceso a nuestra plataforma líder, donde podrán contratar y escalar con el mejor talento IT <strong>en tan solo 5 días.</strong></p><p>En LinkIT, nos dedicamos a proporcionar <strong>soluciones ágiles y eficientes</strong> para que puedan construir, gestionar y retener a los profesionales más destacados del mundo de la tecnología. Nuestra plataforma le permite acceder a un <strong>pool diverso y altamente calificado</strong> de talento IT, brindándoles la oportunidad de impulsar el éxito de su empresa con rapidez y eficacia.</p><p>Estamos comprometidos a facilitar un proceso de <strong>contratación sin complicaciones</strong> y a ofrecerles un servicio de calidad excepcional. ¡Prepárense para escalar y prosperar con el mejor talento disponible!</p><p>Si prefieres <strong>agendar directamente una reunión</strong>, te facilitamos un enlace a nuestro calendario. Puedes seleccionar el horario que mejor se adapte a tu agenda y asegurarte de que nuestro equipo esté listo para abordar tus inquietudes y discutir cómo podemos ayudarte a alcanzar tus objetivos. Estamos entusiasmados por la oportunidad de colaborar en conjunto 🚀.</p></td>
   </tr><tr>
       <td align="center" class="esd-block-button es-p10t">
-          <!--[if mso]><a href="${process.env.HOSTING_CLIENT_URL}/SoyTalento#vacantes"  target="_blank" hidden>
-	<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" esdevVmlButton href="${process.env.HOSTING_CLIENT_URL}/SoyTalento#vacantes" 
-                style="height:34px; v-text-anchor:middle; width:169px" arcsize="50%" strokecolor="#00a489" strokeweight="2px" fillcolor="#00a489">
+          <!--[if mso]><a href="https://calendly.com/saleslinkit" target="_blank" hidden>
+	<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" esdevVmlButton href="https://calendly.com/saleslinkit" 
+                style="height:34px; v-text-anchor:middle; width:154px" arcsize="50%" strokecolor="#00a489" strokeweight="2px" fillcolor="#00a489">
 		<w:anchorlock></w:anchorlock>
-		<center style='color:#ffffff; font-family:"open sans", "helvetica neue", helvetica, arial, sans-serif; font-size:12px; font-weight:400; line-height:12px;  mso-text-raise:1px'>Descubrir vacantes</center>
+		<center style='color:#ffffff; font-family:"open sans", "helvetica neue", helvetica, arial, sans-serif; font-size:12px; font-weight:400; line-height:12px;  mso-text-raise:1px'>Agendar reunión</center>
 	</v:roundrect></a>
 <![endif]--><!--[if !mso]><!-- --><span class="es-button-border">
-              <a class="es-button" target="_blank" style="font-size:14px" href="${process.env.HOSTING_CLIENT_URL}/SoyTalento#vacantes">Descubrir vacantes</a>
+              <a class="es-button" target="_blank" style="font-size:14px" href="https://calendly.com/saleslinkit">Agendar reunión</a>
           </span><!--<![endif]-->
       </td>
   </tr><tr>
@@ -151,14 +151,14 @@ export const userWelcomeMailCreate = (user: MongoUser): IMessage => {
   `
   return {
     to: {
-      name: user.firstName + ' ' + user.lastName,
-      email: user.email
+      name: company.companyName,
+      email: company.email
     },
     from: {
       name: 'LinkIT',
       email: `${process.env.NODEMAILER_USER}`
     },
-    subject: '¡Te damos la bienvenida a LinkIT! 😊',
+    subject: '¡Les damos la bienvenida a LinkIT! 😊',
     html: message
   }
 }

@@ -1,4 +1,5 @@
-import { type postulation, type PostulationQuery, type translatedResponse } from '../../interfaces'
+import { type postulation, type PostulationQuery } from '../../interfaces'
+import { type UserEntity } from '../../users/domain/user/user.entity'
 import { type PostulationRepository } from '../domain/postulation.repository'
 
 export class PostulationUseCase {
@@ -9,8 +10,8 @@ export class PostulationUseCase {
     return postulation
   }
 
-  public createPostulation = async (postulation: postulation): Promise<translatedResponse> => {
-    const postulationCreated = await this.postulationRepo.createPostulation(postulation)
+  public createPostulation = async (postulation: postulation, userId: string): Promise<UserEntity> => {
+    const postulationCreated = await this.postulationRepo.createPostulation(postulation, userId)
     return postulationCreated
   }
 }

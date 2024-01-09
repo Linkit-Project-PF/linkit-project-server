@@ -1,7 +1,6 @@
 import { type UserEntity, type MongoUser } from '../../domain/user/user.entity'
 import { type UserRepository } from '../../domain/user/user.reposiroty'
-import { validateUser } from '../../../errors/validation'
-import { updatePassword } from 'firebase/auth'
+import { validateUser, validateUserEdition } from '../../../errors/validation'
 import { ServerError, UncatchedError } from '../../../errors/errors'
 import { userMailCreate } from '../../authentication/Infrastructure/nodemailer/verifyMail/userMail'
 import { type MailNodeMailerProvider } from '../../authentication/Infrastructure/nodemailer/nodeMailer'
@@ -49,7 +48,7 @@ export class MongoUserRepository implements UserRepository {
         const matchedUsers: UserEntity[] = []
         allUsers.forEach(user => {
           const fullName = user.firstName + user.lastName
-          if (fullName.includes(value)) matchedUsers.push(user)
+          if (fullName.includes(value)) matchedUsers.push(user as UserEntity)
         })
         result = matchedUsers
       } else if (validIncludeFilters.includes(filter)) {
@@ -63,15 +62,15 @@ export class MongoUserRepository implements UserRepository {
     }
   }
 
-  async editUser (id: string, info: any): Promise<UserEntity[]> {
+  async editUser (id: string, info: Partial<UserEntity>): Promise<UserEntity> {
     try {
+      validateUserEdition(info)
       objectIDValidator(id, 'user to edit', 'usuario a editar')
       const invalidEdit = ['_id', 'role', 'airTableId', 'registeredDate', 'email']
       Object.keys(info).forEach(key => { if (invalidEdit.includes(key)) throw new ServerError('No Id/role/date nor email can be changed through this route', 'Ningun ID, rol, fecha o email son editables o no se pueden editar por esta ruta', 403) })
       const editedUser = await User.findByIdAndUpdate(id, info, { new: true })
       if (!editedUser) throw new ServerError('No user found with that ID', 'No se encontro usuario con ese ID', 404)
-      const allUsers = await User.find()
-      return allUsers
+      return editedUser
     } catch (error: any) {
       if (error instanceof ServerError) throw error
       else throw new UncatchedError(error.message, 'editing user', 'editar usuario')
@@ -90,7 +89,7 @@ export class MongoUserRepository implements UserRepository {
             { $set: { active: !user.active } }, { new: true }
           )
           const resultado = await User.find()
-          return resultado
+          return resultado as UserEntity[]
         } else if (total === 'true') {
           if (reqID !== process.env.SUPERADM_ID) throw new ServerError('Only superadm can delete totally', 'El borrado total solo lo puede hcaer el super admin', 401)
           await deletionTrigger(user.firebaseId as string, user.airTableId as string)
@@ -101,15 +100,6 @@ export class MongoUserRepository implements UserRepository {
     } catch (error: any) {
       if (error instanceof ServerError) throw error
       else throw new UncatchedError(error.message, 'deleting user', 'eliminar usuario')
-    }
-  }
-
-  async changePassword (user: any, password: string): Promise<void> {
-    try {
-      const newPassword = password
-      await updatePassword(user, newPassword)
-    } catch (error: any) {
-      console.log(error)
     }
   }
 }

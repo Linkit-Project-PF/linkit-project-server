@@ -1,15 +1,25 @@
 import base from '../../../db/airtable'
 import { ServerError, UncatchedError } from '../../../errors/errors'
+import { type MongoJd } from '../../../posts/domain/jd/jd.entity'
 import { type PostulationRepository } from '../../domain/postulation.repository'
+import { type MailNodeMailerProvider } from '../../../users/authentication/Infrastructure/nodemailer/nodeMailer'
 import { validatePostulation } from '../../../errors/validation'
-import { type postulation, type PostulationQuery, type translatedResponse } from '../../../interfaces'
+import { type postulation, type PostulationQuery } from '../../../interfaces'
+import { type UserEntity, type MongoUser } from '../../../users/domain/user/user.entity'
+import User from '../../../users/infrastructure/schema/User'
+import { postulationMailCreate } from '../../../users/authentication/Infrastructure/nodemailer/postulationMail/postulationMail'
+import Jd from '../../../posts/infrastructure/schema/Jd'
 
 export class MongoPostulationRepository implements PostulationRepository {
-  async createPostulation (postulation: postulation): Promise<translatedResponse> {
+  constructor (private readonly mailNodeMailerProvider: MailNodeMailerProvider) {
+    this.mailNodeMailerProvider = mailNodeMailerProvider
+  }
+
+  async createPostulation (postulation: postulation, userId: string): Promise<UserEntity> {
     try {
       // TODO Add CV from cloudinary, check with front ppl how they storage that.
       // TODO Check ALL postulations from Airtable to validate If user has already created a postulation for that JD, return error If so.
-      await validatePostulation(postulation)
+      await validatePostulation(postulation, userId)
       postulation.created = new Date()
       await base('LinkIT - Candidate application').create([
         {
@@ -22,13 +32,18 @@ export class MongoPostulationRepository implements PostulationRepository {
             'Why Change': postulation.reason,
             'Candidate Email': postulation.email,
             'When to start availability': postulation.availability,
-            Created: postulation.created.toLocaleDateString('en-CA', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-'),
             Nombre: postulation.firstName,
-            Apellido: postulation.lastName
+            Apellido: postulation.lastName,
+            'What would be your area of expertise?': postulation.techStack,
+            recruiter: postulation.recruiter ? postulation.recruiter : undefined
           }
         }
       ])
-      return { en: 'Postulation sent', es: 'Postulación enviada' }
+      await User.findByIdAndUpdate(userId, { $push: { postulations: postulation.code } }, { new: true })
+      const jd = await Jd.find({ code: postulation.code })
+      const user = await User.findById(userId) as UserEntity
+      await this.mailNodeMailerProvider.sendEmail(postulationMailCreate(user as MongoUser, jd as unknown as MongoJd))
+      return user
     } catch (error: any) {
       if (error instanceof ServerError) throw error
       else throw new UncatchedError(error.message, 'creating postulation', 'crear postulacion')
@@ -37,7 +52,6 @@ export class MongoPostulationRepository implements PostulationRepository {
 
   async findPostulation (query: PostulationQuery): Promise<postulation[]> {
     try {
-      console.log(query)
       const filter = Object.keys(query)[0]
       const value = Object.values(query)[0]
       const airtable = await base('LinkIT - Candidate application').select({ view: 'Grid view' }).all()

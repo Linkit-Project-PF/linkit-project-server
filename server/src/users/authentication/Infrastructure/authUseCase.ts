@@ -21,4 +21,9 @@ export class AuthUseCase {
     const result = await this.authRepository.verify(id, role)
     return result
   }
+
+  public resetPassword = async (email: string): Promise<string> => {
+    const result = await this.authRepository.resetPassword(email)
+    return result
+  }
 }

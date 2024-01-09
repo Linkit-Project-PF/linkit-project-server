@@ -1,11 +1,11 @@
-import { type CompanyEntity } from '../../domain/company/company.entity'
+import { type MongoCompany, type CompanyEntity } from '../../domain/company/company.entity'
 import { type CompanyRepository } from '../../domain/company/company.repository'
 import Company from '../schema/Company'
 import { companyMailCreate } from '../../authentication/Infrastructure/nodemailer/verifyMail/companyMail'
 import base from '../../../db/airtable'
 import { type MailNodeMailerProvider } from '../../authentication/Infrastructure/nodemailer/nodeMailer'
 import { objectIDValidator } from '../helpers/validateObjectID'
-import { validateCompanyCreation } from '../../../errors/validation'
+import { validateCompanyCreation, validateCompanyEdition } from '../../../errors/validation'
 import { ServerError, UncatchedError } from '../../../errors/errors'
 
 export class MongoCompanyRepository implements CompanyRepository {
@@ -21,7 +21,7 @@ export class MongoCompanyRepository implements CompanyRepository {
         Rol: company.role,
         WebID: mongoID
       })
-      await this.mailNodeMailerProvider.sendEmail(companyMailCreate(mongoCompany as CompanyEntity))
+      await this.mailNodeMailerProvider.sendEmail(companyMailCreate(mongoCompany as MongoCompany))
       const companyCreated = await Company.findByIdAndUpdate(mongoID, { airTableId: airtableCompany.getId() }, { new: true })
       return companyCreated as CompanyEntity
     } catch (error: any) {
@@ -50,8 +50,9 @@ export class MongoCompanyRepository implements CompanyRepository {
     }
   }
 
-  async editCompany (id: string, info: any): Promise<CompanyEntity> {
+  async editCompany (id: string, info: Partial<CompanyEntity>): Promise<CompanyEntity> {
     try {
+      validateCompanyEdition(info)
       objectIDValidator(id, 'company to edit', 'empresa a editar')
       const invalidEdit = ['_id', 'role', 'airTableId', 'registeredDate', 'email']
       Object.keys(info).forEach(key => {

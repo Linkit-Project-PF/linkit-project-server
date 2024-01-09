@@ -20,6 +20,14 @@ clientsFollowUpRoute.get('/', async (req, res): Promise<void> => {
           return (followUp.Client as string).toLowerCase().includes(value.toLowerCase())
         } else return false
       })
+    } else if (filter === 'code') {
+      result = (fields.filter(followUp => followUp['Role Code'] === value)[0]
+      )
+    } else if (filter === 'area') {
+      result = (fields.filter(followUp => {
+        if (followUp.Area) return (followUp.Area as string).toLowerCase() === value.toLowerCase()
+        else return false
+      })[0])
     } else {
       result = fields
     }

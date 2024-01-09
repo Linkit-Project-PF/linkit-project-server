@@ -1,3 +1,5 @@
+import { type Types } from 'mongoose'
+
 export interface permissions {
   get: string[]
   create: string[]
@@ -18,4 +20,9 @@ export interface AdminEntity {
   active?: boolean | null
   createdDate: Date
   permissions?: permissions | null
+  provider: string
+}
+
+export interface MongoAdmin extends AdminEntity {
+  _id: Types.ObjectId
 }

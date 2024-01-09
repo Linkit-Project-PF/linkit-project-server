@@ -1,4 +1,5 @@
 import { type Types } from 'mongoose'
+import { type cv } from '../../../interfaces'
 
 export interface UserEntity {
   firebaseId?: string | null
@@ -10,12 +11,14 @@ export interface UserEntity {
   password?: string
   country?: string | null
   linkedin?: string | null
-  cv?: string | null
+  cv?: cv | null
   englishLevel?: string | null
   role: string
-  technologies?: string[]
+  technologies: string[]
   active: boolean
-  registeredDate: Date
+  createdDate: Date
+  postulations: string[]
+  provider: string
 }
 
 export interface MongoUser extends UserEntity {

@@ -13,6 +13,9 @@ import Post from '../posts/infrastructure/schema/Post'
 import { type permissions, type AdminEntity } from '../users/domain/admin/admin.entity'
 import { type CompanyEntity } from '../users/domain/company/company.entity'
 import { type postulation } from '../interfaces'
+import { readFile } from '../resources/infrastructure/helpers/JSONfiles'
+import { type OKRsEntity } from '../posts/domain/OKRs/OKRs.entity'
+import countriesList from '../resources/infrastructure/schema/countries.json'
 
 //* GENERAL USER / AUTH VALIDATORS
 
@@ -37,6 +40,21 @@ export async function validateUser (user: UserEntity): Promise<void> {
   await validateIfEmailExists(user.email)
 }
 
+export function validateUserEdition (user: Partial<UserEntity>): void {
+  const linkedinRegex = /^(https?:\/\/)?(www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]+\/?$/
+  const countries = countriesList.entries.map(country => country.name)
+  if (user.linkedin) {
+    if (!linkedinRegex.test(user.linkedin)) throw new ServerError('Not a valid linkedin profile link', 'No es un enlace valido de perfil de linkedin', 406)
+  }
+  if (user.country) {
+    if (!countries.includes(user.country)) throw new ServerError('Not a valid country', 'Pais invalido', 406)
+  }
+  if (user.cv) {
+    if (!(typeof user.cv === 'object' && user.cv !== null && 'fileName' in user.cv &&
+     'cloudinaryId' in user.cv)) throw new ServerError('Not a valid CV information', 'Informacion de CV invalida', 406)
+  }
+}
+
 //* COMPANY VALIDATIONS
 
 const companyValidator = (company: CompanyEntity): void => {
@@ -49,6 +67,17 @@ const companyValidator = (company: CompanyEntity): void => {
 export async function validateCompanyCreation (company: CompanyEntity): Promise<void> {
   companyValidator(company)
   await validateIfEmailExists(company.email)
+}
+
+export function validateCompanyEdition (company: Partial<CompanyEntity>): void {
+  const linkedinRegex = /^(https?:\/\/)?(www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]+\/?$/
+  const countries = countriesList.entries.map(country => country.name)
+  if (company.linkedin) {
+    if (!linkedinRegex.test(company.linkedin)) throw new ServerError('Not a valid linkedin profile link', 'No es un enlace valido de perfil de linkedin', 406)
+  }
+  if (company.country) {
+    if (!countries.includes(company.country)) throw new ServerError('Not a valid country', 'Pais invalido', 406)
+  }
 }
 
 //* ADMIN VALIDATIONS
@@ -158,6 +187,15 @@ export async function validateJD (jobDescription: JdEntity): Promise<void> {
   }
 }
 
+//* OKRs VALIDATORS
+
+export async function ValidateOKRsCreate (OKR: OKRsEntity): Promise<void> {
+  const error: { en: string[], es: string[] } = { en: [], es: [] }
+  if (!OKR.OKRtitle) { error.en.push('OKR title'); error.es.push('Titulo del OKR') }
+  if (!OKR.specificOKRs) { error.en.push('specific OKRs'); error.es.push('OKRs específicos') }
+  if (error.en.length) throw new ServerError(`Missing properties to create a OKR: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear un OKR: ${error.es.join(', ')}`, 406)
+}
+
 //* PERMISSIONS VALIDATOR
 
 export async function permValidator (id: string, method: string, entity: string): Promise<void> {
@@ -167,7 +205,7 @@ export async function permValidator (id: string, method: string, entity: string)
     if (!admin) throw new ServerError('No admin found under that ID', 'No se encontro administrador bajo ese ID', 404)
     const validMethods = ['get', 'create', 'update', 'delete', 'special']
     if (!validMethods.includes(method)) throw new ServerError('Invalid permission', 'Permiso invalido', 406)
-    const validEntities = ['users', 'admins', 'companies', 'posts', 'jds', 'reviews', 'permissions']
+    const validEntities = ['users', 'admins', 'companies', 'posts', 'jds', 'reviews', 'permissions', 'OKRs']
     if (!validEntities.includes(entity)) throw new ServerError('Invalid value for permission', 'Valor invalido para permiso', 406)
     if (!(admin.permissions as permissions)[method as keyof permissions].includes(entity)) throw new ServerError('You do not have the permission for this action', 'No tienes los permisos para hacer esta accion', 401)
   } catch (error: any) {
@@ -178,10 +216,12 @@ export async function permValidator (id: string, method: string, entity: string)
 
 //* POSTULATIONS VALIDATOR
 
-export async function validatePostulation (postulation: postulation): Promise<void> {
+export async function validatePostulation (postulation: postulation, userid: string): Promise<void> {
+  if (!userid) throw new ServerError('No ID of applicant found', 'El ID del aplicante es necesario', 406)
+  objectIDValidator(userid, 'user creating application', 'usuario aplicando')
   validateProps(postulation)
-  validatePostulationTypes(postulation)
-  await validateCandidate(postulation) //! Si no se han creado usuarios comentar este codigo para que deje crear testing data.
+  await validatePostulationTypes(postulation)
+  await validateCandidate(postulation, userid) //! Si no se han creado usuarios comentar este codigo para que deje crear testing data.
 }
 
 function validateProps (postulation: postulation): void {
@@ -199,8 +239,8 @@ function validateProps (postulation: postulation): void {
   if (error.en.length) throw new ServerError(`Missing properties to create a postulation: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear una postulacion: ${error.es.join(', ')}`, 406)
 }
 
-function validatePostulationTypes (postulation: postulation): void { // TODO Create country list collection here with all country names
-  const validCountries = ['Costa rica', 'Argentina', 'Colombia', 'Peru', 'Chile', 'Mexico', 'Paraguay', 'Venezuela', 'Republica Dominicana', 'Bolivia', 'Ecuador', 'Uruguay', 'Brasil', 'Nicaragua', 'Panama', 'España', 'India', 'Guatemala', 'Emiratos Arabes']
+async function validatePostulationTypes (postulation: postulation): Promise<void> {
+  const validCountries = JSON.parse((await readFile('./src/resources/infrastructure/schema/countries.json'))).entries.map((entry: any) => entry.name)
   const validEnglishLevel = ['intermediate (B2)', 'Intermediate', 'Advanced', 'Professional', 'intermediate (B1)', 'Basic'] //! Add here new english levels
   const emailRegex: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
   if (!validCountries.includes(postulation.country)) throw new ServerError('Invalid country', 'Pais invalido', 406)
@@ -213,7 +253,20 @@ function validatePostulationTypes (postulation: postulation): void { // TODO Cre
   if (typeof postulation.reason !== 'string' || typeof postulation.availability !== 'string') throw new ServerError('reason and/or availability are invalid', 'La razon de postulacion y/o la disponibilidad son invalidas', 406)
 }
 
-async function validateCandidate (postulation: postulation): Promise<void> {
+async function validateCandidate (postulation: postulation, userid: string): Promise<void> {
+  const loggedUser = await User.findById(userid)
+  if (!loggedUser) throw new ServerError('Unauthorized', 'No autorizado', 401)
+  else loggedUser.postulations.forEach(code => { if (code === postulation.code) throw new ServerError('You have already a postulation for this job description', 'Ya tienes una postulación para esta vacante', 409) })
   const talent: UserEntity | null = await User.findOne({ firstName: postulation.firstName, lastName: postulation.lastName })
   if (!talent) throw new ServerError('No user under that full name', 'No se encuentra usuario con ese nombre y apellido', 404)
+}
+
+// RESOURCES JSON
+
+export function validateJSONBody (body: { id: number, name: string }): void {
+  const keys = Object.keys(body)
+  if (!keys.includes('id') || !keys.includes('name')) throw new ServerError('ID and name are required for new entry', 'El ID y el nombre son obligatorios', 406)
+  if (!body.id || !body.name) throw new ServerError('ID and name must be valid', 'El ID y nombre deben ser validos', 406)
+  if (typeof body.id !== 'number') throw new ServerError('ID must be a number', 'El ID debe ser un numero', 406)
+  if (keys.length > 2) throw new ServerError('Entries must have just 2 values', 'Solo se permiten dos valores para una nueva entrada', 406)
 }
