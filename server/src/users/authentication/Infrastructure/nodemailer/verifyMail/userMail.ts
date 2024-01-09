@@ -64,7 +64,7 @@ margin-left: 47px !important;
       <center style='color:#ffffff; font-family:"open sans", "helvetica neue", helvetica, arial, sans-serif; font-size:12px; font-weight:400; line-height:12px;  mso-text-raise:1px'>Confirmar email</center>
   </v:roundrect></a>
 <![endif]--><!--[if !mso]><!-- --><span class="es-button-border">
-            <a class="es-button" target="_blank" style="font-size:14px" href="${process.env.HOSTING_SERVER_URL}auth/verify?id=${user._id.toString()}&role=user">Confirmar email</a>
+            <a class="es-button" style="font-size:14px" href="${process.env.HOSTING_SERVER_URL}auth/verify?id=${user._id.toString()}&role=user">Confirmar email</a>
         </span><!--<![endif]-->
     </td>
 </tr><tr>
