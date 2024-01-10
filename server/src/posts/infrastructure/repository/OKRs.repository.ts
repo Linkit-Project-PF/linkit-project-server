@@ -12,7 +12,7 @@ export class MongoOKRsRepository implements OKRsRepository {
       return OKRCreated as OKRsEntity
     } catch (error: any) {
       if (error instanceof ServerError) throw error
-      else throw new UncatchedError(error.message, 'creating JD', 'crear vacante')
+      else throw new UncatchedError(error.message, 'creating OKR', 'crear OKR')
     }
   }
 
