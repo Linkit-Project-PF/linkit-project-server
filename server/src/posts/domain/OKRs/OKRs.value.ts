@@ -1,13 +1,13 @@
-import { type OKRsEntity } from './OKRs.entity'
+import { type OKRsEntity, type Area } from './OKRs.entity'
 
 export class OKRsValue implements OKRsEntity {
-  OKRtitle: string
-  specificOKRs: string[]
+  generalTitleOKR: string
+  areas: Area[]
   archived: boolean
 
   constructor (OKR: OKRsEntity) {
-    this.OKRtitle = OKR.OKRtitle
-    this.specificOKRs = OKR.specificOKRs
+    this.generalTitleOKR = OKR.generalTitleOKR
+    this.areas = OKR.areas
     this.archived = OKR.archived
   }
 }

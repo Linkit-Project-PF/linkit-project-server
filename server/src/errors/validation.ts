@@ -164,8 +164,8 @@ export async function validateJD (jobDescription: JdEntity): Promise<void> {
 
 export async function ValidateOKRsCreate (OKR: OKRsEntity): Promise<void> {
   const error: { en: string[], es: string[] } = { en: [], es: [] }
-  if (!OKR.OKRtitle) { error.en.push('OKR title'); error.es.push('Titulo del OKR') }
-  if (!OKR.specificOKRs) { error.en.push('specific OKRs'); error.es.push('OKRs específicos') }
+  if (!OKR.generalTitleOKR) { error.en.push('OKR general title'); error.es.push('Titulo general del OKR') }
+  if (!OKR.areas) { error.en.push('OKR Area'); error.es.push('Área de OKR') }
   if (error.en.length) throw new ServerError(`Missing properties to create a OKR: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear un OKR: ${error.es.join(', ')}`, 406)
 }
 
