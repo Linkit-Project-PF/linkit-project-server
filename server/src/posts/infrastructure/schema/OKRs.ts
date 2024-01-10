@@ -1,18 +1,26 @@
 import { Schema, model } from 'mongoose'
 
 const OKRsSchema = new Schema({
-  OKRtitle: {
+  generalTitleOKR: {
     type: String,
     required: true
   },
-  specificOKRs: {
-    type: [String],
-    required: false,
-    validate: {
-      validator: (array: string[]) => array.length >= 1,
-      message: 'specificOKRs array must have at least 1 OKR added'
-    }
-  },
+  areas: [{
+    name: {
+      type: String,
+      required: true
+    },
+    specificOKRsArea: [{
+      okrSpecificName: {
+        type: String,
+        required: true
+      },
+      okrsSpecific: {
+        type: [String],
+        required: false
+      }
+    }]
+  }],
   archived: {
     type: Boolean,
     required: true,

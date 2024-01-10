@@ -1,5 +1,15 @@
+export interface SpecificOKRsArea {
+  okrSpecificName: string
+  okrsSpecific: string[]
+}
+
+export interface Area {
+  name: string
+  specificOKRsArea: SpecificOKRsArea[]
+}
+
 export interface OKRsEntity {
-  OKRtitle: string
-  specificOKRs: string[]
+  generalTitleOKR: string
+  areas: Area[]
   archived: boolean
 }
