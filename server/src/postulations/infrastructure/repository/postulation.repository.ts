@@ -1,6 +1,5 @@
 import base from '../../../db/airtable'
 import { ServerError, UncatchedError } from '../../../errors/errors'
-import { type MongoJd } from '../../../posts/domain/jd/jd.entity'
 import { type PostulationRepository } from '../../domain/postulation.repository'
 import { type MailNodeMailerProvider } from '../../../users/authentication/Infrastructure/nodemailer/nodeMailer'
 import { validatePostulation } from '../../../errors/validation'
@@ -21,6 +20,10 @@ export class MongoPostulationRepository implements PostulationRepository {
       // TODO Check ALL postulations from Airtable to validate If user has already created a postulation for that JD, return error If so.
       await validatePostulation(postulation, userId)
       postulation.created = new Date()
+      const jd = await Jd.find({ code: postulation.code })
+      const user = await User.findById(userId) as UserEntity
+      if (jd.length) await this.mailNodeMailerProvider.sendEmail(postulationMailCreate(user as MongoUser, jd[0]))
+      else throw new ServerError('Unable to find JD under the code provided', 'No se encontro JD con ese codigo', 406)
       await base('LinkIT - Candidate application').create([
         {
           fields: {
@@ -40,10 +43,6 @@ export class MongoPostulationRepository implements PostulationRepository {
         }
       ])
       await User.findByIdAndUpdate(userId, { $push: { postulations: postulation.code } }, { new: true })
-      const user = await User.findById(userId) as UserEntity
-      const jd = await Jd.find({ code: postulation.code })
-      if (jd) await this.mailNodeMailerProvider.sendEmail(postulationMailCreate(user as MongoUser, jd as unknown as MongoJd))
-      else throw new Error('jd not found for send Email')
       return user
     } catch (error: any) {
       if (error instanceof ServerError) throw error
