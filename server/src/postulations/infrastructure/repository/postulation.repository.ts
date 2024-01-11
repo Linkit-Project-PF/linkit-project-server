@@ -40,9 +40,10 @@ export class MongoPostulationRepository implements PostulationRepository {
         }
       ])
       await User.findByIdAndUpdate(userId, { $push: { postulations: postulation.code } }, { new: true })
-      const jd = await Jd.find({ code: postulation.code })
       const user = await User.findById(userId) as UserEntity
-      await this.mailNodeMailerProvider.sendEmail(postulationMailCreate(user as MongoUser, jd as unknown as MongoJd))
+      const jd = await Jd.find({ code: postulation.code })
+      if (jd) await this.mailNodeMailerProvider.sendEmail(postulationMailCreate(user as MongoUser, jd as unknown as MongoJd))
+      else throw new Error('jd not found for send Email')
       return user
     } catch (error: any) {
       if (error instanceof ServerError) throw error
