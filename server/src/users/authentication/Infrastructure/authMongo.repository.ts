@@ -83,7 +83,7 @@ export class AuthMongoRepository implements AuthRepository {
         const result = await Company.find({ email })
         if (result.length) return result[0] as CompanyEntity
       } else throw new ServerError('Provide a valid role for login', 'Debes brindar un rol valido para iniciar sesion', 406)
-      throw new ServerError(`${role} not found, please be sure you are using the right login for your role`, `${role} no encontrado, asegurate que estas iniciando sesion desde la seccion correcta`, 404)
+      throw new ServerError(`${role} not found, please be sure you are using the right login for your role`, 'Registro no encontrado, asegurate que estas iniciando sesion desde la seccion correcta', 404)
     } catch (error: any) {
       if (error instanceof ServerError) throw error
       else throw new UncatchedError(error.message, 'signin in', 'iniciar sesion')
