@@ -226,6 +226,7 @@ export async function validatePostulation (postulation: postulation, userid: str
 
 function validateProps (postulation: postulation): void {
   const error: { en: string[], es: string[] } = { en: [], es: [] }
+  if (!postulation.code) { error.en.push('code'); error.es.push('codigo de jd') }
   if (!postulation.stack) { error.en.push('stack'); error.es.push('tecnologias') }
   if (!postulation.email) { error.en.push('email'); error.es.push('correo electronico') }
   if (!postulation.linkedin) { error.en.push('linkedin'); error.es.push('linkedin') }
