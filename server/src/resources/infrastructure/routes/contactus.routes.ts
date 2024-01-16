@@ -12,10 +12,10 @@ contactUsRoute.post('/', async (req, res): Promise<any> => {
     await base('Contactos').create([
       {
         fields: {
-          Nombre: newContact.name,
+          Nombre: newContact.firstName,
           Apellido: newContact.lastName,
           Empresa: newContact.company,
-          Servicio: newContact.service,
+          '¿Qué servicio te interesa?': newContact.service,
           Email: newContact.email,
           Mensaje: newContact.message
         }
