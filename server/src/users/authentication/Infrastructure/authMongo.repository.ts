@@ -6,7 +6,7 @@ import { validateUserExists } from '../../helpers/validateAirtable'
 import { type AuthRepository } from './auth.repository'
 import { auth } from '../firebase'
 import 'dotenv/config'
-import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth'
+import { type UserProfile, createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth'
 import Admin from '../../infrastructure/schema/Admin'
 import User from '../../infrastructure/schema/User'
 import Company from '../../infrastructure/schema/Company'
@@ -77,6 +77,10 @@ export class AuthMongoRepository implements AuthRepository {
       if (role === 'user') {
         const result1 = await User.find({ email })
         const result2 = await Admin.find({ email })
+        // if (result1) {
+        //   if (result1.active) return result1 as UserEntity
+        //   else throw new ServerError('Unverified email, please check your inbox or spam', 'Email no verificado, por favor revisa tu bandeja de entrada o spam', 406)
+        // }
         if (result1.length) return result1[0] as UserEntity
         if (result2.length) return result2[0] as AdminEntity
       } else if (role === 'company') {
