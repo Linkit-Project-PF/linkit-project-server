@@ -11,10 +11,23 @@ const postSchema = new Schema({
     required: true,
     minlength: 3
   },
-  headers: {
-    type: [String],
-    required: true
-  },
+  headers: [{
+    head: {
+      type: String,
+      required: false,
+      default: ''
+    },
+    body: {
+      type: String,
+      required: false,
+      default: ''
+    },
+    sectionImage: {
+      type: String,
+      required: false,
+      default: ''
+    }
+  }],
   createdDate: {
     type: Date,
     required: false,
@@ -23,7 +36,6 @@ const postSchema = new Schema({
   image: {
     type: String,
     required: false,
-    maxlength: 200,
     default: ''
   },
   link: {
@@ -38,8 +50,7 @@ const postSchema = new Schema({
   },
   category: {
     type: String,
-    required: true,
-    minlength: 4
+    required: true
   },
   archived: {
     type: Boolean,
