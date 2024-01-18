@@ -1,9 +1,10 @@
+import { type blogHeader } from '../../../interfaces'
 import { type PostEntity } from './post.entity'
 
 export class PostValue implements PostEntity {
   title: string
   description: string
-  headers: string[]
+  headers: blogHeader[]
   createdDate: Date
   image?: string | null
   link?: string | null

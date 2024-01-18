@@ -28,3 +28,9 @@ export interface cv {
   fileName?: string | null | undefined
   cloudinaryId?: string | null | undefined
 }
+
+export interface blogHeader {
+  head: string
+  body: string
+  sectionImage: string
+}

@@ -1,7 +1,9 @@
+import { type blogHeader } from '../../../interfaces'
+
 export interface PostEntity {
   title: string
   description: string
-  headers: string[]
+  headers: blogHeader[]
   createdDate: Date
   image?: string | null
   link?: string | null
