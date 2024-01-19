@@ -32,6 +32,7 @@ const validateUserCreation = (user: UserEntity): void => {
   if (!user.firstName) { error.en.push('first name'); error.es.push('nombre') }
   if (!user.lastName) { error.en.push('last name'); error.es.push('apellido') }
   if (!user.email) { error.en.push('email'); error.es.push('correo electronico') }
+  if (!user.provider) { error.en.push('provider'); error.es.push('proveedor de autenticacion') }
   if (error.en.length) throw new ServerError(`Missing properties to create an user: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear un usuario: ${error.es.join(', ')}`, 406)
 }
 
@@ -87,6 +88,7 @@ const adminCreateValidator = (admin: AdminEntity): void => {
   if (!admin.firstName) { error.en.push('first name'); error.es.push('nombre') }
   if (!admin.lastName) { error.en.push('last name'); error.es.push('apellido') }
   if (!admin.email) { error.en.push('email'); error.es.push('correo electronico') }
+  if (!admin.provider) { error.en.push('provider'); error.es.push('proveedor de autenticacion') }
   if (error.en.length) throw new ServerError(`Missing properties to create an admin: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear un administrador: ${error.es.join(', ')}`, 406)
 }
 

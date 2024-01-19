@@ -24,7 +24,7 @@ export class CompanyValue implements CompanyEntity {
     this.country = company.country ?? undefined
     this.role = company.role ?? 'company'
     this.linkedin = company.linkedin ?? undefined
-    this.active = company.active ?? true
+    this.active = company.active ?? false
     this.interested = company.interested ?? undefined
     this.createdDate = company.createdDate
     this.provider = company.provider

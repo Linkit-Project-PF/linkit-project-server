@@ -23,7 +23,7 @@ export class AdminValue implements AdminEntity {
     this.country = admin.country ?? undefined
     this.password = admin.password ?? undefined
     this.role = admin.role ?? 'admin'
-    this.active = admin.active ?? true
+    this.active = admin.active ?? false
     this.createdDate = admin.createdDate
     this.permissions = admin.permissions
     this.provider = admin.provider

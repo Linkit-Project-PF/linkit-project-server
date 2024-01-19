@@ -88,7 +88,10 @@ export class AuthMongoRepository implements AuthRepository {
         if (result2.length) return result2[0] as AdminEntity
       } else if (role === 'company') {
         const result = await Company.find({ email })
-        if (result.length) return result[0] as CompanyEntity
+        if (result.length) {
+          if (result[0].active) return result[0] as CompanyEntity
+          else throw new ServerError('Unverified email, please check your inbox or spam', 'Email no verificado, por favor revisa tu bandeja de entrada o spam', 406)
+        }
       } else throw new ServerError('Provide a valid role for login', 'Debes brindar un rol valido para iniciar sesion', 406)
       throw new ServerError(`${role} not found, please be sure you are using the right login for your role`, 'Registro no encontrado, asegurate que estas iniciando sesion desde la seccion correcta', 404)
     } catch (error: any) {
