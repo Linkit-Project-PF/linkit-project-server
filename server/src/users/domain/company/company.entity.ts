@@ -3,7 +3,7 @@ import { type Types } from 'mongoose'
 export interface CompanyEntity {
   firebaseId?: string | null
   airTableId?: string | null
-  image?: string
+  image?: string | null
   companyName: string
   repName?: string | null
   email: string

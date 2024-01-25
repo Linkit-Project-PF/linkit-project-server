@@ -49,7 +49,7 @@ export class MongoPostRepository implements PostRepository {
     }
   }
 
-  async deletePost (id: string, total?: string): Promise<string> {
+  async deletePost (id: string, total?: string): Promise<PostEntity[]> {
     try {
       objectIDValidator(id, 'post to delete', 'publicacion a eliminar')
       const post = await Post.findById(id)
@@ -62,7 +62,8 @@ export class MongoPostRepository implements PostRepository {
       } else if (total === 'true') {
         await Post.findByIdAndDelete(id)
       }
-      return 'Post deleted'
+      const allPosts = await Post.find()
+      return allPosts // TODO FIX THIS TYPO
     } catch (error: any) {
       if (error instanceof ServerError) throw error
       else throw new UncatchedError(error.message, 'deleting post', 'eliminar publicacion')

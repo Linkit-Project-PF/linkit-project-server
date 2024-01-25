@@ -25,7 +25,7 @@ export class PostUseCase {
   }
 
   public deletePost = async (
-    id: string, total?: string): Promise<string> => {
+    id: string, total?: string): Promise<PostEntity[]> => {
     const answer = await this.PostRepository.deletePost(id, total)
     return answer
   }
