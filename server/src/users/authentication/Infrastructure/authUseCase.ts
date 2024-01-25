@@ -22,8 +22,7 @@ export class AuthUseCase {
     return result
   }
 
-  public resetPassword = async (email: string): Promise<string> => {
-    const result = await this.authRepository.resetPassword(email)
-    return result
+  public resetPassword = async (email: string): Promise<void> => {
+    await this.authRepository.resetPassword(email)
   }
 }
