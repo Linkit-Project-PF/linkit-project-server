@@ -1,5 +1,6 @@
 import { type RequestHandler } from 'express'
 import { type AuthUseCase } from './authUseCase'
+import { type translatedResponse } from '../../../interfaces'
 
 export class AuthControllers {
   constructor (private readonly authUseCase: AuthUseCase) {}
@@ -33,8 +34,12 @@ export class AuthControllers {
 
   public resetPasswordController: RequestHandler = async (req, res) => {
     try {
-      const result = await this.authUseCase.resetPassword(req.query.email as string)
-      return res.status(200).send(result)
+      await this.authUseCase.resetPassword(req.query.email as string)
+      const response: translatedResponse = {
+        en: 'An email to reset your password has been sent to your email',
+        es: 'Se ha enviado un enlace a tu correo para cambiar la contraseña'
+      }
+      res.status(200).send(response[(req as any).lang as keyof translatedResponse])
     } catch (error: any) {
       return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
