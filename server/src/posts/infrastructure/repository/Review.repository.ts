@@ -49,7 +49,7 @@ export class MongoReviewRepository implements ReviewRepository {
     }
   }
 
-  async deleteReview (id: string, total?: string): Promise<string> {
+  async deleteReview (id: string, total?: string): Promise<ReviewEntity[]> {
     try {
       objectIDValidator(id, 'review to delete', 'valoracion a eliminar')
       const review = await Review.findById(id)
@@ -62,7 +62,8 @@ export class MongoReviewRepository implements ReviewRepository {
       } else if (total === 'true') {
         await Review.findByIdAndDelete(id)
       }
-      return 'Review deleted'
+      const result = await Review.find()
+      return result
     } catch (error: any) {
       if (error instanceof ServerError) throw error
       else throw new UncatchedError(error.message, 'deleting review', 'eliminar valoracion')

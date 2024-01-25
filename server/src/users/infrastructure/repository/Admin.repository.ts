@@ -70,20 +70,19 @@ export class MongoAdminRepository implements AdminRepository {
     }
   }
 
-  async deleteAdmin (_id: string, reqID?: string, total?: string): Promise<AdminEntity | string> {
+  async deleteAdmin (_id: string, reqID?: string, total?: string): Promise<AdminEntity[]> {
     try {
       objectIDValidator(_id, 'admin to delete', 'admin a eliminar')
       const admin: AdminEntity | null = await Admin.findById(_id)
-      let result: AdminEntity | null
       if (!admin) throw new ServerError('No admin found under that ID', 'No existe un admin con ese ID', 404)
       if (!total || total === 'false') {
-        result = await Admin.findByIdAndUpdate(_id, { active: !admin.active }, { new: true }) as AdminEntity
-        return result
+        await Admin.findByIdAndUpdate(_id, { active: !admin.active }, { new: true })
       } else if (total === 'true') {
         if (reqID !== process.env.SUPERADM_ID) throw new ServerError('Only superadm can delete totally', 'El borrado total solo lo puede hcaer el super admin', 401)
         await Admin.findByIdAndDelete(_id)
       }
-      return 'Admin totally deleted'
+      const adm = await Admin.find()
+      return adm
     } catch (error: any) {
       if (error instanceof ServerError) throw error
       else throw new UncatchedError(error.message, 'deleting admin', 'eliminar administrador')

@@ -25,7 +25,7 @@ export class ReviewUseCase {
   }
 
   public deleteReview = async (
-    id: string, total?: string): Promise<string | string> => {
+    id: string, total?: string): Promise<ReviewEntity[]> => {
     const deleted = await this.ReviewRepository.deleteReview(id, total)
     return deleted
   }

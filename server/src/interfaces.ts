@@ -30,7 +30,7 @@ export interface cv {
 }
 
 export interface blogHeader {
-  head: string
-  body: string
-  sectionImage: string
+  head?: string | null
+  body?: string | null
+  sectionImage?: string | null
 }
