@@ -128,11 +128,10 @@ export class AuthMongoRepository implements AuthRepository {
     }
   }
 
-  async resetPassword (email: string): Promise<string> {
+  async resetPassword (email: string): Promise<void> {
     try {
       const auth = getAuth()
       await sendPasswordResetEmail(auth, email)
-      return 'Email sent'
     } catch (error: any) {
       throw new UncatchedError(error.message, 'sending password reset email', 'enviar email de restablecimiento de contraseña')
     }
