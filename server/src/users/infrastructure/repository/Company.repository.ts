@@ -70,23 +70,23 @@ export class MongoCompanyRepository implements CompanyRepository {
     }
   }
 
-  async deleteCompany (id: string, reqID?: string, total?: string): Promise<CompanyEntity | string> {
+  async deleteCompany (id: string, reqID?: string, total?: string): Promise<CompanyEntity[]> {
     try {
       objectIDValidator(id, 'company to delete', 'empresa a eliminar')
       const company = await Company.findById(id)
       if (!company) throw new ServerError('No company found with that ID', 'No se encontro empresa con ese ID', 404)
       else {
         if (!total || total === 'false') {
-          const resultado = await Company.findByIdAndUpdate(
+          await Company.findByIdAndUpdate(
             id,
             { active: !company.active }, { new: true }
           )
-          return resultado as CompanyEntity
         } else if (total === 'true') {
           if (reqID !== process.env.SUPERADM_ID) throw new ServerError('Only superadm can delete totally', 'El borrado total solo lo puede hcaer el super admin', 401)
           await Company.findByIdAndDelete(id)
         }
-        return 'Company deleted completely'
+        const result = await Company.find()
+        return result
       }
     } catch (error: any) {
       if (error instanceof ServerError) throw error

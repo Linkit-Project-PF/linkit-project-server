@@ -5,7 +5,7 @@ export class ReviewValue implements ReviewEntity {
   role: string
   createdDate: Date
   image?: string | null
-  country: string
+  country?: string | null
   detail: string
   archived?: boolean | null
   createdBy: string
@@ -15,7 +15,7 @@ export class ReviewValue implements ReviewEntity {
     this.role = review.role
     this.createdDate = review.createdDate
     this.image = review.image ?? undefined
-    this.country = review.country
+    this.country = review.country ?? undefined
     this.detail = review.detail
     this.archived = review.archived ?? false
     this.createdBy = review.createdBy

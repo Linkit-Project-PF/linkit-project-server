@@ -77,7 +77,7 @@ export class MongoUserRepository implements UserRepository {
     }
   }
 
-  async deleteUser (id: string, reqID?: string, total?: string): Promise<UserEntity[] | string> {
+  async deleteUser (id: string, reqID?: string, total?: string): Promise<UserEntity[]> {
     try {
       objectIDValidator(id, 'user to delete', 'usuario a eliminar')
       const user = await User.findById(id)
@@ -88,14 +88,13 @@ export class MongoUserRepository implements UserRepository {
             id,
             { $set: { active: !user.active } }, { new: true }
           )
-          const resultado = await User.find()
-          return resultado as UserEntity[]
         } else if (total === 'true') {
           if (reqID !== process.env.SUPERADM_ID) throw new ServerError('Only superadm can delete totally', 'El borrado total solo lo puede hcaer el super admin', 401)
           await deletionTrigger(user.firebaseId as string, user.airTableId as string)
           await User.findByIdAndDelete(id)
         }
-        return 'User totally deleted'
+        const resultado = await User.find()
+        return resultado
       }
     } catch (error: any) {
       if (error instanceof ServerError) throw error

@@ -3,7 +3,7 @@ export interface ReviewEntity {
   role: string
   createdDate: Date
   image?: string | null
-  country: string
+  country?: string | null
   detail: string
   archived?: boolean | null
   createdBy: string

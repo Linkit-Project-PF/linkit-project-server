@@ -41,8 +41,8 @@ export class PostController {
     try {
       await permValidator((req as any).userId, 'delete', 'posts')
       const { id } = req.params
-      await this.postUseCase.deletePost(id, req.query.total as string)
-      return res.status(200).json('Publicación eliminada')
+      const result = await this.postUseCase.deletePost(id, req.query.total as string)
+      return res.status(200).json(result)
     } catch (error: any) {
       return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }

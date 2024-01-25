@@ -21,7 +21,7 @@ export class CompanyUseCase {
     return editCompany
   }
 
-  public deleteCompany = async (id: string, reqID?: string, total?: string): Promise<CompanyEntity | string> => {
+  public deleteCompany = async (id: string, reqID?: string, total?: string): Promise<CompanyEntity[]> => {
     const deleteCompany = await this.companyRepository.deleteCompany(id, reqID, total)
     return deleteCompany
   }
