@@ -22,8 +22,6 @@ export class MongoPostulationRepository implements PostulationRepository {
       postulation.created = new Date()
       const jd = await Jd.find({ code: postulation.code })
       const user = await User.findById(userId) as UserEntity
-      if (jd.length) await this.mailNodeMailerProvider.sendEmail(postulationMailCreate(user as MongoUser, jd[0]))
-      else throw new ServerError('Unable to find JD under the code provided', 'No se encontro JD con ese codigo', 406)
       await base('LinkIT - Candidate application').create([
         {
           fields: {
@@ -43,6 +41,8 @@ export class MongoPostulationRepository implements PostulationRepository {
         }
       ])
       await User.findByIdAndUpdate(userId, { $push: { postulations: postulation.code } }, { new: true })
+      if (jd.length) await this.mailNodeMailerProvider.sendEmail(postulationMailCreate(user as MongoUser, jd[0]))
+      else throw new ServerError('Unable to find JD under the code provided', 'No se encontro JD con ese codigo', 406)
       return user
     } catch (error: any) {
       if (error instanceof ServerError) throw error
