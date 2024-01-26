@@ -27,7 +27,7 @@ export class AuthControllers {
   public putController: RequestHandler = async (req, res) => {
     try {
       await this.authUseCase.verify(String(req.query.id), String(req.query.role))
-      res.redirect(`${process.env.HOSTING_CLIENT_UR}/verify`)
+      res.redirect(`${process.env.HOSTING_CLIENT_URL}/verify`)
     } catch (error: any) {
       return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
