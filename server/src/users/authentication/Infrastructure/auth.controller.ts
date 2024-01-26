@@ -7,7 +7,7 @@ export class AuthControllers {
 
   public getController: RequestHandler = async (req, res) => {
     try {
-      const result = await this.authUseCase.login(String(req.query.email), String(req.query.password), String(req.query.role))
+      const result = await this.authUseCase.login(String(req.body.email), String(req.body.password), String(req.body.role))
       return res.status(200).json(result)
     } catch (error: any) {
       return res.status(error.code).json(error[(req as any).lang as keyof Error])

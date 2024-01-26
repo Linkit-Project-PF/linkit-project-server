@@ -25,7 +25,8 @@ export class MongoUserRepository implements UserRepository {
         WebID: mongoID
       })
       const userCreated = await User.findByIdAndUpdate(mongoID, { airTableId: airtableUser.getId() }, { new: true })
-      await this.mailNodeMailerProvider.sendEmail(userMailCreate(mongoUser as MongoUser))
+      if (userCreated) await this.mailNodeMailerProvider.sendEmail(userMailCreate(mongoUser as MongoUser))
+      else throw new Error('Could not send email')
       return userCreated as UserEntity
     } catch (error: any) {
       if (error instanceof ServerError) throw error
