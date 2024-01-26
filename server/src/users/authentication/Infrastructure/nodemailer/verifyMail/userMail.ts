@@ -57,7 +57,7 @@ margin-left: 47px !important;
     <td align="left" class="esd-block-text"><p>¡Hola ${user.firstName}! ¿Cómo estás?</p><p>Estás recibiendo este mensaje porque tu email fue <strong>registrado</strong> en nuestro sitio web.</p><p>Por favor, haz click en el botón de abajo para <strong>verificar tu email </strong>y confirmar que eres el dueño de esta cuenta. Una vez confirmado, este email será asociado de forma única con tu cuenta en LinkIT.</p><p>Si no has sido tú el que se registró con nosotros, por favor desestima este correo.</p></td>
 </tr><tr>
     <td align="center" class="esd-block-button es-p10t es-p10b">
-        <!--[if mso]><a href="${process.env.HOSTING_SERVER_URL}auth/verify?id=${user._id.toString()}&role=admin" target="_blank" hidden>
+        <!--[if mso]><a href="${process.env.HOSTING_SERVER_URL}auth/verify?id=${user._id.toString()}&role=user" target="_blank" hidden>
   <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" esdevVmlButton href="https://www.linkit-hr.com/" 
               style="height:34px; v-text-anchor:middle; width:150px" arcsize="50%" strokecolor="#00a489" strokeweight="2px" fillcolor="#00a489">
       <w:anchorlock></w:anchorlock>
