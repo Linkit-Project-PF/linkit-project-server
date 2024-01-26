@@ -15,7 +15,7 @@ const authController = new AuthControllers(authCase)
 authRoute.get('/verify', authController.putController)
 
 authRoute.use(authValidator)
-authRoute.get('/login', authController.getController)
+authRoute.post('/login', authController.getController)
 authRoute.post('/register', authController.postController)
 authRoute.get('/resetPassword', authController.resetPasswordController)
 
