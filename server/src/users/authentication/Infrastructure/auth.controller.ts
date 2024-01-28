@@ -1,6 +1,7 @@
 import { type RequestHandler } from 'express'
 import { type AuthUseCase } from './authUseCase'
 import { type translatedResponse } from '../../../interfaces'
+import 'dotenv/config'
 
 export class AuthControllers {
   constructor (private readonly authUseCase: AuthUseCase) {}
@@ -26,7 +27,7 @@ export class AuthControllers {
   public putController: RequestHandler = async (req, res) => {
     try {
       await this.authUseCase.verify(String(req.query.id), String(req.query.role))
-      res.redirect('https://link-it-project.vercel.app')
+      res.redirect(`${process.env.HOSTING_CLIENT_UR}/verify`)
     } catch (error: any) {
       return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }

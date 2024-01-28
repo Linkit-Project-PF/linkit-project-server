@@ -1,4 +1,3 @@
-/* eslint-disable no-tabs */
 import { type MongoUser } from '../../../../domain/user/user.entity'
 import { type IMessage } from '../add-email'
 import 'dotenv/config'
@@ -30,10 +29,10 @@ margin-left: 47px !important;
 
 </style><![endif]
 --></head><body class="body"><span class="esd-hidden-preheader" style="display:none!important;font-size:0px;line-height:0;color:#ffffff;visibility:hidden;opacity:0;height:0;width:0;mso-hide:all;">Tu fuente exclusiva de los mejores contenidos en el mundo IT.</span><div dir="ltr" class="es-wrapper-color"><!--[if gte mso 9]>
-    <v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="t">
-      <v:fill type="tile" color="#f6f6f6"></v:fill>
-    </v:background>
-  <![endif]--><table class="es-wrapper" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td class="esd-email-paddings" valign="top"><table class="esd-header-popover es-header" cellspacing="0" cellpadding="0" align="center"><tbody><tr><td class="esd-stripe" align="center"><table class="es-header-body" width="600" cellspacing="0" cellpadding="0" bgcolor="#ffffff" align="center"><tbody><tr><td class="es-p20t es-p20r es-p20l esd-structure" align="left"><!--[if mso]><table width="560" cellpadding="0"
+          <v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="t">
+              <v:fill type="tile" color="#f6f6f6"></v:fill>
+          </v:background>
+      <![endif]--><table class="es-wrapper" width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td class="esd-email-paddings" valign="top"><table class="esd-header-popover es-header" cellspacing="0" cellpadding="0" align="center"><tbody><tr><td class="esd-stripe" align="center"><table class="es-header-body" width="600" cellspacing="0" cellpadding="0" bgcolor="#ffffff" align="center"><tbody><tr><td class="es-p20t es-p20r es-p20l esd-structure" align="left"><!--[if mso]><table width="560" cellpadding="0"
                           cellspacing="0"><tr><td width="180" valign="top"><![endif]--><table class="es-left" cellspacing="0" cellpadding="0" align="left"><tbody><tr>
               
           <td class="es-m-p0r es-m-p20b esd-container-frame" width="180" valign="top" align="center">
@@ -46,7 +45,7 @@ margin-left: 47px !important;
       </tr></tbody></table><!--[if mso]></td><td width="20"></td><td width="360" valign="top"><![endif]--><table class="es-right" cellspacing="0" cellpadding="0" align="right"><tbody><tr><td class="esd-container-frame" width="360" align="left"><table width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td class="esd-empty-container" style="display: none;" align="center"></td></tr></tbody></table></td></tr></tbody></table><!--[if mso]></td></tr></table><![endif]--></td></tr></tbody></table></td></tr></tbody></table><table class="es-content" cellspacing="0" cellpadding="0" align="center"><tbody><tr><td class="esd-stripe" align="center"><table class="es-content-body" width="600" cellspacing="0" cellpadding="0" bgcolor="#ffffff" align="center"><tbody><tr><td class="es-p20t es-p20r es-p20l esd-structure" align="left"><table width="100%" cellspacing="0" cellpadding="0"><tbody><tr><td class="esd-container-frame" width="560" valign="top" align="center"><table width="100%" cellspacing="0" cellpadding="0"><tbody><tr>
     <td align="center" class="esd-block-image" style="font-size: 0">
         <a target="_blank">
-            <img src="https://fcoqzhd.stripocdn.email/content/guids/CABINET_c5c6e376dd6b2da146dd8238f60741b1854cf9cd35ddc80612282df9e8dff0db/images/linkitmailsbanner2.jpg" alt="" width="560" class="adapt-img">
+            <img src="https://fcoqzhd.stripocdn.email/content/guids/CABINET_de3a6cd6d513b8fb86154f5ba8e714326fc796c06b0496234368bf34e5560202/images/linkitmails_v02banner.jpg" alt="" class="adapt-img" height="140">
         </a>
     </td>
 </tr><tr>
@@ -54,17 +53,17 @@ margin-left: 47px !important;
         
     </td>
 </tr><tr>
-    <td align="left" class="esd-block-text"><p>¡Hola ${user.firstName}!</p><p>¡Nos emociona darte la bienvenida al Newsletter de LinkIT, tu fuente exclusiva de los <strong>mejores contenidos</strong> en el mundo IT!</p><p>En esta plataforma, encontrarás una gran variedad de <strong>blogs, ebooks y eventos</strong> que abarcan temas cruciales para tu carrera en el ámbito tecnológico. Desde consejos para conseguir tu primer empleo IT hasta estrategias para sobresalir en entrevistas. Exploraremos juntos las tendencias más actuales en trabajo remoto, metodologías de trabajo efectivas y la gestión de contratos y pagos a nivel global.</p><p>Nuestro compromiso es proporcionarte información valiosa y relevante que <strong>impulse tu crecimiento profesional. </strong>Prepárate para sumergirte en un mundo de conocimiento, innovación y oportunidades.</p><p>¡Gracias por unirte a nuestra comunidad! Mantente atento/a a tu bandeja de entrada para no perderte los artículos y eventos más destacados del universo IT. ¡Aquí estamos para ayudarte a alcanzar tus metas! 🚀</p><p align="center"></p><p align="center">¿Conoces nuestra <strong>Librería de Recursos</strong>? ¡Te invitamos a explorarla!</p></td>
+    <td align="left" class="esd-block-text"><p>¡Hola ${user.firstName}!</p><p>¡Nos emociona darte la bienvenida al Newsletter de LinkIT, tu fuente exclusiva de los <strong>mejores contenidos</strong> en el mundo IT!</p><p>En esta plataforma, encontrarás una gran variedad de <strong>blogs, ebooks y eventos</strong> que abarcan temas cruciales para tu carrera en el ámbito tecnológico. Desde consejos para conseguir tu primer empleo IT hasta estrategias para sobresalir en entrevistas. Exploraremos juntos las tendencias más actuales en trabajo remoto, metodologías de trabajo efectivas y la gestión de contratos y pagos a nivel global.</p><p>Nuestro compromiso es proporcionarte información valiosa y relevante que <strong>impulse tu crecimiento profesional. </strong>Prepárate para sumergirte en un mundo de conocimiento, innovación y oportunidades.</p><p>¡Gracias por unirte a nuestra comunidad! Mantente atento/a a tu bandeja de entrada para no perderte los artículos y eventos más destacados del universo IT. ¡Aquí estamos para ayudarte a alcanzar tus metas! 🚀</p> <p align="center"></p><p align="center">¿Conoces nuestra <strong>Librería de Recursos</strong>? ¡Te invitamos a explorarla!</p></td>
 </tr><tr>
     <td align="center" class="esd-block-button es-p10t">
-        <!--[if mso]><a href="${process.env.HOSTING_CLIENT_URL}" target="_blank" hidden>
-<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" esdevVmlButton href="${process.env.HOSTING_CLIENT_URL}" 
+        <!--[if mso]><a href="https://www.linkit-hr.com/" target="_blank" hidden>
+  <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" esdevVmlButton href="https://www.linkit-hr.com/" 
               style="height:34px; v-text-anchor:middle; width:119px" arcsize="50%" strokecolor="#00a489" strokeweight="2px" fillcolor="#00a489">
-  <w:anchorlock></w:anchorlock>
-  <center style='color:#ffffff; font-family:"open sans", "helvetica neue", helvetica, arial, sans-serif; font-size:12px; font-weight:400; line-height:12px;  mso-text-raise:1px'>Ir a Librería</center>
-</v:roundrect></a>
+      <w:anchorlock></w:anchorlock>
+      <center style='color:#ffffff; font-family:"open sans", "helvetica neue", helvetica, arial, sans-serif; font-size:12px; font-weight:400; line-height:12px;  mso-text-raise:1px'>Ir a Librería</center>
+  </v:roundrect></a>
 <![endif]--><!--[if !mso]><!-- --><span class="es-button-border">
-            <a class="es-button" target="_blank" style="font-size:14px" href="${process.env.HOSTING_CLIENT_URL}recursos">Ir a Librería</a>
+            <a class="es-button" target="_blank" style="font-size:14px" href="https://www.linkit-hr.com/">Ir a Librería</a>
         </span><!--<![endif]-->
     </td>
 </tr><tr>
@@ -87,8 +86,8 @@ margin-left: 47px !important;
     </td>
 </tr><tr>
     <td align="center" class="esd-block-image" style="font-size: 0">
-        <a target="_blank" href="${process.env.HOSTING_CLIENT_URL}>
-            <img src="https://fcoqzhd.stripocdn.email/content/guids/CABINET_c5c6e376dd6b2da146dd8238f60741b1854cf9cd35ddc80612282df9e8dff0db/images/linkitmailslogo.png" alt="" width="144">
+        <a target="_blank" href="https://www.linkit-hr.com/">
+            <img src="https://fcoqzhd.stripocdn.email/content/guids/CABINET_de3a6cd6d513b8fb86154f5ba8e714326fc796c06b0496234368bf34e5560202/images/linkitmails_v02logo.png" alt="" width="144">
         </a>
     </td>
 </tr><tr>
@@ -131,7 +130,7 @@ margin-left: 47px !important;
 </td>
 </tr><tr>
     <td align="left" class="esd-block-text es-text-7928">
-        <p style="font-size:14px;line-height:130% !important;color:#2e2d2c" align="left" class="es-m-txt-c"><strong>${process.env.PAGE_ADDRESS}</strong></p>
+        <p style="font-size:14px;line-height:130% !important;color:#2e2d2c" align="left" class="es-m-txt-c"><strong>www.linkit-hr.com</strong></p>
     </td>
 </tr><tr>
     <td align="center" class="esd-block-spacer es-spacer-5262" style="font-size: 0" height="20">
