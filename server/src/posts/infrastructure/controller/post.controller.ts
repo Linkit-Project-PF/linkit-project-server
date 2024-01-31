@@ -19,7 +19,6 @@ export class PostController {
 
   public getController: RequestHandler = async (req, res) => {
     try {
-      await permValidator((req as any).userId, 'get', 'posts')
       const post = await getPostValidator(req.query, this.postUseCase)
       return res.status(200).json(post)
     } catch (error: any) {

@@ -170,19 +170,19 @@ const ValidateJdCreate = (jd: JdEntity): void => {
   if (error.en.length) throw new ServerError(`Missing properties to create a JD: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear una vacante: ${error.es.join(', ')}`, 406)
 }
 
-async function validateCompany (title: string): Promise<void> {
-  if (!title) throw new ServerError('Company name is needed to create a JD', 'El nombre de la empresa asociada es necesario para crear una vacante', 406)
-  let exists = false
-  const companies = await Company.find({}, 'companyName')
-  companies.forEach(comp => { if (comp.companyName === title) exists = true })
-  if (!exists) throw new ServerError('Company not found', 'No se encontro una empresa con ese nombre en el registro', 404)
-}
+// async function validateCompany (title: string): Promise<void> {
+//   if (!title) throw new ServerError('Company name is needed to create a JD', 'El nombre de la empresa asociada es necesario para crear una vacante', 406)
+//   let exists = false
+//   const companies = await Company.find({}, 'companyName')
+//   companies.forEach(comp => { if (comp.companyName === title) exists = true })
+//   if (!exists) throw new ServerError('Company not found', 'No se encontro una empresa con ese nombre en el registro', 404)
+// }
 
 export async function validateJD (jobDescription: JdEntity): Promise<void> {
   try {
     ValidateJdCreate(jobDescription)
     await validateIfJdCodeExists(jobDescription.code)
-    await validateCompany(jobDescription.company)
+    // await validateCompany(jobDescription.company)
   } catch (error: any) {
     if (error instanceof ServerError) throw error
     else throw new UncatchedError(error.message, 'creating JD', 'crear vacante')
