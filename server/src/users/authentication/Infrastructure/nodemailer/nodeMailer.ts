@@ -7,8 +7,8 @@ export class MailNodeMailerProvider implements AddEmailAccount {
 
   constructor () {
     this.transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
+      host: 'smtp.linkit-hr.com',
+      port: 587,
       secure: true,
       auth: {
         user: process.env.NODEMAILER_USER,
