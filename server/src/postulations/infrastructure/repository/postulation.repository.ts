@@ -36,7 +36,7 @@ export class MongoPostulationRepository implements PostulationRepository {
             Nombre: postulation.firstName,
             Apellido: postulation.lastName,
             'What would be your area of expertise?': postulation.techStack,
-            recruiter: postulation.recruiter ? postulation.recruiter : undefined
+            Recruiter: postulation.recruiter ? postulation.recruiter : undefined
           }
         }
       ])
