@@ -233,7 +233,7 @@ function validateProps (postulation: postulation): void {
   if (!postulation.email) { error.en.push('email'); error.es.push('correo electronico') }
   if (!postulation.linkedin) { error.en.push('linkedin'); error.es.push('linkedin') }
   if (!postulation.salary) { error.en.push('salary expectation'); error.es.push('expectativa salarial') }
-  if (!postulation.english) { error.en.push('english level'); error.es.push('nievl de ingles') }
+  if (!postulation.english) { error.en.push('english level'); error.es.push('nivel de ingles') }
   if (!postulation.reason) { error.en.push('reason'); error.es.push('razon para aplicar') }
   if (!postulation.availability) { error.en.push('availability'); error.es.push('disponibilidad') }
   if (!postulation.firstName) { error.en.push('firstName'); error.es.push('nombre del postulante') }
