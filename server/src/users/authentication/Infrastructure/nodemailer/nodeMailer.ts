@@ -8,7 +8,7 @@ export class MailNodeMailerProvider implements AddEmailAccount {
   constructor () {
     this.transporter = nodemailer.createTransport({
       host: 'smtp.hostinger.com',
-      port: 587,
+      port: 465,
       secure: true,
       auth: {
         user: process.env.NODEMAILER_USER,
