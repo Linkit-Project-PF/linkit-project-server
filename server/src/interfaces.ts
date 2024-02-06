@@ -8,6 +8,7 @@ export interface PostulationQuery {
 }
 
 export interface postulation {
+  cv: string
   code: string
   techStack: string[]
   stack: string[]

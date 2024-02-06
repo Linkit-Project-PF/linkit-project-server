@@ -19,7 +19,7 @@ export class JdController {
   public getController: RequestHandler = async (req, res) => {
     try {
       await permValidator((req as any).userId, 'get', 'jds')
-      const post = await getJDValidator(req.query, this.jdUseCase)
+      const post = await getJDValidator(req.query, this.jdUseCase, (req as any).lang)
       return res.status(200).json(post)
     } catch (error: any) {
       return res.status(error.code).json(error[(req as any).lang as keyof Error])

@@ -10,9 +10,9 @@ export interface JdEntity {
   stack: string[]
   aboutUs?: string | null
   aboutClient?: string | null
-  responsabilities?: string | null
+  responsabilities: string[]
   requirements: string[]
-  niceToHave?: string[] | null
+  niceToHave: string[]
   benefits: string[]
   archived: boolean
   company: string
