@@ -49,8 +49,8 @@ const jdSchema = new Schema({
     default: ''
   },
   responsabilities: {
-    type: String,
-    required: false,
+    type: [String],
+    required: true,
     default: ''
   },
   requirements: {
