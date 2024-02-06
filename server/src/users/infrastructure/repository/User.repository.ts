@@ -17,12 +17,13 @@ export class MongoUserRepository implements UserRepository {
       await validateUser(user)
       const mongoUser = await User.create(user)
       const mongoID = String(mongoUser._id)
-      const airtableUser = await base('UsersInfo').create({
+      const airtableUser = await base('Web - UsersInfo').create({
         Nombre: user.firstName,
         Apellido: user.lastName,
         Email: user.email,
         Rol: user.role,
         WebID: mongoID
+        // Created: Date.now() // TODO FIX THIS
       })
       const userCreated = await User.findByIdAndUpdate(mongoID, { airTableId: airtableUser.getId() }, { new: true })
       if (userCreated) await this.mailNodeMailerProvider.sendEmail(userMailCreate(mongoUser as MongoUser))
