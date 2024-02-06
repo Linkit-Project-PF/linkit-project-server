@@ -51,7 +51,7 @@ const jdSchema = new Schema({
   responsabilities: {
     type: [String],
     required: true,
-    default: ''
+    default: []
   },
   requirements: {
     type: [String],
@@ -63,7 +63,7 @@ const jdSchema = new Schema({
   },
   niceToHave: {
     type: [String],
-    required: false,
+    required: true,
     default: []
   },
   benefits: {

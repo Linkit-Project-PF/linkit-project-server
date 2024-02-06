@@ -14,16 +14,16 @@ interface JDQuery {
   company?: string
 }
 
-export default async function getJDValidator (query: JDQuery, jdUseCase: JdUseCase): Promise<JdEntity | JdEntity[] | string> {
+export default async function getJDValidator (query: JDQuery, jdUseCase: JdUseCase, lang?: string): Promise<JdEntity | JdEntity[] | string> {
   try {
     let jd
     const filters: string[] = Object.keys(query)
     const values: string[] = Object.values(query)
     if (filters.length) {
       if (filters.length === 1) {
-        jd = await jdUseCase.findJD(values[0], filters[0])
+        jd = await jdUseCase.findJD(values[0], filters[0], lang)
       } else {
-        jd = await jdUseCase.findJD(values, filters, true)
+        jd = await jdUseCase.findJD(values, filters, '', true)
       }
     } else {
       jd = await jdUseCase.findJD('', 'all')

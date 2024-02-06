@@ -10,9 +10,9 @@ export class JdValue implements JdEntity {
   stack: string[]
   aboutUs?: string | null
   aboutClient?: string | null
-  responsabilities?: string | null
+  responsabilities: string[]
   requirements: string[]
-  niceToHave?: string[] | null
+  niceToHave: string[]
   benefits: string[]
   archived: boolean
   company: string
@@ -28,9 +28,9 @@ export class JdValue implements JdEntity {
     this.stack = jd.stack
     this.aboutUs = jd.aboutUs ?? undefined
     this.aboutClient = jd.aboutClient ?? undefined
-    this.responsabilities = jd.responsabilities ?? undefined
+    this.responsabilities = jd.responsabilities
     this.requirements = jd.requirements
-    this.niceToHave = jd.niceToHave ?? []
+    this.niceToHave = jd.niceToHave
     this.benefits = jd.benefits
     this.archived = jd.archived
     this.company = jd.company

@@ -5,6 +5,7 @@ import { validateJD } from '../../../errors/validation'
 import { ServerError, UncatchedError } from '../../../errors/errors'
 import CombinedFilters from '../../../users/infrastructure/helpers/CombinedFilters'
 import { objectIDValidator } from '../../../users/infrastructure/helpers/validateObjectID'
+import { JDTranslate } from '../helpers/JDTranslator'
 
 export class MongoJdRepository implements JdRepository {
   async createJD (jd: JdEntity): Promise<JdEntity> {
@@ -19,10 +20,10 @@ export class MongoJdRepository implements JdRepository {
     }
   }
 
-  async findJD (value: string | string[], filter: string | string[], combined?: boolean): Promise<JdEntity | JdEntity[]> {
+  async findJD (value: string | string[], filter: string | string[], lang?: string, combined?: boolean): Promise<JdEntity | JdEntity[]> {
     try {
       let result
-      const validSingleParams = ['title', 'location', 'type', 'modality', 'archived', 'company', 'code', 'status']
+      const validSingleParams = ['title', 'location', 'type', 'modality', 'archived', 'company', 'status']
       if (!combined) {
         if (filter === 'all') result = await Jd.find()
         else if (filter === 'id') {
@@ -36,6 +37,12 @@ export class MongoJdRepository implements JdRepository {
             for (let i = 1; i < values.length; i++) {
               result = (result).filter((jd: JdEntity) => jd.stack.includes(values[i]))
             }
+          }
+        } else if (filter === 'code') {
+          result = await Jd.find({ code: value })
+          if (result.length < 1) throw new ServerError('No JD found under that CODE', 'No se encontro vacante bajo ese codigo', 404)
+          if (lang === 'en') {
+            await JDTranslate(result[0])
           }
         } else if (validSingleParams.includes(filter as string)) {
           result = await Jd.find({ [filter as string]: value })

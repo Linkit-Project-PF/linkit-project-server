@@ -16,12 +16,11 @@ export class MongoPostulationRepository implements PostulationRepository {
 
   async createPostulation (postulation: postulation, userId: string): Promise<UserEntity> {
     try {
-      // TODO Add CV from cloudinary, check with front ppl how they storage that.
-      // TODO Check ALL postulations from Airtable to validate If user has already created a postulation for that JD, return error If so.
       await validatePostulation(postulation, userId)
       postulation.created = new Date()
       const jd = await Jd.find({ code: postulation.code })
       const user = await User.findById(userId) as UserEntity
+      // const localCV = [{ id: postulation.cv, url: 'URL' + postulation.cv + '.pdf', filename: 'filename', size: 1000, type: 'application/pdf' }]
       await base('LinkIT - Candidate application').create([
         {
           fields: {
@@ -37,6 +36,7 @@ export class MongoPostulationRepository implements PostulationRepository {
             Apellido: postulation.lastName,
             'What would be your area of expertise?': postulation.techStack,
             Recruiter: postulation.recruiter ? postulation.recruiter : undefined
+            // CV: localCV
           }
         }
       ])
