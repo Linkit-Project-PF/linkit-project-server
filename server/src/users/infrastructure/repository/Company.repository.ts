@@ -22,7 +22,7 @@ export class MongoCompanyRepository implements CompanyRepository {
         WebID: mongoID
       })
       const companyCreated = await Company.findByIdAndUpdate(mongoID, { airTableId: airtableCompany.getId() }, { new: true })
-      if (!companyCreated) await this.mailNodeMailerProvider.sendEmail(companyMailCreate(mongoCompany as MongoCompany))
+      if (companyCreated) await this.mailNodeMailerProvider.sendEmail(companyMailCreate(mongoCompany as MongoCompany))
       else throw new Error('Could not send email')
       return companyCreated as unknown as CompanyEntity
     } catch (error: any) {
