@@ -15,7 +15,7 @@ export class MongoCompanyRepository implements CompanyRepository {
       await validateCompanyCreation(company)
       const mongoCompany = await Company.create(company)
       const mongoID = String(mongoCompany._id)
-      const airtableCompany = await base('UsersInfo').create({
+      const airtableCompany = await base('Web - UsersInfo').create({
         Nombre: company.companyName,
         Email: company.email,
         Rol: company.role,

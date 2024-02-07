@@ -18,7 +18,7 @@ export class MongoAdminRepository implements AdminRepository {
       await validateAdmin(admin)
       const adminCreated = await Admin.create(admin)
       if (adminCreated) await this.mailNodeMailerProvider.sendEmail(adminMailCreate(adminCreated as MongoAdmin))
-      else throw new Error('Could not send email')
+      else throw new ServerError('Could not send email', 'No se logro enviar el email', 500)
       return adminCreated
     } catch (error: any) {
       if (error instanceof ServerError) throw error
