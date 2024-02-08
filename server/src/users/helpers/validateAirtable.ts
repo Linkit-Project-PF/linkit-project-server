@@ -3,7 +3,7 @@ import { type CustomType } from '../authentication/Infrastructure/authMongo.repo
 import { ServerError, UncatchedError } from '../../errors/errors'
 export const validateUserExists = async (user: CustomType): Promise<void> => {
   try {
-    const airtable = await base('Web - UsersInfo').select({ view: 'Grid view' }).all()
+    const airtable = await base('Web - UsersInfo').select({ view: 'WebView' }).all()
     const fields = airtable.map(result => result.fields)
     fields.forEach(record => { if (record.Email === user.email) throw new ServerError('This email is already registered', 'El email ya esta registrado', 409) })
   } catch (error: any) {

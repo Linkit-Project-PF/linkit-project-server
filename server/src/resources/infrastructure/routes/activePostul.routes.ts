@@ -8,7 +8,7 @@ const candidatePrsentationRoute = Router()
 candidatePrsentationRoute.get('/', async (req, res): Promise<any> => {
   try {
     const airtable = await base('LinkIT - Recruiter candidate presentation').select({
-      view: 'Grid view'
+      view: 'WebView'
     }).all()
     const result = airtable.map(result => result.fields)
     res.status(200).json(result)
