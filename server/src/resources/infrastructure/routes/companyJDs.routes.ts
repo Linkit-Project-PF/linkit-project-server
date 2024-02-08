@@ -8,7 +8,7 @@ const clientsFollowUpRoute = Router()
 clientsFollowUpRoute.get('/', async (req, res): Promise<void> => {
   try {
     const airtable = await base('LinkIT - Clients Follow up').select({
-      view: 'Grid view'
+      view: 'WebView'
     }).all()
     const fields = airtable.map(result => result.fields)
     const filter = Object.keys(req.query)[0]
