@@ -60,8 +60,8 @@ export class MongoJdRepository implements JdRepository {
   async editJD (_id: string, jd: any): Promise<JdEntity> {
     try {
       objectIDValidator(_id, 'jd to edit', 'vacante a editar')
-      const invalidEdit = ['_id', 'createdDate', 'company']
-      Object.keys(jd).forEach(key => { if (invalidEdit.includes(key)) throw new ServerError('ID/date/company cannot be edited', 'ID/usuarios/fecha y empresa no pueden ser editados', 403) })
+      const invalidEdit = ['_id', 'createdDate']
+      Object.keys(jd).forEach(key => { if (invalidEdit.includes(key)) throw new ServerError('ID/date cannot be edited', 'ID/fecha no pueden ser editados', 403) })
       const editedJd = await Jd.findByIdAndUpdate(_id, jd, { new: true })
       if (editedJd) return editedJd as JdEntity
       else throw new ServerError('Job Description not found', 'Vacante no encontrada', 404)
