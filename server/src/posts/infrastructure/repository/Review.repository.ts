@@ -61,6 +61,7 @@ export class MongoReviewRepository implements ReviewRepository {
         )
       } else if (total === 'true') {
         await Review.findByIdAndDelete(id)
+        return await Review.find()
       }
       const result = await Review.find()
       return result
