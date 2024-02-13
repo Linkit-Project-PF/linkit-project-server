@@ -28,7 +28,7 @@ const jdSchema = new Schema({
   modality: {
     type: String,
     required: true,
-    enum: ['remote', 'specific-remote', 'on-site', 'hybrid']
+    enum: ['remote-local', 'remote-regional', 'hybrid']
   },
   stack: {
     type: [String],
