@@ -6,7 +6,7 @@ export interface JdEntity {
   description: string
   type: 'full-time' | 'part-time' | 'freelance'
   location: string
-  modality: 'remote' | 'specific-remote' | 'on-site' | 'hybrid'
+  modality: 'remote-local' | 'remote-regional' | 'hybrid'
   stack: string[]
   aboutUs?: string | null
   aboutClient?: string | null
