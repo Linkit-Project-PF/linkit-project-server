@@ -13,8 +13,8 @@ export class PostUseCase {
     return PostCreated
   }
 
-  public findPost = async (value: string, filter: string): Promise<PostEntity | PostEntity[] | string> => {
-    const post = await this.PostRepository.findPost(value, filter)
+  public findPost = async (value: string, filter: string, lang?: string): Promise<PostEntity | PostEntity[] | string> => {
+    const post = await this.PostRepository.findPost(value, filter, lang)
     return post
   }
 
