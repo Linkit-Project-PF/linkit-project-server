@@ -20,7 +20,7 @@ export class MongoReviewRepository implements ReviewRepository {
   async findReview (value: string, filter: string): Promise<ReviewEntity | ReviewEntity[] | string> {
     try {
       let result
-      const validFilters = ['name', 'rol', 'archived', 'country']
+      const validFilters = ['name', 'archived', 'country']
       if (filter === 'all') result = await Review.find()
       else if (filter === 'id') {
         objectIDValidator(value, 'searched review', 'valoracion buscada')

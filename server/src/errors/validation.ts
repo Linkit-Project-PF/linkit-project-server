@@ -102,7 +102,6 @@ export async function validateAdmin (admin: AdminEntity): Promise<void> {
 const ValidateReviewCreate = (review: ReviewEntity): void => {
   const error: { en: string[], es: string[] } = { en: [], es: [] }
   if (!review.name) { error.en.push('name'); error.es.push('nombre') }
-  if (!review.role) { error.en.push('role'); error.es.push('rol') }
   if (!review.detail) { error.en.push('detail'); error.es.push('detalle') }
   if (!review.createdBy) { error.en.push('createdBy'); error.es.push('creado por') }
   if (error.en.length) throw new ServerError(`Missing properties to create a review: ${error.en.join(', ')}`, `Faltan las siguientes propiedades para crear una valoracion: ${error.es.join(', ')}`, 406)

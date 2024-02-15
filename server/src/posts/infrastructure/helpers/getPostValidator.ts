@@ -9,7 +9,7 @@ interface PostQuery {
   archived?: string
 }
 
-export default async function getPostValidator (query: PostQuery, postUseCase: PostUseCase): Promise<PostEntity | PostEntity[] | string> {
+export default async function getPostValidator (query: PostQuery, postUseCase: PostUseCase, lang: string): Promise<PostEntity | PostEntity[] | string> {
   try {
     let post
     if (Object.keys(query).length) {
@@ -17,7 +17,7 @@ export default async function getPostValidator (query: PostQuery, postUseCase: P
       const value: string = Object.values(query)[0]
       post = await postUseCase.findPost(value, filter)
     } else {
-      post = await postUseCase.findPost('', 'all')
+      post = await postUseCase.findPost('', 'all', lang)
     }
     return post as PostEntity[]
   } catch (error: any) {

@@ -6,11 +6,6 @@ const reviewSchema = new Schema({
     required: true,
     minminlength: 1
   },
-  role: {
-    type: String,
-    required: true,
-    enum: ['company', 'user']
-  },
   createdDate: {
     type: Date,
     required: true,

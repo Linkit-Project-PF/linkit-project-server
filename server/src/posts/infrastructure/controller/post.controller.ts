@@ -19,7 +19,7 @@ export class PostController {
 
   public getController: RequestHandler = async (req, res) => {
     try {
-      const post = await getPostValidator(req.query, this.postUseCase)
+      const post = await getPostValidator(req.query, this.postUseCase, (req as any).lang)
       return res.status(200).json(post)
     } catch (error: any) {
       return res.status(error.code).json(error[(req as any).lang as keyof Error])
