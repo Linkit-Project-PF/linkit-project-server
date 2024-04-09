@@ -74,15 +74,11 @@ export class MongoJdRepository implements JdRepository {
 
   async getUserAndCheckPermissions(userID: string): Promise<boolean> {
     try {
-        console.log(`Buscando al admin con ID: ${userID}`);
         const user = await Admin.findById(userID);
         
         if (!user) {
-            console.log('Admin no encontrado.');
             throw new Error('User not found');
         }
-
-        console.log(`Admin encontrado: ${user}`);
         
         if (user.permissions && user.permissions.delete.includes('jds')) {
             return true;
