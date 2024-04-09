@@ -6,6 +6,7 @@ import { ServerError, UncatchedError } from '../../../errors/errors'
 import CombinedFilters from '../../../users/infrastructure/helpers/CombinedFilters'
 import { objectIDValidator } from '../../../users/infrastructure/helpers/validateObjectID'
 import { JDTranslate } from '../helpers/JDTranslator'
+import Admin from '../../../users/infrastructure/schema/Admin'
 
 export class MongoJdRepository implements JdRepository {
   async createJD (jd: JdEntity): Promise<JdEntity> {
@@ -71,23 +72,59 @@ export class MongoJdRepository implements JdRepository {
     }
   }
 
-  async deleteJD (_id: string, reqID?: string, total?: string): Promise<JdEntity[]> {
+  async getUserAndCheckPermissions(userID: string): Promise<boolean> {
     try {
-      objectIDValidator(_id, 'jd to delete', 'vacante a eliminar')
-      const JD = await Jd.findById(_id)
-      if (!JD) throw new ServerError('JD does not exist under that ID', 'No existen vacantes con ese ID', 404)
-      if (!total || total === 'false') {
-        await Jd.findByIdAndUpdate(_id, { archived: !JD.archived })
-      } else if (total === 'true') {
-        if (reqID !== process.env.SUPERADM_ID) throw new ServerError('Only superadm can delete totally', 'El borrado total solo lo puede hcaer el super admin', 401)
-        await Jd.findByIdAndDelete(_id)
-      }
-      //* This is set like this as Front-End requirements.
-      const allJds = await Jd.find()
-      return allJds as JdEntity[]
-    } catch (error: any) {
-      if (error instanceof ServerError) throw error
-      else throw new UncatchedError(error.message, 'deleting JD', 'eliminar vacante')
+        const user = await Admin.findById(userID);
+        
+        if (!user) {
+            throw new Error('User not found');
+        }
+        
+        if (user.permissions && user.permissions.delete.includes('jds')) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        if (error instanceof Error && 'message' in error) {
+            throw new Error(`Error while checking user permissions: ${error.message}`);
+        } else {
+            throw new Error(`Error while checking user permissions: ${error}`);
+        }
     }
+}
+
+
+
+async deleteJD(_id: string, reqID?: string, total?: string): Promise<JdEntity[]> {
+  try {
+      objectIDValidator(_id, 'jd to delete', 'vacante a eliminar');
+      const JD = await Jd.findById(_id);
+
+      if (!JD) {
+          throw new ServerError('JD does not exist under that ID', 'No existen vacantes con ese ID', 404);
+      }
+
+      // Verificar si el usuario tiene el permiso 'delete' en su lista de permisos
+      if (reqID && await this.getUserAndCheckPermissions(reqID)) {
+          if (total && total === 'true') {
+              await Jd.findByIdAndDelete(_id);
+          } else {
+              await Jd.findByIdAndUpdate(_id, { archived: !JD.archived });
+          }
+      } else {
+          throw new ServerError('User does not have permission to delete JDs', 'El usuario no tiene permiso para eliminar JDs', 401);
+      }
+
+      // Obtener todas las JDs después de la operación de eliminación o actualización
+      const allJds = await Jd.find();
+      return allJds as JdEntity[];
+  } catch (error: any) {
+      if (error instanceof ServerError) {
+          throw error;
+      } else {
+          throw new UncatchedError(error.message, 'deleting JD', 'eliminar vacante');
+      }
   }
+}
 }
