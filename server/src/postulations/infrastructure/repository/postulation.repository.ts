@@ -20,7 +20,13 @@ export class MongoPostulationRepository implements PostulationRepository {
       postulation.created = new Date()
       const jd = await Jd.find({ code: postulation.code })
       const user = await User.findById(userId) as UserEntity
-      const localCV = `https://res.cloudinary.com/dquhriqz3/image/upload/v1713016359/${postulation.cv}.pdf`
+      const localCV = {
+        id: postulation.cv, 
+        url: `https://res.cloudinary.com/dquhriqz3/image/upload/v1713016359/${postulation.cv}.pdf`, 
+        filename: 'filename',
+        size: 1000,
+        type: 'application/pdf' 
+       }
       await base('LinkIT - Candidate application').create([
         {
           fields: {
@@ -36,7 +42,7 @@ export class MongoPostulationRepository implements PostulationRepository {
             Apellido: postulation.lastName,
             'What would be your area of expertise?': postulation.techStack,
             Recruiter: postulation.recruiter ? postulation.recruiter : undefined,
-            'CV': localCV
+            'CV': localCV.url
           }
         }
       ])
