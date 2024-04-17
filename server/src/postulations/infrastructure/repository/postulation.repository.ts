@@ -20,7 +20,6 @@ export class MongoPostulationRepository implements PostulationRepository {
       postulation.created = new Date()
       const jd = await Jd.find({ code: postulation.code })
       const user = await User.findById(userId) as UserEntity
-      const localCV = postulation.cv
       await base('LinkIT - Candidate application').create([
         {
           fields: {
@@ -36,7 +35,7 @@ export class MongoPostulationRepository implements PostulationRepository {
             Apellido: postulation.lastName,
             'What would be your area of expertise?': postulation.techStack,
             Recruiter: postulation.recruiter ? postulation.recruiter : undefined,
-            'CV': localCV
+            'CV': postulation.cv
           }
         }
       ])
