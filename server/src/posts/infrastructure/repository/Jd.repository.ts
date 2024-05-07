@@ -12,7 +12,7 @@ export class MongoJdRepository implements JdRepository {
   async createJD (jd: JdEntity): Promise<JdEntity> {
     try {
       await validateJD(jd)
-      jd.stack = jd.stack.map(stack => stack.toLowerCase())
+      jd.stack = jd.stack?.map(stack => stack.toLowerCase())
       const jdCreated = await Jd.create(jd)
       return jdCreated as JdEntity
     } catch (error: any) {
@@ -35,8 +35,9 @@ export class MongoJdRepository implements JdRepository {
           const values = (value as string).split(',').map(value => value.trim().toLowerCase())
           result = await Jd.find({ stack: { $in: [values[0]] } })
           if (values.length > 1) {
+            result = result.filter(r => r.stack?.length && r.stack?.length >= 1)
             for (let i = 1; i < values.length; i++) {
-              result = (result).filter((jd: JdEntity) => jd.stack.includes(values[i]))
+              result = (result).filter((jd) => jd.stack?.includes(values[i]))
             }
           }
         } else if (filter === 'code') {
@@ -72,59 +73,57 @@ export class MongoJdRepository implements JdRepository {
     }
   }
 
-  async getUserAndCheckPermissions(userID: string): Promise<boolean> {
+  async getUserAndCheckPermissions (userID: string): Promise<boolean> {
     try {
-        const user = await Admin.findById(userID);
-        
-        if (!user) {
-            throw new Error('User not found');
-        }
-        
-        if (user.permissions && user.permissions.delete.includes('jds')) {
-            return true;
-        } else {
-            return false;
-        }
+      const user = await Admin.findById(userID)
+
+      if (!user) {
+        throw new Error('User not found')
+      }
+
+      if (user.permissions && user.permissions.delete.includes('jds')) {
+        return true
+      } else {
+        return false
+      }
     } catch (error) {
-        if (error instanceof Error && 'message' in error) {
-            throw new Error(`Error while checking user permissions: ${error.message}`);
-        } else {
-            throw new Error(`Error while checking user permissions: ${error}`);
-        }
+      if (error instanceof Error && 'message' in error) {
+        throw new Error(`Error while checking user permissions: ${error.message}`)
+      } else {
+        throw new Error(`Error while checking user permissions: ${error}`)
+      }
     }
-}
+  }
 
-
-
-async deleteJD(_id: string, reqID?: string, total?: string): Promise<JdEntity[]> {
-  try {
-      objectIDValidator(_id, 'jd to delete', 'vacante a eliminar');
-      const JD = await Jd.findById(_id);
+  async deleteJD (_id: string, reqID?: string, total?: string): Promise<JdEntity[]> {
+    try {
+      objectIDValidator(_id, 'jd to delete', 'vacante a eliminar')
+      const JD = await Jd.findById(_id)
 
       if (!JD) {
-          throw new ServerError('JD does not exist under that ID', 'No existen vacantes con ese ID', 404);
+        throw new ServerError('JD does not exist under that ID', 'No existen vacantes con ese ID', 404)
       }
 
       // Verificar si el usuario tiene el permiso 'delete' en su lista de permisos
       if (reqID && await this.getUserAndCheckPermissions(reqID)) {
-          if (total && total === 'true') {
-              await Jd.findByIdAndDelete(_id);
-          } else {
-              await Jd.findByIdAndUpdate(_id, { archived: !JD.archived });
-          }
+        if (total && total === 'true') {
+          await Jd.findByIdAndDelete(_id)
+        } else {
+          await Jd.findByIdAndUpdate(_id, { archived: !JD.archived })
+        }
       } else {
-          throw new ServerError('User does not have permission to delete JDs', 'El usuario no tiene permiso para eliminar JDs', 401);
+        throw new ServerError('User does not have permission to delete JDs', 'El usuario no tiene permiso para eliminar JDs', 401)
       }
 
       // Obtener todas las JDs después de la operación de eliminación o actualización
-      const allJds = await Jd.find();
-      return allJds as JdEntity[];
-  } catch (error: any) {
+      const allJds = await Jd.find()
+      return allJds as JdEntity[]
+    } catch (error: any) {
       if (error instanceof ServerError) {
-          throw error;
+        throw error
       } else {
-          throw new UncatchedError(error.message, 'deleting JD', 'eliminar vacante');
+        throw new UncatchedError(error.message, 'deleting JD', 'eliminar vacante')
       }
+    }
   }
-}
 }

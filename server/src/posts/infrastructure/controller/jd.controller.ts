@@ -12,6 +12,7 @@ export class JdController {
       const jd = await this.jdUseCase.createJD(req.body)
       return res.status(201).json(jd)
     } catch (error: any) {
+      console.log(error)
       return res.status(error.code).json(error[(req as any).lang as keyof Error])
     }
   }

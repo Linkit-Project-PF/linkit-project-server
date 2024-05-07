@@ -6,14 +6,14 @@ export interface JdEntity {
   description: string
   type: 'full-time' | 'part-time' | 'freelance'
   location: string
-  modality: 'remote-local' | 'remote-regional' | 'hybrid'
-  stack: string[]
+  modality: 'remote-local' | 'remote-regional' | 'hybrid' | 'on-site'
+  stack?: string[] | null | undefined
   aboutUs?: string | null
   aboutClient?: string | null
   responsabilities: string[]
   requirements: string[]
-  niceToHave: string[]
-  benefits: string[]
+  niceToHave?: string[] | null | undefined
+  benefits?: string[] | null | undefined
   archived: boolean
   company: string
   createdDate: Date

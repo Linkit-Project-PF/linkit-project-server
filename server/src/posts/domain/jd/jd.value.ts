@@ -6,7 +6,7 @@ export class JdValue implements JdEntity {
   description: string
   type: 'full-time' | 'part-time' | 'freelance'
   location: string
-  modality: 'remote-local' | 'remote-regional' | 'hybrid'
+  modality: 'remote-local' | 'remote-regional' | 'hybrid' | 'on-site'
   stack: string[]
   aboutUs?: string | null
   aboutClient?: string | null
@@ -25,13 +25,13 @@ export class JdValue implements JdEntity {
     this.type = jd.type
     this.location = jd.location
     this.modality = jd.modality
-    this.stack = jd.stack
+    this.stack = jd.stack ?? []
     this.aboutUs = jd.aboutUs ?? undefined
     this.aboutClient = jd.aboutClient ?? undefined
     this.responsabilities = jd.responsabilities
     this.requirements = jd.requirements
-    this.niceToHave = jd.niceToHave
-    this.benefits = jd.benefits
+    this.niceToHave = jd.niceToHave ?? []
+    this.benefits = jd.benefits ?? []
     this.archived = jd.archived
     this.company = jd.company
     this.createdDate = jd.createdDate

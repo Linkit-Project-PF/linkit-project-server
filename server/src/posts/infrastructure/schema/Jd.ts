@@ -28,15 +28,12 @@ const jdSchema = new Schema({
   modality: {
     type: String,
     required: true,
-    enum: ['remote-local', 'remote-regional', 'hybrid']
+    enum: ['remote-local', 'remote-regional', 'hybrid', 'on-site']
   },
   stack: {
     type: [String],
-    required: true,
-    validate: {
-      validator: (array: string[]) => array.length >= 1,
-      message: 'Stack array must have at least 1 stack added'
-    }
+    required: false,
+    default: []
   },
   aboutUs: {
     type: String,
@@ -63,16 +60,13 @@ const jdSchema = new Schema({
   },
   niceToHave: {
     type: [String],
-    required: true,
+    required: false,
     default: []
   },
   benefits: {
     type: [String],
-    required: true,
-    validate: {
-      validator: (array: string[]) => array.length >= 1,
-      message: 'Benefits array must have at least 1 benefit added'
-    }
+    required: false,
+    default: []
   },
   archived: {
     type: Boolean,

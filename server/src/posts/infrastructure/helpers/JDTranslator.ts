@@ -15,12 +15,22 @@ export async function JDTranslate (jd: JdEntity): Promise<JdEntity> {
   for (let i = 0; i < jd.responsabilities.length; i++) {
     jd.responsabilities[i] = (await translator.translateText(jd.responsabilities[i], 'es', 'en-US')).text
   }
-  for (let i = 0; i < jd.niceToHave.length; i++) {
-    jd.niceToHave[i] = (await translator.translateText(jd.niceToHave[i], 'es', 'en-US')).text
+  if (jd.niceToHave?.length) {
+    for (let i = 0; i < jd.niceToHave.length; i++) {
+      jd.niceToHave[i] = (await translator.translateText(jd.niceToHave[i], 'es', 'en-US')).text
+    }
+  } else {
+    jd.niceToHave = []
   }
-  for (let i = 0; i < jd.benefits.length; i++) {
-    jd.benefits[i] = (await translator.translateText(jd.benefits[i], 'es', 'en-US')).text
+  if (jd.benefits?.length) {
+    for (let i = 0; i < jd.benefits.length; i++) {
+      jd.benefits[i] = (await translator.translateText(jd.benefits[i], 'es', 'en-US')).text
+    }
+  } else {
+    jd.niceToHave = []
   }
+  if (jd.stack === undefined) jd.stack = []
+  if (jd.stack === null) jd.stack = []
 
   return jd
 }
