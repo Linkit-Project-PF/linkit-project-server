@@ -13,6 +13,7 @@ import OKRRoute from './posts/infrastructure/routes/OKRs.routes'
 import resourcesRoute from './resources/infrastructure/routes/resources.routes'
 import { authValidator, langValidator } from './middlewares'
 import postulationRoute from './postulations/infrastructure/routes/postulation.route'
+// import morgan from 'morgan'
 
 const app = express()
 app.use(cors(
@@ -24,6 +25,7 @@ app.use(cors(
 ))
 
 app.use(express.json())
+// app.use(morgan('dev'))
 
 const port = process.env.PORT ?? 3000
 

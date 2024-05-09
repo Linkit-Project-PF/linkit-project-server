@@ -2,50 +2,54 @@
   "entries": [
     {
       "id": 1,
-      "name": "Back-end development"
+      "name": "Front-end WEB development"
     },
     {
       "id": 2,
-      "name": "Full-stack WEB development"
+      "name": "Back-end development"
     },
     {
       "id": 3,
-      "name": "Mobile development"
+      "name": "Full-stack WEB development"
     },
     {
       "id": 4,
-      "name": "Digital/Product design"
+      "name": "Mobile development"
     },
     {
       "id": 5,
-      "name": "Testing"
+      "name": "Digital/Product design"
     },
     {
       "id": 6,
-      "name": "Product Management"
+      "name": "Testing"
     },
     {
       "id": 7,
-      "name": "Marketing"
+      "name": "Product Management"
     },
     {
       "id": 8,
-      "name": "Sales"
+      "name": "Marketing"
     },
     {
       "id": 9,
-      "name": "HR"
+      "name": "Sales"
     },
     {
       "id": 10,
+      "name": "HR"
+    },
+    {
+      "id": 11,
       "name": "Operations"
     },
     {
-      "id": 11,
+      "id": 12,
       "name": "Administrative"
     },
     {
-      "id": 11,
+      "id": 13,
       "name": "Finance"
     }
   ]
