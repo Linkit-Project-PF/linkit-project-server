@@ -40,12 +40,19 @@ export class MongoPostulationRepository implements PostulationRepository {
         }
       ])
       await User.findByIdAndUpdate(userId, { $push: { postulations: postulation.code } }, { new: true })
-      if (jd.length) await this.mailNodeMailerProvider.sendEmail(postulationMailCreate(user as MongoUser, jd[0]))
-      else throw new ServerError('Unable to find JD under the code provided', 'No se encontro JD con ese codigo', 406)
+      if (jd.length) {
+        await this.mailNodeMailerProvider.sendEmail(postulationMailCreate(user as MongoUser, jd[0]))
+      } else {
+        throw new ServerError('Unable to find JD under the code provided', 'No se encontro JD con ese codigo', 406)
+      }
+  
       return user
     } catch (error: any) {
-      if (error instanceof ServerError) throw error
-      else throw new UncatchedError(error.message, 'creating postulation', 'crear postulacion')
+      if (error instanceof ServerError) {
+        throw error
+      } else {
+        throw new UncatchedError(error.message, 'creating postulation', 'crear postulacion')
+      }
     }
   }
 
