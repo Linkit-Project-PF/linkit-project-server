@@ -78,11 +78,11 @@
     },
     {
       "id": 20,
-      "name": "Philippines"
+      "name": "Filipinas"
     },
     {
       "id": 21,
-      "name": "South Africa"
+      "name": "Sudáfrica"
     },
     {
       "id": 22,
@@ -93,8 +93,17 @@
       "name": "Honduras"
     },
     {
-      "id": 22,
+      "id": 24,
       "name": "Puerto Rico"
+    },{
+      "id": 25,
+      "name": "Estados Unidos"
+    },{
+      "id": 26,
+      "name": "Canada"
+    },{
+      "id": 27,
+      "name": "El Salvador"
     }
   ]
 }
